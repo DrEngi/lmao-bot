@@ -116,6 +116,8 @@ tokens/
 customs/
 
 lmao_count.txt
+custom_cmd_list_server.txt
+custom_cmd_list.txt
 
 
 # End of https://www.gitignore.io/api/python

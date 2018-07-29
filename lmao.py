@@ -35,6 +35,7 @@ import random
 import io
 import time
 import aiohttp
+import json
 import urban
 import avatar
 import lmgtfy
@@ -46,8 +47,11 @@ bot = discord.Client()
 bot_token = ""
 with io.open("tokens/lmao.txt", "r") as token:
     bot_token = (token.read())[:-1]
-bot_url = "https://discordbots.org/api/bots/459432854821142529/stats"
-bot_headers = {"Authorization" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1OTQzMjg1NDgyMTE0MjUyOSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTMyODQyMTUzfQ.zR5xb3qxhGXD6NuTdJya6Pd3DmI4m0nrOftzm8NdNeE" }
+dbl_token = ""
+with io.open("tokens/lmao-dbl.txt", "r") as token:
+    dbl_token = (token.read())[:-1]
+dbl_url = "https://discordbots.org/api/bots/459432854821142529/stats"
+dbl_headers = {"Authorization" : dbl_token}
 
 ### GLOBAL VARIABLES ###
 start_time = 0.0            # Start time for lmao uptime command
@@ -117,17 +121,19 @@ async def on_ready():   # Prints ready message in terminal
     await bot.change_presence(game=discord.Game(name=r'lmao help | Maintenance: 10pm ET | Created by Firestar493#6963'))
     payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession() as aioclient:
-        await aioclient.post(bot_url, data=payload, headers=bot_headers)
+        await aioclient.post(dbl_url, data=payload, headers=dbl_url)
 
 @bot.event
 async def on_server_join(server):
+    payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession() as aioclient:
-        await aioclient.post(bot_url, data=payload, headers=bot_headers)
+        await aioclient.post(dbl_url, data=payload, headers=dbl_url)
 
 @bot.event
 async def on_server_remove(server):
+    payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession() as aioclient:
-        await aioclient.post(bot_url, data=payload, headers=bot_headers)
+        await aioclient.post(dbl_url, data=payload, headers=dbl_url)
 
 @bot.event
 async def on_message(message):  # Event triggers when message is sent
@@ -522,7 +528,7 @@ async def on_message(message):  # Event triggers when message is sent
                     #    await bot.send_message(message.channel, mention + " You have laughed your ass off " + str(count_lmao[message.author.id]) + " times.")
                     #else:
                     #    await bot.send_message(message.channel, mention + " You have yet to laugh your ass off.")
-                    await bot.send_message(message.channel, mention + "Sorry, the count command is currently bugged and not working. This is a problem that is being worked on. :)")
+                    await bot.send_message(message.channel, mention + " Sorry, the count command is currently bugged and not working. This is a problem that is being worked on. :)")
                     return 'count'
                 async def cmd_ping():   # Ping-Pong
                     await bot.send_message(message.channel, ':ping_pong: Pong')
