@@ -1,5 +1,6 @@
 ### TO-DO LIST ###
-###Check permissions for certain commands, esp ones which affect custom commands, prefixes, and toggle chances
+###REWRITE TO NEW DISCORD.PY LIBRARY
+#Add join/welcome message
 #Add FAQ: lmao admins, command prefix, pronounce
 #Server mute command
 #Fix unmute glitch described in https://discordapp.com/channels/407274897350328345/461312988540829717/470635373161086977
@@ -25,7 +26,6 @@
 #Search for a specific channel to post announcements in
 #Random custom command
 
-#Vote command
 #Support server command
 #Implement server count
 
@@ -134,6 +134,14 @@ async def on_server_remove(server):
     payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession() as aioclient:
         await aioclient.post(dbl_url, data=payload, headers=dbl_url)
+
+@bot.event
+async def on_member_join(member):
+    if member.server.id == "463758816270483476":
+        channel = member.server.get_channel("469491274219782144")
+        await bot.send_typing(channel)
+        beautiful = await avatar.beautiful(member)
+        await bot.send_file(message.channel, "img/beautiful_person.png", content="Welcome to {}, {}!".format(member.server.name, member.mention))
 
 @bot.event
 async def on_message(message):  # Event triggers when message is sent
