@@ -27,19 +27,27 @@
 
 #Vote command
 #Support server command
+#Implement server count
 
 import discord
 import asyncio
 import random
 import io
 import time
+import aiohttp
 import urban
 import avatar
 import lmgtfy
-from PIL import Image
+from PIL import Image#, ImageDraw, ImageFont
 #import urbandictionary as ud
 
 bot = discord.Client()
+
+bot_token = ""
+with io.open("tokens/lmao.txt", "r") as token:
+    bot_token = (token.read())[:-1]
+bot_url = "https://discordbots.org/api/bots/459432854821142529/stats"
+bot_headers = {"Authorization" : bot_token}
 
 ### GLOBAL VARIABLES ###
 start_time = 0.0            # Start time for lmao uptime command
@@ -47,7 +55,7 @@ cmd_prefix = {}             # Prefix for lmao-bot commands; default is "lmao "
 lmao_admin_list = {}
 custom_cmd_list = {}        # Dictionary for storing custom commands.
 count_lmao = {}             # Counts how many times someone said lmao or lmfao in chat
-count_lmao_full = {}        # Imports text from the count lmao file
+count_lmao_full = ""        # Imports text from the count lmao file
 replace_ass_chance = {}     # Chance of ass replacement
 react_chance = {}           # Chance of ass reaction
 magic_number = {}           # Magic number in number guessing game
@@ -106,7 +114,20 @@ async def on_ready():   # Prints ready message in terminal
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    await bot.change_presence(game=discord.Game(name=r'lmao help | Bot created by Firestar493#6963'))
+    await bot.change_presence(game=discord.Game(name=r'lmao help | Maintenance: 10pm ET | Created by Firestar493#6963'))
+    payload = {"server_count"  : len(bot.servers)}
+    async with aiohttp.ClientSession() as aioclient:
+        await aioclient.post(bot_url, data=payload, headers=bot_headers)
+
+@bot.event
+async def on_server_join(server):
+    async with aiohttp.ClientSession() as aioclient:
+        await aioclient.post(bot_url, data=payload, headers=bot_headers)
+
+@bot.event
+async def on_server_remove(server):
+    async with aiohttp.ClientSession() as aioclient:
+        await aioclient.post(bot_url, data=payload, headers=bot_headers)
 
 @bot.event
 async def on_message(message):  # Event triggers when message is sent
@@ -218,8 +239,8 @@ async def on_message(message):  # Event triggers when message is sent
         async def init_count_lmao():
             count_lmao_txt_r = io.open("count_lmao.txt", "r", encoding="utf-8")
             while True:
-                line = (count_lmao_txt_r.readline())[:-1]
-                if (line != "" and line != "\n"):
+                line = (count_lmao_txt_r.readline())
+                if (line.find(r']w@5pe-suC{Vt3wZ') != -1):
                     cutoff_ind = line.find(r']w@5pe-suC{Vt3wZ')
                     user = line[:cutoff_ind]
                     count = int(line[cutoff_ind + 16:])
@@ -229,7 +250,7 @@ async def on_message(message):  # Event triggers when message is sent
             count_lmao_txt_r.seek(0)
             count_lmao_txt_r.seek(0)
             global count_lmao_full
-            count_lmao_full[server_id] = count_lmao_txt_r.read()
+            count_lmao_full = count_lmao_txt_r.read()
             count_lmao_txt_r.close()
         await init_count_lmao()
 
@@ -301,9 +322,13 @@ async def on_message(message):  # Event triggers when message is sent
             async def cmd_switch(command):
                 async def cmd_announce():
                     if message.author.id == "210220782012334081":
-                        for server in bot.servers:
+                        server_list = bot.servers
+                        for server in server_list:
+                            await asyncio.sleep(10)
                             for channel in server.channels:
                                 if channel.permissions_for(server.me).send_messages and str(channel.type) == "text":
+                                    with io.open("announcement_finished.txt", "a") as f:
+                                        f.write("{} ({}) has received your announcement.".format(server.name, server.id))
                                     await bot.send_message(channel, cmd_arg)
                                     break
                     else:
@@ -327,7 +352,9 @@ async def on_message(message):  # Event triggers when message is sent
                     elif minutes > 0:
                         time_display += str(minutes) + " minute(s) and "
                     time_display += str(seconds) + " second(s)."
-                    tmp = await bot.send_message(message.channel, "lmao-bot has been up for " + time_display)
+                    with io.open("next_maintenance.txt") as f:
+                        next_maintenance = f.read()[:-1]
+                    tmp = await bot.send_message(message.channel, "lmao-bot has been up for {}\n\nNext maintenance break is scheduled for {}.".format(time_display, next_maintenance))
                     return 'uptime'
                 async def cmd_toggle_ass(): # Toggle whether automatic ass substitution happens or not
                     #if toggle_ass:
@@ -417,15 +444,17 @@ async def on_message(message):  # Event triggers when message is sent
                     await bot.send_message(message.channel, "Ass replacement chance: **" + str(replace_ass_chance[server_id]) + "%**\nAss reaction chance: **" + str(react_chance[server_id]) + "%**")
                     return 'chance'
                 async def cmd_help():   # DMs list of commands
+                    await bot.send_typing(message.channel)
                     dm_help = [""":peach: **FULL LIST OF LMAO-BOT COMMANDS** :peach:
                                   \n
                                   \n:robot: **Bot Management** :robot:
                                   \n:exclamation: `lmao prefix` If the bot's command prefix is not \"lmao \", this returns the current command prefix.
                                   \n:question: `{0}help` Returns a list of commands for lmao-bot to your DMs (hey, that's meta).
-                                  \n:computer: `{0}uptime` Shows how long lmao-bot has been up for.
+                                  \n:computer: `{0}uptime` Shows how long lmao-bot has been up for as well as the time for the next maintenance break.
                                   \n:ping_pong: `{0}ping` Returns \"pong\".
                                   \n:exclamation: `{0}prefix` `new_prefix` Changes the bot's command prefix to `new_prefix`. Available to server admins and lmao admins only. Default is "lmao ".
-                                  \n:information_source: `{0}about` Gives a brief description about the bot, including an invite to the support server.""",
+                                  \n:information_source: `{0}about` Gives a brief description about the bot, including an invite to the support server.
+                                  \n:ballot_box: `{0}vote` Like lmao-bot? This gives you a link to vote for it on Discord Bot List!""",
                                """_ _\n
                                   \n:oncoming_police_car: **Administration and Moderation** :oncoming_police_car:
                                   \n:police_car: `{0}adminlist` Sends a list of everyone who is a lmao administrator.
@@ -457,6 +486,7 @@ async def on_message(message):  # Event triggers when message is sent
                                   \n:japanese_goblin: `{0}ugly` `member` Lets a mentioned `member` know that they're ugly with a frame from SpongeBob.
                                   \n:rage: `{0}triggered` `member` Warns people to stay away from a mentioned `member`; they're triggered!.
                                   \n:trophy: `{0}victory` `member` Displays to everyone `member`'s Victory Royale.
+                                  \n:cowboy: `{0}wanted` `member` Puts `member` on a WANTED poster.
                                   \n
                                   \n:tools: **Utility** :tools:
                                   \n:orange_book: `{0}urban` `term` Provides the definition for `term` on Urban Dictionary. Not yet available.
@@ -514,10 +544,13 @@ async def on_message(message):  # Event triggers when message is sent
                         await bot.send_message(message.channel, mention + " You do not have the permission to change the bot's prefix. Ask a server administrator or lmao administrator to do so.")
                     return 'prefix'
                 async def cmd_about():  # Returns about lmao-bot message
-                    tmp = await bot.send_message(message.channel, """**About lmao-bot**: lmao-bot was created by Firestar493#6963 in June 2018 as a fun Discord bot for replacing people's asses after they \"lmao\" or \"lmfao\". The bot is written in Python using the discord.py library, and the support server is https://discord.gg/JQgB7p7.
-                        \n\nlmao-bot is currently replacing asses on {} servers.
-                        \n\nLike lmao-bot? **Vote** for lmao-bot on DiscordBots! https://discordbots.org/bot/459432854821142529/vote""".format(len(bot.servers)))
+                    await bot.send_message(message.channel, """**About lmao-bot**: lmao-bot was created by Firestar493#6963 in June 2018 as a fun Discord bot for replacing people's asses after they \"lmao\" or \"lmfao\". The bot is written in Python using the discord.py library, and the support server is https://discord.gg/JQgB7p7.
+                        \n\nlmao-bot is currently replacing asses on **{}** servers.
+                        \n\nLike lmao-bot? **Vote** for lmao-bot on Discord Bot List! https://discordbots.org/bot/459432854821142529/vote""".format(len(bot.servers)))
                     return 'about'
+                async def cmd_vote():
+                    await bot.send_message(message.channel, "Like lmao-bot? **Vote** for lmao-bot on Discord Bot List!\n\nhttps://discordbots.org/bot/459432854821142529/vote")
+                    return 'vote'
                 async def cmd_say():    # Allows user to have lmao-bot say a message
                     if cmd_arg == "":
                         tmp = await bot.send_message(message.channel, 'You have to have a message for me to say. e.g. `" + prefix + "say Replacing asses by day, kicking asses by night.`')
@@ -688,7 +721,7 @@ async def on_message(message):  # Event triggers when message is sent
                         await bot.send_message(message.channel, mention + " You do not have the permission to ban members.")
                     return 'ban'
                 async def cmd_booty():  # Sends a random SFW booty pic in the channel
-                    await bot.send_file(message.channel, 'booties/booty' + str(random.randint(1,10)) + '.jpg')
+                    await bot.send_file(message.channel, 'img/booties/booty' + str(random.randint(1,10)) + '.jpg')
                     return 'booty'
                 async def cmd_moon():   # Allows users to moon other users with SFW booty pics
                     mentioned = ""
@@ -699,10 +732,11 @@ async def on_message(message):  # Event triggers when message is sent
                         mention_msg = mentioned + ", you have been mooned by " + mention + "!"
                     else:
                         mention_msg = ""
-                    await bot.send_file(message.channel, 'booties/booty' + str(random.randint(1,10)) + '.jpg', content=mention_msg)
+                    await bot.send_file(message.channel, 'img/booties/booty' + str(random.randint(1,10)) + '.jpg', content=mention_msg)
                     #msg.mentions returns a list of Members mentioned
                     return 'moon'
                 async def cmd_beautiful():
+                    await bot.send_typing(message.channel)
                     try:
                         beautiful_person = message.mentions[0]
                     except IndexError:
@@ -711,6 +745,7 @@ async def on_message(message):  # Event triggers when message is sent
                     await bot.send_file(message.channel, "img/beautiful_person.png", content=beautiful_person.mention + " :heart:")
                     return 'beautiful'
                 async def cmd_ugly():
+                    await bot.send_typing(message.channel)
                     try:
                         ugly_person = message.mentions[0]
                     except IndexError:
@@ -719,6 +754,7 @@ async def on_message(message):  # Event triggers when message is sent
                     await bot.send_file(message.channel, "img/ugly_person.png", content=ugly_person.mention + " :japanese_goblin:")
                     return 'ugly'
                 async def cmd_triggered():
+                    await bot.send_typing(message.channel)
                     try:
                         triggered_person = message.mentions[0]
                     except IndexError:
@@ -727,6 +763,7 @@ async def on_message(message):  # Event triggers when message is sent
                     await bot.send_file(message.channel, "img/triggered_person.png", content=triggered_person.mention + " needs a safe space!")
                     return 'triggered'
                 async def cmd_victory():
+                    await bot.send_typing(message.channel)
                     try:
                         victory_person = message.mentions[0]
                     except IndexError:
@@ -734,16 +771,36 @@ async def on_message(message):  # Event triggers when message is sent
                     victory = await avatar.victory(victory_person)
                     await bot.send_file(message.channel, "img/victory_person.png", content=victory_person.mention + " :trophy: Victory Royale!")
                     return 'victory'
+                async def cmd_wanted():
+                    await bot.send_typing(message.channel)
+                    try:
+                        wanted_person = message.mentions[0]
+                    except IndexError:
+                        wanted_person = message.author
+                    wanted = await avatar.wanted(wanted_person)
+                    await bot.send_file(message.channel, "img/wanted_person.png", content=wanted_person.mention + " is WANTED!")
+                    return 'wanted'
+                async def cmd_whos_that():
+                    await bot.send_typing(message.channel)
+                    try:
+                        whos_that_person = message.mentions[0]
+                    except IndexError:
+                        whos_that_person = message.author
+                    whos_that = await avatar.whos_that(whos_that_person)
+                    await bot.send_file(message.channel, "img/whos_that_person.png", content="Who's that Pokémon?\n\nIt's " + whos_that_person.mention + ", seen from above!")
+                    return 'wanted'
                 async def cmd_urban():
+                    await bot.send_typing(message.channel)
                     #try:
                     #    urban_def = urban.define(cmd_arg)[0]
                     #    urban_msg = "**Urban Dictionary definition for {}:**\n\n{}\n\n\n**Example:**\n\n_{}_\n\n\n:thumbsup: {}     :thumbsdown: {}".format(urban_def.word, urban_def.definition, urban_def.example, urban_def.upvotes, urban_def.downvotes)
                     #    await bot.send_message(message.channel, urban_msg)
                     #except IndexError:
                     #    await bot.send_message(message.channel, "Sorry, {} could not be found on Urban Dictionary.".format(cmd_arg))
-                    await bot.send_message(message.channel, "Sorry, this command is not available yet. DiscordBots is strict about having this command being NSFW-channels-only, but my current library doesn't support that. Please be patient while the program is rewritten. :)")
+                    await bot.send_message(message.channel, "Sorry, this command is not available yet. Discord Bot List is strict about having this command being NSFW-channels-only, but my current library doesn't support that. Please be patient while the program is rewritten. :)")
                     return 'urban'
                 async def cmd_lmgtfy():
+                    await bot.send_typing(message.channel)
                     await bot.send_message(message.channel, lmgtfy.lmgtfy(cmd_arg))
                     return 'lmgtfy'
                 async def cmd_coin():
@@ -1012,13 +1069,13 @@ async def on_message(message):  # Event triggers when message is sent
                     #tmp = await bot.send_message(message.channel, 'List is not yet available.')
                     return 'list'
                 async def cmd_custom():    # triggers custom command
-                    try:
-                        if msg.startswith(prefix.lower()):
+                    if msg.startswith(prefix.lower()):
+                        try:
                             await bot.send_message(message.channel, custom_cmd_list[cmd_raw])
-                        else:
+                        except KeyError:
                             if "lmao" in msg or "lmfao" in msg:
                                 await replace_ass()
-                    except KeyError:
+                    else:
                         if "lmao" in msg or "lmfao" in msg:
                             await replace_ass()
                     return 'custom'
@@ -1030,6 +1087,7 @@ async def on_message(message):  # Event triggers when message is sent
                     "ping": cmd_ping,
                     "prefix": cmd_prefix,
                     "about": cmd_about,
+                    "vote": cmd_vote,
                     "say": cmd_say,
                     "adminlist": cmd_admin_list,
                     "addadmin": cmd_add_admin,
@@ -1045,6 +1103,8 @@ async def on_message(message):  # Event triggers when message is sent
                     "ugly": cmd_ugly,
                     "triggered": cmd_triggered,
                     "victory": cmd_victory,
+                    "wanted": cmd_wanted,
+                    #"whosthat": cmd_whos_that,
                     "urban": cmd_urban,
                     "lmgtfy": cmd_lmgtfy,
                     "toggleass": cmd_toggle_ass,
@@ -1078,7 +1138,6 @@ async def on_message(message):  # Event triggers when message is sent
                 #cmd_msg = await cmd_case[cmd_call]()
                 #tmp = await bot.send_message(message.channel, await cmd_call())
                 await cmd_call()
-            await bot.send_typing(message.channel)
             await cmd_switch(cmd_word)
             await export_admins()
             await export_customs()
@@ -1097,17 +1156,15 @@ async def on_message(message):  # Event triggers when message is sent
             global count_lmao_full
             if message.author.id in count_lmao.keys():
                 count_lmao[message.author.id] += 1
-                line_ind = (count_lmao_full[server_id]).find("\n" + message.author.id)
-                if line_ind == -1:
-                    line_ind = 0
+                line_ind = (count_lmao_full).find(message.author.id)
                 global find_next
-                line_end = find_next(count_lmao_full[server_id], "\n", line_ind)
-                text_prior = (count_lmao_full[server_id])[:line_ind]
-                text_after = (count_lmao_full[server_id])[line_end:]
+                line_end = find_next(count_lmao_full, "\n", line_ind)
+                text_prior = (count_lmao_full)[:line_ind]
+                text_after = (count_lmao_full)[line_end + 1:]
                 count_lmao_txt_w.write(text_prior + text_after + message.author.id + r"]w@5pe-suC{Vt3wZ" + str(count_lmao[message.author.id]) + u'\u000A')
             else:
                 count_lmao[message.author.id] = 1
-                count_lmao_txt_w.write(count_lmao_full[server_id] + message.author.id + r"]w@5pe-suC{Vt3wZ" + '1' + u'\u000A')
+                count_lmao_txt_w.write(count_lmao_full + message.author.id + r"]w@5pe-suC{Vt3wZ" + '1' + u'\u000A')
 
             count_lmao_txt_w.close()
 
@@ -1132,5 +1189,6 @@ async def on_message(message):  # Event triggers when message is sent
             settings_txt_w.close()
         await export_settings()
 
-with io.open("tokens/lmao-dev.txt", "r") as token:
-    bot.run((token.read())[:-1])
+#with io.open("tokens/lmao.txt", "r") as token:
+    #bot.run((token.read())[:-1])
+bot.run(bot_token)
