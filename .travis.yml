@@ -1,7 +1,7 @@
 language: python
-  python:
-    - "3.6"
-  script:
-    - pip install discord.py
-    - pip install Pillow
-    - pip install pytest
+python:
+  - "3.6"
+script:
+  - pip install discord.py
+  - pip install Pillow
+  - pip install pytest
