@@ -114,7 +114,7 @@ admins/
 settings/
 tokens/
 
-*.txt
+lmao_count.txt
 
 
 # End of https://www.gitignore.io/api/python
