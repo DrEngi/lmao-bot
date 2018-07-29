@@ -44,7 +44,7 @@ from PIL import Image#, ImageDraw, ImageFont
 bot = discord.Client()
 
 bot_token = ""
-with io.open("tokens/lmao-dev.txt", "r") as token:
+with io.open("tokens/lmao.txt", "r") as token:
     bot_token = (token.read())[:-1]
 bot_url = "https://discordbots.org/api/bots/459432854821142529/stats"
 bot_headers = {"Authorization" : bot_token}
@@ -235,24 +235,24 @@ async def on_message(message):  # Event triggers when message is sent
             if y <= replace_ass_chance[server_id]:
                 tmp = await bot.send_message(message.channel, replace_ass_msg)
 
-        global count_lmao
-        async def init_count_lmao():
-            count_lmao_txt_r = io.open("count_lmao.txt", "r", encoding="utf-8")
-            while True:
-                line = (count_lmao_txt_r.readline())
-                if (line.find(' ') != -1):
-                    cutoff_ind = line.find(' ')
-                    user = line[:cutoff_ind]
-                    count = int(line[cutoff_ind + 1:])
-                    count_lmao[user] = count
-                else:
-                    break
-            count_lmao_txt_r.seek(0)
-            count_lmao_txt_r.seek(0)
-            global count_lmao_full
-            count_lmao_full = count_lmao_txt_r.read()
-            count_lmao_txt_r.close()
-        await init_count_lmao()
+        #global count_lmao
+        #async def init_count_lmao():
+        #    count_lmao_txt_r = io.open("count_lmao.txt", "r", encoding="utf-8")
+        #    while True:
+        #        line = (count_lmao_txt_r.readline())
+        #        if (line.find(' ') != -1):
+        #            cutoff_ind = line.find(' ')
+        #            user = line[:cutoff_ind]
+        #            count = int(line[cutoff_ind + 1:])
+        #            count_lmao[user] = count
+        #        else:
+        #            break
+        #    count_lmao_txt_r.seek(0)
+        #    count_lmao_txt_r.seek(0)
+        #    global count_lmao_full
+        #    count_lmao_full = count_lmao_txt_r.read()
+        #    count_lmao_txt_r.close()
+        #await init_count_lmao()
 
         global custom_cmd_list
         async def import_customs():
@@ -518,10 +518,11 @@ async def on_message(message):  # Event triggers when message is sent
                     await bot.send_message(message.channel, mention + ' A full list of lmao-bot commands has been slid into your DMs. :mailbox_with_mail:')
                     return 'help'
                 async def cmd_count():  # Counts the number of times someone says lmao
-                    if message.author.id in count_lmao.keys():
-                        await bot.send_message(message.channel, mention + " You have laughed your ass off " + str(count_lmao[message.author.id]) + " times.")
-                    else:
-                        await bot.send_message(message.channel, mention + " You have yet to laugh your ass off.")
+                    #if message.author.id in count_lmao.keys():
+                    #    await bot.send_message(message.channel, mention + " You have laughed your ass off " + str(count_lmao[message.author.id]) + " times.")
+                    #else:
+                    #    await bot.send_message(message.channel, mention + " You have yet to laugh your ass off.")
+                    await bot.send_message(message.channel, mention + "Sorry, the count command is currently bugged and not working. This is a problem that is being worked on. :)")
                     return 'count'
                 async def cmd_ping():   # Ping-Pong
                     await bot.send_message(message.channel, ':ping_pong: Pong')
@@ -1152,21 +1153,21 @@ async def on_message(message):  # Event triggers when message is sent
             #if toggle_ass:
             #    await replace_ass()
             await replace_ass()
-            count_lmao_txt_w = io.open("count_lmao.txt", "w", encoding="utf-8")
-            global count_lmao_full
-            if message.author.id in count_lmao.keys():
-                count_lmao[message.author.id] += 1
-                line_ind = (count_lmao_full).find(message.author.id)
-                global find_next
-                line_end = find_next(count_lmao_full, "\n", line_ind)
-                text_prior = (count_lmao_full)[:line_ind]
-                text_after = (count_lmao_full)[line_end + 1:]
-                count_lmao_txt_w.write(text_prior + text_after + message.author.id + ' ' + str(count_lmao[message.author.id]) + u'\u000A')
-            else:
-                count_lmao[message.author.id] = 1
-                count_lmao_txt_w.write(count_lmao_full + message.author.id + ' ' + '1' + u'\u000A')
+            #count_lmao_txt_w = io.open("count_lmao.txt", "w", encoding="utf-8")
+            #global count_lmao_full
+            #if message.author.id in count_lmao.keys():
+            #    count_lmao[message.author.id] += 1
+            #    line_ind = (count_lmao_full).find(message.author.id)
+            #    global find_next
+            #    line_end = find_next(count_lmao_full, "\n", line_ind)
+            #    text_prior = (count_lmao_full)[:line_ind]
+            #    text_after = (count_lmao_full)[line_end + 1:]
+            #    count_lmao_txt_w.write(text_prior + text_after + message.author.id + ' ' + str(count_lmao[message.author.id]) + u'\u000A')
+            #else:
+            #    count_lmao[message.author.id] = 1
+            #    count_lmao_txt_w.write(count_lmao_full + message.author.id + ' ' + u'\u000A')
 
-            count_lmao_txt_w.close()
+            #count_lmao_txt_w.close()
 
         if server_id == "345655060740440064" and ('pollard' in msg or 'buh-bye' in msg or 'buhbye' in msg or 'buh bye' in msg):
             x = random.randint(0,100)
