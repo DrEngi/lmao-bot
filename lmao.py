@@ -141,7 +141,7 @@ async def on_member_join(member):
         channel = member.server.get_channel("469491274219782144")
         await bot.send_typing(channel)
         beautiful = await avatar.beautiful(member)
-        await bot.send_file(message.channel, "img/beautiful_person.png", content="Welcome to {}, {}!".format(member.server.name, member.mention))
+        await bot.send_file(channel, "img/beautiful_person.png", content="Welcome to {}, {}!".format(member.server.name, member.mention))
 
 @bot.event
 async def on_message(message):  # Event triggers when message is sent
