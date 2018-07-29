@@ -47,7 +47,7 @@ bot_token = ""
 with io.open("tokens/lmao.txt", "r") as token:
     bot_token = (token.read())[:-1]
 bot_url = "https://discordbots.org/api/bots/459432854821142529/stats"
-bot_headers = {"Authorization" : bot_token}
+bot_headers = {"Authorization" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1OTQzMjg1NDgyMTE0MjUyOSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTMyODQyMTUzfQ.zR5xb3qxhGXD6NuTdJya6Pd3DmI4m0nrOftzm8NdNeE" }
 
 ### GLOBAL VARIABLES ###
 start_time = 0.0            # Start time for lmao uptime command
