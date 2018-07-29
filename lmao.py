@@ -521,6 +521,7 @@ async def on_message(message):  # Event triggers when message is sent
                                   #\n**About lmao-bot**: lmao-bot was created by Firestar493#6963 in June 2018 as a fun Discord bot for replacing people's asses after they \"lmao\" or \"lmfao\". The bot is written in Python using the discord.py library, and the support server is https://discord.gg/JQgB7p7."""
                     for msg_part in dm_help:
                         await bot.send_message(message.author, msg_part.format(prefix))
+                        asyncio.sleep(0.5)
                     await bot.send_message(message.channel, mention + ' A full list of lmao-bot commands has been slid into your DMs. :mailbox_with_mail:')
                     return 'help'
                 async def cmd_count():  # Counts the number of times someone says lmao
