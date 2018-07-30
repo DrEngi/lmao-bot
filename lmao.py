@@ -47,9 +47,9 @@ bot = discord.Client()
 bot_token = ""
 with io.open("tokens/lmao.txt", "r") as token:
     bot_token = (token.read())[:-1]
-dbl_token = ""
-with io.open("tokens/lmao-dbl.txt", "r") as token:
-    dbl_token = (token.read())[:-1]
+dbl_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1OTQzMjg1NDgyMTE0MjUyOSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTMyODQyMTUzfQ.zR5xb3qxhGXD6NuTdJya6Pd3DmI4m0nrOftzm8NdNeE"
+#with io.open("tokens/lmao-dbl.txt", "r") as token:
+#    dbl_token = (token.read())[:-1]
 dbl_url = "https://discordbots.org/api/bots/459432854821142529/stats"
 dbl_headers = {"Authorization" : dbl_token}
 
@@ -119,20 +119,24 @@ async def on_ready():   # Prints ready message in terminal
     print(bot.user.id)
     print('------')
     await bot.change_presence(game=discord.Game(name=r'lmao help | Maintenance: 10pm ET | Created by Firestar493#6963'))
+    #payload = {"server_count"  : 300}
+    dbl_connector = aiohttp.TCPConnector(verify_ssl=False)
     payload = {"server_count"  : len(bot.servers)}
-    async with aiohttp.ClientSession() as aioclient:
+    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_join(server):
+    dbl_connector = aiohttp.TCPConnector(verify_ssl=False)
     payload = {"server_count"  : len(bot.servers)}
-    async with aiohttp.ClientSession() as aioclient:
+    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_remove(server):
+    dbl_connector = aiohttp.TCPConnector(verify_ssl=False)
     payload = {"server_count"  : len(bot.servers)}
-    async with aiohttp.ClientSession() as aioclient:
+    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
