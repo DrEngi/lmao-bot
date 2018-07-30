@@ -121,19 +121,19 @@ async def on_ready():   # Prints ready message in terminal
     await bot.change_presence(game=discord.Game(name=r'lmao help | Maintenance: 10pm ET | Created by Firestar493#6963'))
     payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession() as aioclient:
-        await aioclient.post(dbl_url, data=payload, headers=dbl_url)
+        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_join(server):
     payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession() as aioclient:
-        await aioclient.post(dbl_url, data=payload, headers=dbl_url)
+        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_remove(server):
     payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession() as aioclient:
-        await aioclient.post(dbl_url, data=payload, headers=dbl_url)
+        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_member_join(member):
@@ -148,7 +148,10 @@ async def on_message(message):  # Event triggers when message is sent
     channel = str(message.channel)
     author = str(message.author)
     author_dm = "Direct Message with " + author[:-5]
-    perms = message.author.permissions_in(message.channel)
+    try:
+        perms = message.author.permissions_in(message.channel)
+    except AttributeError:
+        perms = discord.Permissions(permissions=0)
     if channel == author_dm:
         print(author + " sent: " + message.content)
     if channel == author_dm and author == r"Gucci Shawarma#6105": #r"Firestar493#6963":
@@ -348,6 +351,14 @@ async def on_message(message):  # Event triggers when message is sent
                     else:
                         await replace_ass()
                     return 'announce'
+                async def cmd_change_maintenance():
+                    if message.author.id == "210220782012334081":
+                        await bot.change_presence(game=discord.Game(name=r'lmao help | Maintenance: {} | Created by Firestar493#6963'.format(cmd_arg)))
+                    return 'changemaintenance'
+                async def cmd_change_game():
+                    if message.author.id == "210220782012334081":
+                        await bot.change_presence(game=discord.Game(name=cmd_arg))
+                    return 'changegame'
                 async def cmd_uptime():
                     global start_time
                     current_time = time.time()
@@ -1098,6 +1109,8 @@ async def on_message(message):  # Event triggers when message is sent
 
                 cmd_case = {    # Dictionary for commmands
                     "announce": cmd_announce,
+                    "changemaintenance": cmd_change_maintenance,
+                    "changegame": cmd_change_game,
                     "help": cmd_help,
                     "uptime": cmd_uptime,
                     "ping": cmd_ping,
