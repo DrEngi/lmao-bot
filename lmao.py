@@ -35,6 +35,7 @@ import random
 import io
 import time
 import aiohttp
+import socket
 import json
 import urban
 import avatar
@@ -119,22 +120,22 @@ async def on_ready():   # Prints ready message in terminal
     print(bot.user.id)
     print('------')
     await bot.change_presence(game=discord.Game(name=r'lmao help | Maintenance: 10pm ET | Created by Firestar493#6963'))
-    #payload = {"server_count"  : 300}
-    dbl_connector = aiohttp.TCPConnector(verify_ssl=False)
+    #payload = {"server_count"  : 301}
+    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
     payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_join(server):
-    dbl_connector = aiohttp.TCPConnector(verify_ssl=False)
+    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
     payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_remove(server):
-    dbl_connector = aiohttp.TCPConnector(verify_ssl=False)
+    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
     payload = {"server_count"  : len(bot.servers)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
