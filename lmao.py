@@ -1,3 +1,5 @@
+dev = False #True if using lmao-bot-dev, False if using lmao-bot
+
 ### TO-DO LIST ###
 ###REWRITE TO NEW DISCORD.PY LIBRARY
 #Add join/welcome message
@@ -25,9 +27,9 @@
 #Change concatenated strings to .format
 #Search for a specific channel to post announcements in
 #Random custom command
+#Aesthetic (a e s t h e t i c) command turns text into t e x t
 
 #Support server command
-#Implement server count
 
 import discord
 import asyncio
@@ -46,11 +48,14 @@ from PIL import Image#, ImageDraw, ImageFont
 bot = discord.Client()
 
 bot_token = ""
-with io.open("tokens/lmao.txt", "r") as token:
+if dev:
+    token_file = "tokens/lmao-dev.txt"
+else:
+    token_file = "tokens/lmao.txt"
+with io.open(token_file, "r") as token:
     bot_token = (token.read())[:-1]
-dbl_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1OTQzMjg1NDgyMTE0MjUyOSIsImJvdCI6dHJ1ZSwiaWF0IjoxNTMyODQyMTUzfQ.zR5xb3qxhGXD6NuTdJya6Pd3DmI4m0nrOftzm8NdNeE"
-#with io.open("tokens/lmao-dbl.txt", "r") as token:
-#    dbl_token = (token.read())[:-1]
+with io.open("tokens/lmao-dbl.txt", "r") as token:
+    dbl_token = (token.read())[:-1]
 dbl_url = "https://discordbots.org/api/bots/459432854821142529/stats"
 dbl_headers = {"Authorization" : dbl_token}
 
@@ -120,25 +125,27 @@ async def on_ready():   # Prints ready message in terminal
     print(bot.user.id)
     print('------')
     await bot.change_presence(game=discord.Game(name=r'lmao help | Maintenance: 10pm ET | Created by Firestar493#6963'))
-    #payload = {"server_count"  : 301}
-    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
-    payload = {"server_count"  : len(bot.servers)}
-    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
+    if not dev:
+        dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
+        payload = {"server_count"  : len(bot.servers)}
+        async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
+            await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_join(server):
-    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
-    payload = {"server_count"  : len(bot.servers)}
-    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
+    if not dev:
+        dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
+        payload = {"server_count"  : len(bot.servers)}
+        async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
+            await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_remove(server):
-    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
-    payload = {"server_count"  : len(bot.servers)}
-    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
+    if not dev:
+        dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
+        payload = {"server_count"  : len(bot.servers)}
+        async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
+            await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_member_join(member):
@@ -819,8 +826,17 @@ async def on_message(message):  # Event triggers when message is sent
                     except IndexError:
                         whos_that_person = message.author
                     whos_that = await avatar.whos_that(whos_that_person)
-                    await bot.send_file(message.channel, "img/whos_that_person.png", content="Who's that Pokémon?\n\nIt's " + whos_that_person.mention + ", seen from above!")
-                    return 'wanted'
+                    await bot.send_file(message.channel, "img/whos_that_person.png", content="Who's that Pokémon?\n\nIt's... " + whos_that_person.mention + "!")
+                    return 'whos_that'
+                async def cmd_seen_from_above():
+                    await bot.send_typing(message.channel)
+                    try:
+                        seen_from_above_person = message.mentions[0]
+                    except IndexError:
+                        seen_from_above_person = message.author
+                    seen_from_above = await avatar.seen_from_above(seen_from_above_person)
+                    await bot.send_file(message.channel, "img/seen_from_above_person.png", content="It's... " + seen_from_above_person.mention + ", seen from above!")
+                    return 'seen_from_above'
                 async def cmd_urban():
                     await bot.send_typing(message.channel)
                     #try:
@@ -1138,7 +1154,8 @@ async def on_message(message):  # Event triggers when message is sent
                     "triggered": cmd_triggered,
                     "victory": cmd_victory,
                     "wanted": cmd_wanted,
-                    #"whosthat": cmd_whos_that,
+                    "whosthat": cmd_whos_that,
+                    "seenfromabove": cmd_seen_from_above,
                     "urban": cmd_urban,
                     "lmgtfy": cmd_lmgtfy,
                     "toggleass": cmd_toggle_ass,
