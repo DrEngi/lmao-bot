@@ -1,4 +1,4 @@
-dev = False #True if using lmao-bot-dev, False if using lmao-bot
+#dev = True #True if using lmao-bot-dev, False if using lmao-bot
 
 ### TO-DO LIST ###
 ###REWRITE TO NEW DISCORD.PY LIBRARY
@@ -47,14 +47,14 @@ from PIL import Image#, ImageDraw, ImageFont
 
 bot = discord.Client()
 
-bot_token = ""
-if dev:
-    token_file = "tokens/lmao-dev.txt"
-else:
-    token_file = "tokens/lmao.txt"
-with io.open(token_file, "r") as token:
+#bot_token = ""
+#if dev:
+#    token_file = "tokens/lmao-dev.txt"
+#else:
+#    token_file = "tokens/lmao.txt"
+with io.open("tokens/token.txt", "r") as token:
     bot_token = (token.read())[:-1]
-with io.open("tokens/lmao-dbl.txt", "r") as token:
+with io.open("tokens/dbl.txt", "r") as token:
     dbl_token = (token.read())[:-1]
 dbl_url = "https://discordbots.org/api/bots/459432854821142529/stats"
 dbl_headers = {"Authorization" : dbl_token}
@@ -125,27 +125,27 @@ async def on_ready():   # Prints ready message in terminal
     print(bot.user.id)
     print('------')
     await bot.change_presence(game=discord.Game(name=r'lmao help | Maintenance: 10pm ET | Created by Firestar493#6963'))
-    if not dev:
-        dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
-        payload = {"server_count"  : len(bot.servers)}
-        async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-            await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
+    #if not dev:
+    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
+    payload = {"server_count"  : len(bot.servers)}
+    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
+        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_join(server):
-    if not dev:
-        dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
-        payload = {"server_count"  : len(bot.servers)}
-        async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-            await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
+    #if not dev:
+    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
+    payload = {"server_count"  : len(bot.servers)}
+    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
+        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_server_remove(server):
-    if not dev:
-        dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
-        payload = {"server_count"  : len(bot.servers)}
-        async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-            await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
+    #if not dev:
+    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
+    payload = {"server_count"  : len(bot.servers)}
+    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
+        await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
 @bot.event
 async def on_member_join(member):
@@ -524,6 +524,8 @@ async def on_message(message):  # Event triggers when message is sent
                                   \n:rage: `{0}triggered` `member` Warns people to stay away from a mentioned `member`; they're triggered!.
                                   \n:trophy: `{0}victory` `member` Displays to everyone `member`'s Victory Royale.
                                   \n:cowboy: `{0}wanted` `member` Puts `member` on a WANTED poster.
+                                  \n:bust_in_silhouette: `{0}whosthat` `member` Who's that Pokémon? It's Pika-er... `member`?
+                                  \n:top: `{0}seenfromabove` `member` Voltorb? Pokéball? Electrode? Nope. It's `member`, seen from above.
                                   \n
                                   \n:tools: **Utility** :tools:
                                   \n:orange_book: `{0}urban` `term` Provides the definition for `term` on Urban Dictionary. Not yet available.
