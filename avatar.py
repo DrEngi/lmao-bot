@@ -1,7 +1,7 @@
 import urllib.request
 import discord
 import io
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 async def get_avatar(mentioned):
     url = mentioned.avatar_url
@@ -98,8 +98,34 @@ async def whos_that(mentioned):
     canvas_w, canvas_h = whos_that.size
     canvas = Image.open("img/white_canvas.png").resize((canvas_w, canvas_h)).convert('RGBA')
 
-    specimen = img.resize((202,207)).convert('RGBA')
+    #specimen = img.resize((202,207)).convert('RGBA')
+    specimen = img.resize((296,182)).convert('RGBA')
 
-    canvas.paste(specimen, (155, 454), specimen)
+    #canvas.paste(specimen, (155, 454), specimen)
+    canvas.paste(specimen, (23, 432), specimen)
     canvas.paste(whos_that, (0,0), whos_that)
     canvas.save("img/whos_that_person.png")
+
+async def seen_from_above(mentioned):
+    img = await get_avatar(mentioned)
+    seen_from_above = Image.open("img/seen_from_above.png").convert('RGBA')
+
+    canvas_w, canvas_h = seen_from_above.size
+    canvas = Image.open("img/white_canvas.png").resize((canvas_w, canvas_h)).convert('RGBA')
+
+    specimen = img.resize((202,207)).convert('RGBA')
+
+    canvas.paste(specimen, (155, 833), specimen)
+    canvas.paste(seen_from_above, (0,0), seen_from_above)
+
+    txt = Image.new('RGBA', canvas.size, (255,255,255,0))
+    fnt = ImageFont.truetype('arial.ttf', 32)
+    fill = (0,0,0,255)
+    d = ImageDraw.Draw(txt)
+
+    user_text = mentioned.name
+    user_text_w, user_text_h = d.textsize(user_text, font=fnt)
+    d.text((canvas_w/4 - user_text_w/2, canvas_h - user_text_h - 68), user_text, font=fnt, fill=fill)
+
+    out = Image.alpha_composite(canvas, txt)
+    out.save("img/seen_from_above_person.png")
