@@ -128,6 +128,7 @@ async def on_ready():   # Prints ready message in terminal
     #if not dev:
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False)
     payload = {"server_count"  : len(bot.servers)}
+    
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         await aioclient.post(dbl_url, data=payload, headers=dbl_headers)
 
