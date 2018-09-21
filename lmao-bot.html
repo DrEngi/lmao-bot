@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      body {
+      	font-family: Tahoma, Verdana, Sans-Serif;
+        background-color: #fdd;
+      }
+      table {
+          width:100%;
+      }
+      table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+      }
+      th, td {
+          padding: 15px;
+          text-align: left;
+      }
+      table.lmao-commands tr:nth-child(even) {
+          background-color: #fff;
+      }
+      table.lmao-commands tr:nth-child(odd) {
+         background-color: #fdd;
+      }
+      table.lmao-commands th {
+          background-color: #ff4500;
+          color: white;
+      }
+      table.lmao-commands tr th:nth-child(1), table.lmao-commands tr td:nth-child(1) {
+      	width: 160px;
+      	font-family: Courier New, Monospace;
+          font-weight: bold;
+      }
+      .noweight {
+      	font-weight: normal;
+      }
+      code {
+      	font-family: Courier new, Monospace;
+      }
+      table.lmao-commands tr th.table-header {
+      	color: black;
+          text-align: center;
+      	background-color: #fdd;
+          font-family: Tahoma, Verdana, Sans-Serif;
+          font-size: 20px;
+      }
+      h2 {
+      	text-align: center;
+      }
+      a {
+      	color: #ff4500;
+          text-decoration: none;
+      }
+      a:hover {
+      	color: #cf2500;
+      }
+      .widget {
+      	display: block;
+      	text-align: center;
+      }
+      .widget img {
+      	display: inline;
+      }
+    </style>
+  </head>
+  <body>
+
+  <h2>About Lmao-Bot</h2>
+
+  <p>Lmao-bot is a fun, multipurpose bot meant to replace people's asses when they say "lmao" or "lmfao". It also serves as a utility bot with music, moderation commands, probability commands (including coins, dice, cards, and 8-ball), and custom message commands.</p>
+  <p>When someone says "lmao" or "lmfao" in the chat, the bot responds with the following message:</p>
+  <blockquote>You appear to have misplaced your ass while laughing. Here is a replacement: 🍑</blockquote>
+  <p>This message, along with the automatic 🍑 reactions the bot gives, can be disabled or made to happen randomly instead of all the time. I personally recommend setting the chance to 1%, especially if you're on an active server, so that it's always unexpected when the message comes.</p>
+
+  <hr />
+
+  <p>The bot was created in June 2018 by Firestar493#6963. Its prefix is "lmao ", but the prefix can be changed from server to server.</p>
+  <p><a href="https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575">Invite lmao-bot to your server!</a></p>
+  <p><a href="https://discord.gg/JQgB7p7">Join the lmao-bot support server!</a></p>
+
+  <hr />
+
+  <a href="https://discordbots.org/bot/459432854821142529" class="widget">
+  	<img src="https://discordbots.org/api/widget/459432854821142529.svg" alt="lmao-bot" />
+	</a>
+
+  <hr />
+
+  <h2>Full List of Lmao-Bot Commands</h2>
+
+  <table class="lmao-commands">
+    <tr>
+      <th colspan=2 class="table-header">Bot Management</th>
+    </tr>
+    <tr>
+      <th>Command</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>lmao prefix</td>
+      <td>If the bot's command prefix is not &quot;lmao &quot;, this returns the current command prefix.</td>
+    </tr>
+    <tr>
+      <td>lmao help</td>
+      <td>Returns a list of commands for lmao-bot to your DMs.</td>
+    </tr>
+    <tr>
+      <td>lmao uptime</td>
+      <td>Shows how long lmao-bot has been up for as well as the time for the next maintenance break.</td>
+    </tr>
+    <tr>
+      <td>lmao ping</td>
+      <td>Returns "pong".</td>
+    </tr>
+    <tr>
+      <td>lmao prefix <span class="noweight">&quot;new_prefix&quot;</span></td>
+      <td>Changes the bot's command prefix to <code>new_prefix</code>. Available to server admins and lmao admins only. Default is "lmao ".</td>
+    </tr>
+    <tr>
+      <td>lmao about</td>
+      <td>Gives a brief description about the bot, including an invite to the support server.</td>
+    </tr>
+    <tr>
+      <td>lmao invite</td>
+      <td>Need ass insurance in other servers? Invite lmao-bot to other servers you're in!</td>
+    </tr>
+    <tr>
+      <td>lmao support</td>
+      <td>Sends an invite link to the lmao-bot support server.</td>
+    </tr>
+    <tr>
+      <td>lmao vote</td>
+      <td>Like lmao-bot? This gives you a link to vote for it on Discord Bot List!</td>
+    </tr>
+  </table>
+
+  <br />
+
+  <table class="lmao-commands">
+    <tr>
+      <th colspan=2 class="table-header">Lmao Message &amp; Reaction Settings</th>
+    </tr>
+    <tr>
+      <th>Command</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>lmao toggleass <span class="noweight">chance</span></td>
+      <td>Changes the chance of automatic ass replacement after someone laughs their ass off to <code>chance</code> percent. Default is 100%.</td>
+    </tr>
+    <tr>
+      <td>lmao asstoggle <span class="noweight">chance</span></td>
+      <td>Does the same thing as <code>lmao toggleass</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao on</td>
+      <td>Changes the chance of automatic ass replacement to 100%.</td>
+    </tr>
+    <tr>
+      <td>lmao off</td>
+      <td>Changes the chance of automatic ass replacement to 0%.</td>
+    </tr>
+    <tr>
+      <td>lmao lotto</td>
+      <td>Changes the chance of automatic ass replacement to 1% (spicy setting for spicy servers).</td>
+    </tr>
+    <tr>
+      <td>lmao react <span class="noweight">chance</span></td>
+      <td>Changes the chance of emoji reaction features to <code>chance</code> percent. Default is 100%.</td>
+    </tr>
+    <tr>
+      <td>lmao chance</td>
+      <td>Returns the chance of automatic ass replacement and the chance of emoji reaction features.</td>
+    </tr>
+    <tr>
+      <td>lmao count</td>
+      <td>Counts the number of times you have used "lmao" or "lmfao".</td>
+    </tr>
+  </table>
+
+  <br />
+
+  <table class="lmao-commands">
+    <tr>
+      <th colspan=2 class="table-header">Music</th>
+    </tr>
+    <tr>
+      <th>Command</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>lmao play</td>
+      <td>Plays the first song in the song queue.</td>
+    </tr>
+    <tr>
+      <td>lmao play <span class="noweight">number</span></td>
+      <td>Plays song number <code>number</code> from the song queue.</td>
+    </tr>
+    <tr>
+      <td>lmao play <span class="noweight">search_term</span></td>
+      <td>Plays the first result from a YouTube search for <code>search_term</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao play <span class="noweight">url</span></td>
+      <td>Plays music from a given URL <code>url</code>. Works with many video sites, including YouTube and Soundcloud.</td>
+    </tr>
+    <tr>
+      <td>lmao next</td>
+      <td>Ends the current song and plays the next song in the queue.</td>
+    </tr>
+    <tr>
+      <td>lmao skip</td>
+      <td>Does the same thing as <code>lmao next</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao pause</td>
+      <td>Pauses the current song.</td>
+    </tr>
+    <tr>
+      <td>lmao resume</td>
+      <td>Resumes a paused song.</td>
+    </tr>
+    <tr>
+      <td>lmao queue</td>
+      <td>Returns a list of all the songs in the queue.</td>
+    </tr>
+    <tr>
+      <td>lmao q</td>
+      <td>Does the same thing as <code>lmao queue</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao q <span class="noweight">add song</span></td>
+      <td>Adds a <code>song</code> (URL or search term) to the end of the queue.</td>
+    </tr>
+    <tr>
+      <td>lmao q <span class="noweight">remove number</span></td>
+      <td>Removes song number <code>number</code> from the queue.</td>
+    </tr>
+    <tr>
+      <td>lmao q <span class="noweight">clear</span></td>
+      <td>Clears the current queue.</td>
+    </tr>
+  </table>
+
+  <br />
+
+  <table class="lmao-commands">
+    <tr>
+      <th colspan=2 class="table-header">Moderation and Administration</th>
+    </tr>
+    <tr>
+      <th>Command</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>lmao adminlist</td>
+      <td>Sends a list of everyone who is a lmao administrator.</td>
+    </tr>
+    <tr>
+      <td>lmao addadmin <span class="noweight">member</span></td>
+      <td>Makes <code>member</code> a lmao administrator. Available to server admins and existing lmao admins only.</td>
+    </tr>
+    <tr>
+      <td>lmao removeadmin <span class="noweight">member</span></td>
+      <td>Removes <code>member</code> from the lmao administrator list. Available to server admins only.</td>
+    </tr>
+    <tr>
+      <td>lmao purge <span class="noweight">num_of_messages</span></td>
+      <td>Purges (deletes) the most recent <code>num_of_messages</code> number of messages from the text channel.</td>
+    </tr>
+    <tr>
+      <td>lmao mute <span class="noweight">member</span></td>
+      <td>Prevents <code>member</code> from sending messages (mutes <code>member</code>) in a given text channel.</td>
+    </tr>
+    <tr>
+      <td>lmao mute <span class="noweight">time member</span></td>
+      <td>Mutes <code>member</code> in a given text channel for <code>time</code> (in minutes).</td>
+    </tr>
+    <tr>
+      <td>lmao unmute <span class="noweight">member</span></td>
+      <td>Allows <code>member</code> to send messages (unmutes <code>member</code>) in a given text channel.</td>
+    </tr>
+    <tr>
+      <td>lmao kick <span class="noweight">member</span></td>
+      <td>Kicks <code>member</code> from the server.</td>
+    </tr>
+    <tr>
+      <td>lmao ban <span class="noweight">member</span></td>
+      <td>Bans <code>member</code> from the server.</td>
+    </tr>
+  </table>
+
+  <br />
+
+  <table class="lmao-commands">
+    <tr>
+      <th colspan=2 class="table-header">Fun Commands</th>
+    </tr>
+    <tr>
+      <th>Command</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>lmao say <span class="noweight">message</span></td>
+      <td>Has lmao-bot say the <code>message</code> you want it to say.</td>
+    </tr>
+    <tr>
+      <td>lmao booty</td>
+      <td>Sends a random SFW booty image in the chat.</td>
+    </tr>
+    <tr>
+      <td>lmao moon <span class="noweight">member</span></td>
+      <td>Moons the mentioned <code>member</code> with a SFW booty image.</td>
+    </tr>
+    <tr>
+      <td>lmao beautiful <span class="noweight">member</span></td>
+      <td>Lets a mentioned <code>member</code> know that they're beautiful with a frame from Gravity Falls.</td>
+    </tr>
+    <tr>
+      <td>lmao ugly <span class="noweight">member</span></td>
+      <td>Lets a mentioned <code>member</code> know that they're ugly with a frame from SpongeBob.</td>
+    </tr>
+    <tr>
+      <td>lmao triggered <span class="noweight">member</span></td>
+      <td>Warns people to stay away from a mentioned <code>member</code>; they're triggered!</td>
+    </tr>
+    <tr>
+      <td>lmao victory <span class="noweight">member</span></td>
+      <td>Displays to everyone <code>member</code>'s Victory Royale.</td>
+    </tr>
+    <tr>
+      <td>lmao wanted <span class="noweight">member</span></td>
+      <td>Puts <code>member</code> on a WANTED poster.</td>
+    </tr>
+    <tr>
+      <td>lmao whosthat <span class="noweight">member</span></td>
+      <td>Who's that Pokémon? It's Pika-er... <code>member</code>?</td>
+    </tr>
+    <tr>
+      <td>lmao seenfromabove <span class="noweight">member</span></td>
+      <td>Voltorb? Pokéball? Electrode? Nope. It's <code>member</code>, seen from above.</td>
+    </tr>
+  </table>
+
+  <br />
+
+  <table class="lmao-commands">
+    <tr>
+      <th colspan=2 class="table-header">Utility</th>
+    </tr>
+    <tr>
+      <th>Command</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>lmao urban <span class="noweight">term</span></td>
+      <td>Provides the definition for <code>term</code> on Urban Dictionary. Not yet available.</td>
+    </tr>
+    <tr>
+      <td>lmao lmgtfy <span class="noweight">what_to_google</span></td>
+      <td>Provides a nifty LMGTFY (Let Me Google That For You) link for <code>what_to_google</code>.</td>
+    </tr>
+  </table>
+
+  <br />
+
+  <table class="lmao-commands">
+    <tr>
+      <th colspan=2 class="table-header">Probability Games &amp; Commands</th>
+    </tr>
+    <tr>
+      <th>Command</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>lmao coin <span class="noweight">number_of_coins</span></td>
+      <td>Flips <code>number_of_coins</code> coins. If <code>number_of_coins</code> is not specified, one coin will be flipped.</td>
+    </tr>
+    <tr>
+      <td>lmao flip <span class="noweight">number_of_coins</span></td>
+      <td>Does the same thing as <code>lmao coin</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao dice <span class="noweight">number_of_dice</span></td>
+      <td>Rolls <code>number_of_dice</code> six-sided dice. If <code>number_of_dice</code> is not specified, one die will be rolled.</td>
+    </tr>
+    <tr>
+      <td>lmao roll <span class="noweight">number_of_dice</span></td>
+      <td>Does the same thing as <code>lmao dice</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao card <span class="noweight">number_of_cards</span></td>
+      <td>Draws <code>number_of_cards</code> cards (without replacement) from a standard 52-card deck. If <code>number_of_cards</code> is not specified, one card will be drawn.</td>
+    </tr>
+    <tr>
+      <td>lmao draw <span class="noweight">number_of_cards</span></td>
+      <td>Does the same thing as <code>lmao card</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao pick <span class="noweight">option1, option2, ...</span></td>
+      <td>Picks one option out of several given options, separated by commas.</td>
+    </tr>
+    <tr>
+      <td>lmao 8ball</td>
+      <td>Provides a response from the Magic 8-Ball.</td>
+    </tr>
+    <tr>
+      <td>lmao guess start</td>
+      <td>Starts a number guessing game with a random number from 0 to 100.</td>
+    </tr>
+    <tr>
+      <td>lmao guess <span class="noweight">number</span></td>
+      <td>Guesses a <code>number</code> in an ongoing guessing game.</td>
+    </tr>
+    <tr>
+      <td>lmao guess giveup</td>
+      <td>Gives up an ongoing guessing game. Only use this if you're a quitter.</td>
+    </tr>
+  </table>
+  <br />
+
+  <table class="lmao-commands">
+    <tr>
+      <th colspan=2 class="table-header">Custom Commands</th>
+    </tr>
+    <tr>
+      <th>Command</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>lmao add <span class="noweight">command_name command_text</span></td>
+      <td>Adds <code>command_name</code> as a custom command, which prints <code>command_text</code> when executed.</td>
+    </tr>
+    <tr>
+      <td>lmao edit <span class="noweight">command_name command_text</span></td>
+      <td>Edits a certain command, <code>command_name</code>, to instead print <code>command_text</code> when executed.</td>
+    </tr>
+    <tr>
+      <td>lmao delete <span class="noweight">command_name</span></td>
+      <td>Deletes a certain command, <code>command_name</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao list</td>
+      <td>Lists all custom commands.</td>
+    </tr>
+    <tr>
+      <td>lmao <span class="noweight">command_name</span></td>
+      <td>Prints the message associated with the custom command <code>command_name</code>.</td>
+    </tr>
+  </table>
+
+  </body>
+</html>

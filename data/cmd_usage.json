@@ -1,0 +1,278 @@
+{
+    "uptime": {
+        "uses": 46,
+        "uptime": 5
+    },
+    "replaceass": {
+        "uses": 219
+    },
+    "count": {
+        "uses": 21,
+        "count": 7
+    },
+    "queue": {
+        "uses": 202,
+        "queue": 1,
+        "q": 5
+    },
+    "urban": {
+        "uses": 24,
+        "urban": 3
+    },
+    "say": {
+        "uses": 41,
+        "say": 13
+    },
+    "play": {
+        "uses": 247,
+        "play": 49
+    },
+    "pause": {
+        "uses": 28,
+        "pause": 1
+    },
+    "queue_add": {
+        "uses": 39
+    },
+    "resume": {
+        "uses": 12,
+        "resume": 1
+    },
+    "stop": {
+        "uses": 21,
+        "stop": 4
+    },
+    "add": {
+        "uses": 54,
+        "add": 36
+    },
+    "delete": {
+        "uses": 20,
+        "delete": 10
+    },
+    "next": {
+        "uses": 14
+    },
+    "ugly": {
+        "uses": 7,
+        "ugly": 1
+    },
+    "react": {
+        "uses": 8
+    },
+    "toggle": {
+        "uses": 27,
+        "on": 4,
+        "toggleass": 1,
+        "off": 2,
+        "toggle": 1
+    },
+    "pick": {
+        "uses": 4
+    },
+    "purge": {
+        "uses": 13,
+        "purge": 8,
+        "clean": 1,
+        "clear": 1
+    },
+    "prefix": {
+        "uses": 69,
+        "prefix": 20
+    },
+    "vote": {
+        "uses": 10,
+        "vote": 7
+    },
+    "queue_remove": {
+        "uses": 1
+    },
+    "help": {
+        "uses": 33,
+        "null": 1,
+        "help": 13
+    },
+    "invite": {
+        "uses": 6,
+        "invite": 1
+    },
+    "list": {
+        "uses": 44,
+        "list": 23
+    },
+    "announce": {
+        "uses": 5
+    },
+    "custom": {
+        "uses": 20
+    },
+    "edit": {
+        "uses": 15,
+        "edit": 10
+    },
+    "chance": {
+        "uses": 29,
+        "chance": 9
+    },
+    "addadmin": {
+        "uses": 13,
+        "addadmin": 8
+    },
+    "adminlist": {
+        "uses": 23,
+        "adminlist": 15
+    },
+    "about": {
+        "uses": 6
+    },
+    "removeadmin": {
+        "uses": 7,
+        "removeadmin": 5
+    },
+    "kick": {
+        "uses": 8,
+        "kick": 6
+    },
+    "ping": {
+        "uses": 43,
+        "ping": 13
+    },
+    "moon": {
+        "uses": 2
+    },
+    "booty": {
+        "uses": 30,
+        "booty": 28
+    },
+    "beautiful": {
+        "uses": 7,
+        "beautiful": 6
+    },
+    "victory": {
+        "uses": 6,
+        "victory": 2
+    },
+    "seenfromabove": {
+        "uses": 1
+    },
+    "wanted": {
+        "uses": 3,
+        "wanted": 1
+    },
+    "lmgtfy": {
+        "uses": 2,
+        "lmgtfy": 1
+    },
+    "guess": {
+        "uses": 39,
+        "guess": 23,
+        "guess:giveup": 1,
+        "guess:start": 3,
+        "guess:50": 3,
+        "guess:10": 1,
+        "guess:100": 1,
+        "guess:7": 1,
+        "guess:30": 1,
+        "guess:20": 1,
+        "guess:22": 1,
+        "guess:27": 1,
+        "guess:25": 1,
+        "guess:75": 1,
+        "guess:60": 1,
+        "guess:55": 1,
+        "guess:52": 1,
+        "guess:53": 1
+    },
+    "triggered": {
+        "uses": 2,
+        "triggered": 1
+    },
+    "whosthat": {
+        "uses": 1
+    },
+    "coin": {
+        "uses": 6
+    },
+    "dice": {
+        "uses": 11,
+        "dice": 5
+    },
+    "card": {
+        "uses": 3
+    },
+    "8ball": {
+        "uses": 8,
+        "8ball": 3
+    },
+    "mute": {
+        "uses": 7,
+        "mute": 4
+    },
+    "music": {
+        "uses": 29
+    },
+    "avatar": {
+        "uses": 28
+    },
+    "changegame": {
+        "uses": 1
+    },
+    "secret": {
+        "uses": 7
+    },
+    "utility": {
+        "uses": 5
+    },
+    "images": {
+        "uses": 31
+    },
+    "prob": {
+        "uses": 91
+    },
+    "settings": {
+        "uses": 24
+    },
+    "fun": {
+        "uses": 323
+    },
+    "info": {
+        "uses": 13,
+        "about": 3,
+        "null": 1,
+        "info": 1
+    },
+    "gonewild": {
+        "uses": 65,
+        "gonewild": 64
+    },
+    "unmute": {
+        "uses": 3,
+        "unmute": 3
+    },
+    "ban": {
+        "uses": 3,
+        "ban": 3
+    },
+    "now_playing": {
+        "uses": 5,
+        "np": 5
+    },
+    "skip": {
+        "uses": 6,
+        "skip": 4,
+        "next": 2
+    },
+    "garbage": {
+        "uses": 16,
+        "garbage": 15,
+        "trash": 1
+    },
+    "remind": {
+        "uses": 119,
+        "remind": 119
+    },
+    "reminders": {
+        "uses": 12,
+        "reminders": 12
+    }
+}
