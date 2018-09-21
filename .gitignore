@@ -114,10 +114,12 @@ admins/
 settings/
 tokens/
 customs/
+ffmpeg-20180811-00ae349-win64-static/
+potential
+old/
+testing/
 
 lmao_count.txt
-custom_cmd_list_server.txt
-custom_cmd_list.txt
 
 
 # End of https://www.gitignore.io/api/python
