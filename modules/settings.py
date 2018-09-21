@@ -14,7 +14,7 @@ class Settings:
     @commands.command(name="toggle", aliases=["toggleass", "asstoggle", "on", "off", "lotto"])
     async def cmd_toggle_ass(self, ctx, new_chance=""): # Toggle whether automatic ass substitution happens or not
         guild_id = ctx.guild.id
-        if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages:
+        if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages or perms.is_lmao_developer(ctx.message):
             valid_chance = True
             chance = vars.get_replace_ass_chance(guild_id)
             try:
@@ -48,7 +48,7 @@ class Settings:
     @commands.command(name="react", aliases=["togglereact", "reacttoggle"])
     async def cmd_react(self, ctx, new_chance):
         guild_id = ctx.guild.id
-        if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages:
+        if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages or perms.is_lmao_developer(ctx.message):
             valid_chance = True
             chance = vars.get_react_chance(guild_id)
             try:
