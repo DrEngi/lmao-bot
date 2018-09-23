@@ -31,7 +31,7 @@ class Brackets:
         return ctx.command.name
 
     @commands.command(name="brackets delgroup", aliases=["b!delgroup"])
-    async def cmd_brackets_delgroup(self, ctx, name) # Deletes a group from this server
+    async def cmd_brackets_delgroup(self, ctx, name): # Deletes a group from this server
         guild_id = ctx.guild.id
         await ctx.send(ctx.author.mention + " Not implemented yet.")
         usage.update(ctx)
