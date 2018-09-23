@@ -30,7 +30,8 @@ class Info:
             0x808080,
             0x008000,
             0xD11919,
-            0xFBCEB1
+            0xFBCEB1,
+            0xFFFFFF
         ]
         help_head = [
                     "🤖 **Bot Management** 🤖",
