@@ -30,8 +30,8 @@ class Info:
             0x808080,
             0x008000,
             0xD11919,
-            0xFBCEB1,
-            0xFFFFFF
+            0xFBCEB1#,
+            # 0xFFFFFF
         ]
         help_head = [
                     "🤖 **Bot Management** 🤖",
@@ -42,8 +42,8 @@ class Info:
                     "🛠️ **Utility** 🛠️",
                     "📊 **Probability Games & Commands** 📊",
                     "😏 **NSFW** 😏",
-                    "✍️ **Custom Commands** ✍️",
-                    "️️️✍️ **Bracket Commands** ✍️"
+                    "✍️ **Custom Commands** ✍️"#,
+                    # "️️️✍️ **Bracket Commands** ✍️"
                     ]
         help_desc = [""":exclamation: `lmao prefix` If the bot's command prefix is not `lmao`, this returns the current command prefix.
                       \n:question: `{0}help` Returns a list of commands for lmao-bot to your DMs (hey, that's meta).
@@ -114,11 +114,11 @@ class Info:
                       \n:pencil: `{0}edit` `command_name` `command_text` Edits a certain command, `command_name`, to instead print `command_text` when executed.
                       \n:wastebasket: `{0}delete` `command_name` Deletes a certain command, `command_name`.
                       \n:clipboard: `{0}list` Lists all custom commands.
-                      \n:speaking_head: `{0}command_name` Prints the message associated with the custom command `command_name`.""",
-                   """:thonking: `{0}brackets enable` Enables brackets.
-                      \n:thonking: `{0}brackets disable` Deletes brackets.
-                      \n:thonking: `{0}brackets add <group_name>` Adds a group
-                      \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
+                      \n:speaking_head: `{0}command_name` Prints the message associated with the custom command `command_name`."""]#,
+                   # """:thonking: `{0}brackets enable` Enables brackets.
+                   #    \n:thonking: `{0}brackets disable` Deletes brackets.
+                   #    \n:thonking: `{0}brackets add <group_name>` Adds a group
+                   #    \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
         for i in range(len(help_head)):
             e = discord.Embed(color=help_color[i], title=help_head[i], description=help_desc[i].format(prefix))
             if i > 0:
