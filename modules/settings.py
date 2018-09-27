@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import io
 import json
+import asyncio
 from utils import vars, perms, usage
 
 class Settings:
@@ -12,13 +13,30 @@ class Settings:
         self.bot = bot
 
     @commands.command(name="toggle", aliases=["toggleass", "asstoggle", "on", "off", "lotto"])
-    async def cmd_toggle_ass(self, ctx, new_chance=""): # Toggle whether automatic ass substitution happens or not
+    async def cmd_toggle(self, ctx, arg=""): # Toggle whether automatic ass substitution happens or not
         guild_id = ctx.guild.id
-        if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages or perms.is_lmao_developer(ctx.message):
+        if perms.is_lmao_developer(ctx.message) or perms.get_perms(ctx.message).manage_messages:
+            valid_shortcuts = ["on", "off", "lotto"]
+            new_chance = arg
+            if new_chance == "" and ctx.invoked_with not in valid_shortcuts:
+                await ctx.send(f"{ctx.author.mention} My current ass replacement chance for {ctx.guild.name} is `{vars.get_replace_ass_chance(guild_id)}%`. What should I change it to?\n\n(Note: Say `cancel` to cancel this change.)")
+                def check(message):
+                    return message.author == ctx.author and message.channel == ctx.channel
+                try:
+                    message = await self.bot.wait_for("message", timeout=30.0, check=check)
+                    if message.content.lower() == "cancel":
+                        await ctx.send(f":x: {ctx.author.mention} Ass replacement chance change cancelled.")
+                        usage.update(ctx)
+                        return ctx.command.name
+                    new_chance = message.content
+                except asyncio.TimeoutError:
+                    await ctx.send(f":x: {ctx.author.mention} Command timed out.")
+                    usage.update(ctx)
+                    return ctx.command.name
             valid_chance = True
             chance = vars.get_replace_ass_chance(guild_id)
             try:
-                chance = int(new_chance)
+                chance = int(new_chance.replace("%", ""))
                 if chance < 0 or chance > 100:
                     valid_chance = False
             except ValueError:
@@ -26,7 +44,7 @@ class Settings:
                     chance = 0
                 elif new_chance == "on" or ctx.invoked_with == "on":
                     chance = 100
-                elif ctx.invoked_with == "lotto":
+                elif new_chance == "lotto" or ctx.invoked_with == "lotto":
                     chance = 1
                 else:
                     valid_chance = False
@@ -37,22 +55,38 @@ class Settings:
                 else:
                     after_msg = "Don't do anything reckless; you'll be fine."
                 vars.set_replace_ass_chance(guild_id, chance)
-                await ctx.send(r'You have changed the automatic ass replacement chance to ' + str(chance) + r"%. " + after_msg)
+                await ctx.send(f"You have changed the automatic ass replacement chance for {ctx.guild.name} to `{chance}%`. {after_msg}")
             else:
-                await ctx.send(r'You must include an integer after toggleass from 0 to 100. This is the chance (in %) of automatic ass replacement.')
+                await ctx.send(f"{ctx.author.mention} You must include an integer after toggleass from 0 to 100. This is the chance (in %) of automatic ass replacement.")
         else:
             await ctx.send(ctx.author.mention + " You do not have the permission to change the ass replacement chance. Ask a guild administrator, lmao administrator, or user with the `Manage Messages` permission to do so.")
         usage.update(ctx)
         return ctx.command.name
 
     @commands.command(name="react", aliases=["togglereact", "reacttoggle"])
-    async def cmd_react(self, ctx, new_chance):
+    async def cmd_react(self, ctx, arg=""):
         guild_id = ctx.guild.id
-        if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages or perms.is_lmao_developer(ctx.message):
+        if perms.is_lmao_developer(ctx.message) or perms.get_perms(ctx.message).manage_messages:
+            new_chance = arg
+            if new_chance == "":
+                await ctx.send(f"{ctx.author.mention} My current reaction chance for {ctx.guild.name} is `{vars.get_react_chance(guild_id)}%`. What should I change it to?\n\n(Note: Say `cancel` to cancel this change.)")
+                def check(message):
+                    return message.author == ctx.author and message.channel == ctx.channel
+                try:
+                    message = await self.bot.wait_for("message", timeout=30.0, check=check)
+                    if message.content.lower() == "cancel":
+                        await ctx.send(f":x: {ctx.author.mention} Reaction chance change cancelled.")
+                        usage.update(ctx)
+                        return ctx.command.name
+                    new_chance = message.content
+                except asyncio.TimeoutError:
+                    await ctx.send(f":x: {ctx.author.mention} Command timed out.")
+                    usage.update(ctx)
+                    return ctx.command.name
             valid_chance = True
             chance = vars.get_react_chance(guild_id)
             try:
-                chance = int(new_chance)
+                chance = int(new_chance.replace("%", ""))
                 if chance < 0 or chance > 100:
                     valid_chance = False
             except ValueError:
@@ -69,7 +103,7 @@ class Settings:
                 else:
                     after_msg = "Watch out for the Fine Bros. :eyes:"
                 vars.set_react_chance(guild_id, chance)
-                await ctx.send(r'You have changed the automatic emoji reaction chance to ' + str(chance) + r"%. " + after_msg)
+                await ctx.send(f"You have changed the automatic emoji reaction chance for {ctx.guild.name} to `{chance}%`. {after_msg}")
             else:
                 await ctx.send(r'You must include an integer after `react` from 0 to 100. This is the chance (in %) of automatic emoji reactions.')
         else:
