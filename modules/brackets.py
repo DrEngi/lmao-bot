@@ -23,15 +23,15 @@ class Brackets:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="brackets addgroup", aliases=["b!addgroup"])
-    async def cmd_brackets_addgroup(self, ctx, name): # Adds a group for this server
+    @commands.command(name="brackets group add", aliases=["b!groupadd"])
+    async def cmd_brackets_groupadd(self, ctx, name): # Adds a group from brackets in this server
         guild_id = ctx.guild.id
         await ctx.send(ctx.author.mention + " Not implemented yet.")
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="brackets delgroup", aliases=["b!delgroup"])
-    async def cmd_brackets_delgroup(self, ctx, name) # Deletes a group from this server
+    @commands.command(name="brackets group del", aliases=["b!groupdel"])
+    async def cmd_brackets_groupdel(self, ctx, name): # Deletes a group from brackets in this server
         guild_id = ctx.guild.id
         await ctx.send(ctx.author.mention + " Not implemented yet.")
         usage.update(ctx)
