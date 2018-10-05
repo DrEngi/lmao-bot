@@ -48,7 +48,7 @@ class Info:
         help_desc = [""":exclamation: `lmao prefix` If the bot's command prefix is not `lmao`, this returns the current command prefix.
                       \n:question: `{0}help` Returns a list of commands for lmao-bot to your DMs (hey, that's meta).
                       \n:computer: `{0}uptime` Shows how long lmao-bot has been up for as well as the time for the next maintenance break.
-                      \n:ping_pong: `{0}ping` Returns \"pong\".
+                      \n:ping_pong: `{0}ping` Sends the bot's latency (ping).
                       \n:exclamation: `{0}prefix` `new_prefix` Changes the bot's command prefix to `new_prefix`. Available to guild admins and lmao admins only. Default is "lmao ".
                       \n:information_source: `{0}about` Gives a brief description about the bot, including an invite to the support server.
                       \n:incoming_envelope: `{0}invite` Need ass insurance in other guilds? Invite lmao-bot to other guilds you're in!
@@ -65,10 +65,11 @@ class Info:
                       \n:arrow_forward: `{0}play` `number` Plays song number `number` from the song queue.
                       \n:arrow_forward: `{0}play` `search_term` Plays the first result from a YouTube search for `search_term`.
                       \n:arrow_forward: `{0}play` `url` Plays music from a given URL `url`. Works with many video sites, including YouTube and Soundcloud.
-                      \n:fast_forward: `{0}next` Ends the current song and plays the next song in the queue.
-                      \n:fast_forward: `{0}skip` Does the same thing as `{0}next`.
+                      \n:next_track: `{0}next` Ends the current song and plays the next song in the queue.
+                      \n:next_track: `{0}skip` Does the same thing as `{0}next`.
                       \n:pause_button: `{0}pause` Pauses the current song.
                       \n:play_pause: `{0}resume` Resumes a paused song.
+                      \n:loud_sound: `{0}volume` `percent` Changes the volumes to `percent`%.
                       \n:radio: `{0}queue` Returns a list of all the songs in the queue.
                       \n:radio: `{0}q` Does the same thing as `{0}queue`.
                       \n:heavy_plus_sign: `{0}q` `add` `song` Adds a `song` (URL or search term) to the end of the queue.
@@ -109,7 +110,13 @@ class Info:
                       \n:thinking: `{0}guess start` Starts a number guessing game with a random number from 0 to 100.
                       \n:raising_hand: `{0}guess` `number` Guesses a `number` in an ongoing guessing game.
                       \n:flag_white: `{0}guess giveup` Gives up an ongoing guessing game. Only use this if you're a quitter.""",
-                   """:flushed: `{0}gonewild` Sends a random post from the /r/gonewild subreddit.""",
+                   """:flushed: `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
+                      \n:peach: `{0}ass` Sends a random NSFW ass picture.
+                      \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
+                      \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
+                      \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
+                      \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
+                      \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.""",
                    """:heavy_plus_sign: `{0}add` `command_name` `command_text` Adds `command_name` as a custom command, which prints `command_text` when executed.
                       \n:pencil: `{0}edit` `command_name` `command_text` Edits a certain command, `command_name`, to instead print `command_text` when executed.
                       \n:wastebasket: `{0}delete` `command_name` Deletes a certain command, `command_name`.
@@ -120,6 +127,8 @@ class Info:
                    #    \n:thonking: `{0}brackets add <group_name>` Adds a group
                    #    \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
         for i in range(len(help_head)):
+            if "nsfw" in help_head[i].lower() and not vars.get_allow_nsfw(ctx.guild.id):
+                continue
             e = discord.Embed(color=help_color[i], title=help_head[i], description=help_desc[i].format(prefix))
             if i > 0:
                 await ctx.author.send(embed=e)

@@ -12,10 +12,10 @@ async def has_voted(user_id):
     vote_url = f"https://discordbots.org/api/bots/459432854821142529/check?userId={user_id}"
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         async with aioclient.get(vote_url, headers=vote_headers) as r:
-            dbl_connector.close()
-            await aioclient.close()
             vote_data = await r.json()
             if vote_data["voted"] == 0:
                 return False
             else:
                 return True
+            dbl_connector.close()
+            await aioclient.close()

@@ -173,7 +173,7 @@ class Fun:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="booty", aliases=["butt", "ass"])
+    @commands.command(name="booty", aliases=["butt"])
     async def cmd_booty(self, ctx):  # Sends a random SFW booty pic in the channel
         await ctx.send(file=discord.File("img/booties/booty" + str(random.randint(1,10)) + ".jpg"))
         usage.update(ctx)

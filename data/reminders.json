@@ -1,12 +1,3 @@
 {
-    "reminders": [
-        {
-            "timestamp": 25623241,
-            "author": 210220782012334081,
-            "time": "2 hour(s) and 30 minute(s)",
-            "message": "Typing race thing",
-            "set_on": "2018-09-19 15:31:36 Eastern Standard Time",
-            "set_for": "2018-09-19 18:01 Eastern Standard Time"
-        }
-    ]
+    "reminders": []
 }

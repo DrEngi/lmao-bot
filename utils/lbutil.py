@@ -5,8 +5,12 @@ def get_permutations(prefix):
     prefixes = []
     prefixes.append(prefix[0].lower() + prefix[1:] + " ")
     prefixes.append(prefix[0].upper() + prefix[1:] + " ")
+    prefixes.append(prefix.lower() + " ")
+    prefixes.append(prefix.upper() + " ")
     prefixes.append(prefixes[0][:-1])
     prefixes.append(prefixes[1][:-1])
+    prefixes.append(prefixes[2][:-1])
+    prefixes.append(prefixes[3][:-1])
     return prefixes
 
 # Utility function for finding the next occurrence of little_string in big_string after the index of n
