@@ -128,10 +128,9 @@ async def on_ready():   # Prints ready message in terminal
             await check_reminders()
         except Exception as e:
             print(f"Error: {e}")
-        await bot.change_presence(activity=discord.Game(name="lmao help | Maint.: {} | Firestar493#6963".format(vars.get_maintenance_time())))
-        await asyncio.sleep(30)
-        await bot.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(bot.guilds))))
-        await asyncio.sleep(30)
+        if not vars.custom_game:
+            await bot.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(bot.guilds))))
+        await asyncio.sleep(60)
 
 @bot.event
 async def on_guild_join(guild):

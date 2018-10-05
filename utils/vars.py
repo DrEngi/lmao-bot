@@ -4,6 +4,8 @@ import io
 
 replace_ass_msg = "You appear to have misplaced your ass while laughing. Here is a replacement: :peach:"
 
+custom_game = False # Changes to True of the activity of lmao-bot is manually altered
+
 deck = {}                   # TO BE WORKED ON: deck feature
 # init = []                   # Guilds where settings have been initialized
 guild_count = 0
@@ -198,7 +200,7 @@ def get_last_use_time():
     return last_use_time
 
 def set_maintenance_time(time):
-    global set_maintenance_time
+    global maintenance_time
     maintenance_time = time
     return maintenance_time
 def get_maintenance_time():
