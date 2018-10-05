@@ -97,6 +97,7 @@ class Info:
                       \n:top: `{0}seenfromabove` `member` Voltorb? Pokéball? Electrode? Nope. It's `member`, seen from above.""",
                    """:orange_book: `{0}urban` `term` Provides the definition for `term` on Urban Dictionary. Not yet available.
                       \n:mag: `{0}lmgtfy` `what_to_google` Provides a nifty LMGTFY (Let Me Google That For You) link for `what_to_google`.
+                      \n:wavy_dash: `{0}aesthetic` `text` Turns `text` into `t e x t`.
                       \n:reminder_ribbon: `{0}remind` Sets up a reminder. After the amount of time you specify, you will be DM'd your reminder.
                       \n:date: `{0}reminders` Lists all your reminders.""",
                    """:moneybag: `{0}coin` `number_of_coins` Flips `number_of_coins` coins. If `number_of_coins` is not specified, one coin will be flipped.

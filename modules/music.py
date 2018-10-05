@@ -556,9 +556,10 @@ class Music:
         for i in range(0, math.ceil(len(player.queue) / 20)):
             desc.append("")
         for i in range(0, len(player.queue)):
-            line = f"{i + 1}. {player.queue[i]}\n"
+            line = f"{i + 1}. {player.queue[i]}"
             if len(line) > 100:
                 line = line[:97] + "..."
+            line += "\n"
             desc[math.floor(i / 20)] += line
         for i in range(0, len(desc)):
             e = discord.Embed(title=f"Current Queue for {ctx.guild.name} {player.print_total_time()}", description=desc[i])

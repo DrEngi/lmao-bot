@@ -78,7 +78,7 @@ class NSFW:
 
     @commands.command(name="nsfwtoggle", aliases=["togglensfw", "nsfwon", "nsfwoff"])
     async def cmd_toggle_nsfw(self, ctx):
-        if not perms.get_perms(ctx.message).manage_messages and not perms.is_lmao_developer(ctx.message):
+        if not perms.get_perms(ctx.message).manage_messages and not perms.is_lmao_admin(ctx.message):
             await ctx.send(f"{ctx.author.mention} You do not have the permission to toggle NSFW settings for your guild.")
             usage.update(ctx)
             return ctx.command.name

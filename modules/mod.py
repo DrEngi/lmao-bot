@@ -32,7 +32,7 @@ class Mod:
 
     @commands.command(name="addadmin")
     async def cmd_add_admin(self, ctx, *, arg=""):
-        if perms.is_lmao_admin(ctx.message) or perms.is_lmao_developer(ctx.message):
+        if perms.is_lmao_admin(ctx.message):
             if len(ctx.message.mentions) == 1:
                 if str(ctx.message.mentions[0].id) in vars.get_lmao_admin_list(ctx.guild.id):
                     await ctx.send(ctx.message.mentions[0].name + " is already a lmao administrator.")
@@ -68,7 +68,7 @@ class Mod:
 
     @commands.command(name="purge", aliases=["clear", "clean", "prune"])
     async def cmd_purge(self, ctx, *, arg=""):  # Allows the deletion of messages
-        if perms.get_perms(ctx.message).manage_messages or perms.is_lmao_developer(ctx.message):
+        if perms.get_perms(ctx.message).manage_messages or perms.is_lmao_admin(ctx.message):
             try:
                 if int(arg) > 100:
                     await ctx.send("You cannot delete more than 100 messages.")
@@ -92,7 +92,7 @@ class Mod:
     async def cmd_mute(self, ctx, *, arg=""):
         #muted_perms = discord.Permissions(send_messages=False)
         #lmao_muted = await ctx.guild.create_role(name="lmao muted", permissions=muted_perms)
-        if perms.get_perms(ctx.message).manage_channels or perms.is_lmao_developer(ctx.message):
+        if perms.get_perms(ctx.message).manage_channels or perms.is_lmao_admin(ctx.message):
             try:
                 if len(ctx.message.mentions) == 1:
                     if ctx.message.mentions[0] == self.bot.user:
@@ -135,7 +135,7 @@ class Mod:
 
     @commands.command(name="unmute")
     async def cmd_unmute(self, ctx, *, arg=""):
-        if perms.get_perms(ctx.message).manage_channels or perms.is_lmao_developer(ctx.message):
+        if perms.get_perms(ctx.message).manage_channels or perms.is_lmao_admin(ctx.message):
             try:
                 if len(ctx.message.mentions) == 1:
                     unmuted_perms = ctx.channel.overwrites_for(ctx.message.mentions[0])
@@ -155,7 +155,7 @@ class Mod:
 
     @commands.command(name="kick", aliases=["getouttahere"])
     async def cmd_kick(self, ctx, *, arg=""):
-        if perms.get_perms(ctx.message).kick_members or perms.is_lmao_developer(ctx.message):
+        if perms.get_perms(ctx.message).kick_members or perms.is_lmao_admin(ctx.message):
             try:
                 if len(ctx.message.mentions) == 1:
                     if ctx.message.mentions[0] == self.bot.user:
@@ -178,7 +178,7 @@ class Mod:
 
     @commands.command(name="ban")
     async def cmd_ban(self, ctx, *, arg=""):
-        if perms.get_perms(ctx.message).ban_members or perms.is_lmao_developer(ctx.message):
+        if perms.get_perms(ctx.message).ban_members or perms.is_lmao_admin(ctx.message):
             try:
                 if len(ctx.message.mentions) == 1:
                     if ctx.message.mentions[0] == self.bot.user:

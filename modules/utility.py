@@ -115,6 +115,19 @@ class Utility:
         usage.update(ctx)
         return ctx.command.name
 
+    @commands.command(name="aesthetic")
+    async def cmd_aesthetic(self, ctx, *, text=""):
+        if text == "":
+            await ctx.send(f"{ctx.author.mention} You have to include TEXT you want to turn into T E X T. Use `{ctx.prefix}aesthetic text`.")
+            usage.update(ctx)
+            return ctx.command.name
+        transformed = ""
+        for i in range(0, len(text)):
+            transformed += text[i] + " "
+        await ctx.send(transformed[:2000])
+        usage.update(ctx)
+        return ctx.command.name
+
     @commands.command(name="remind", aliases=["remindme"])
     async def cmd_remind(self, ctx, *, arg=""):
         humor = [

@@ -15,7 +15,7 @@ class Settings:
     @commands.command(name="toggle", aliases=["toggleass", "asstoggle", "on", "off", "lotto"])
     async def cmd_toggle(self, ctx, arg=""): # Toggle whether automatic ass substitution happens or not
         guild_id = ctx.guild.id
-        if perms.is_lmao_developer(ctx.message) or perms.get_perms(ctx.message).manage_messages:
+        if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages:
             valid_shortcuts = ["on", "off", "lotto"]
             new_chance = arg
             if new_chance == "" and ctx.invoked_with not in valid_shortcuts:
@@ -66,7 +66,7 @@ class Settings:
     @commands.command(name="react", aliases=["togglereact", "reacttoggle"])
     async def cmd_react(self, ctx, arg=""):
         guild_id = ctx.guild.id
-        if perms.is_lmao_developer(ctx.message) or perms.get_perms(ctx.message).manage_messages:
+        if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages:
             new_chance = arg
             if new_chance == "":
                 await ctx.send(f"{ctx.author.mention} My current reaction chance for {ctx.guild.name} is `{vars.get_react_chance(guild_id)}%`. What should I change it to?\n\n(Note: Say `cancel` to cancel this change.)")

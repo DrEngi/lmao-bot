@@ -12,7 +12,8 @@ def is_admin(message):
     return get_perms(message).administrator
 
 def is_lmao_admin(message):
-    return is_admin(message) or str(message.author.id) in vars.get_lmao_admin_list(message.guild.id)
+    return is_admin(message) or str(message.author.id) in vars.get_lmao_admin_list(message.guild.id) or is_lmao_developer(message)
 
 def is_lmao_developer(message):
-    return message.author.id == 257203526390906880 or message.author.id == 210220782012334081 or message.author.id == 300763778608267266
+    developers = [257203526390906880, 210220782012334081, 300763778608267266]
+    return message.author.id in developers
