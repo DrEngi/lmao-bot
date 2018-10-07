@@ -19,7 +19,7 @@ class Error:
         if hasattr(ctx.command, 'on_error'):
             return
 
-        ignored = (commands.CommandNotFound, commands.UserInputError, commands.CheckFailure)
+        ignored = (commands.CommandNotFound, commands.UserInputError, commands.CheckFailure, discord.errors.Forbidden)
 
         # Allows us to check for original exceptions raised and sent to CommandInvokeError.
         # If nothing is found. We keep the exception passed to on_command_error.

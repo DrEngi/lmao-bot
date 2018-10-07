@@ -16,7 +16,7 @@ class Info:
     async def cmd_help(self, ctx):   # DMs list of commands
         # Idea: Create objects instead of multiple lists
         if ctx.guild == None:
-            prefix = "lmao"
+            prefix = "lmao "
         else:
             prefix = ctx.prefix
         await ctx.channel.trigger_typing()
@@ -49,7 +49,7 @@ class Info:
                       \n:question: `{0}help` Returns a list of commands for lmao-bot to your DMs (hey, that's meta).
                       \n:computer: `{0}uptime` Shows how long lmao-bot has been up for as well as the time for the next maintenance break.
                       \n:ping_pong: `{0}ping` Sends the bot's latency (ping).
-                      \n:exclamation: `{0}prefix` `new_prefix` Changes the bot's command prefix to `new_prefix`. Available to guild admins and lmao admins only. Default is "lmao ".
+                      \n:exclamation: `{0}prefix` `new_prefix` Changes the bot's command prefix to `new_prefix`. Available to guild admins and lmao admins only. Default is "lmao".
                       \n:information_source: `{0}about` Gives a brief description about the bot, including an invite to the support server.
                       \n:incoming_envelope: `{0}invite` Need ass insurance in other guilds? Invite lmao-bot to other guilds you're in!
                       \n:information_desk_person: `{0}support` Sends an invite link to the lmao-bot support server.
@@ -128,7 +128,7 @@ class Info:
                    #    \n:thonking: `{0}brackets add <group_name>` Adds a group
                    #    \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
         for i in range(len(help_head)):
-            if "nsfw" in help_head[i].lower() and not vars.get_allow_nsfw(ctx.guild.id):
+            if "nsfw" in help_head[i].lower() and ctx.guild != None and not vars.get_allow_nsfw(ctx.guild.id):
                 continue
             e = discord.Embed(color=help_color[i], title=help_head[i], description=help_desc[i].format(prefix))
             if i > 0:

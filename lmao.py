@@ -95,7 +95,9 @@ async def check_reminders(late=False):
 async def on_ready():   # Prints ready message in terminal
     await dblpy.get_upvote_info()
     vars.reset_guild_count()
+    print("Importing settings...")
     vars.import_settings()
+    print("All settings successfully imported.")
     for guild in bot.guilds:
         vars.update_settings(guild.id, vars.GuildSettings(guild.id))
         guild_count = vars.increment_guild_count()
