@@ -63,6 +63,8 @@ def get_all_commands():
 
 print("All extensions loaded.")
 
+dblpy = bot.cogs.get("DBL")
+
 with io.open("tokens/token.txt", "r") as token:
     bot_token = (token.read()).strip()
 with io.open("tokens/dbl.txt", "r") as token:
@@ -91,6 +93,7 @@ async def check_reminders(late=False):
 
 @bot.event
 async def on_ready():   # Prints ready message in terminal
+    await dblpy.get_upvote_info()
     vars.reset_guild_count()
     vars.import_settings()
     for guild in bot.guilds:
@@ -113,7 +116,7 @@ async def on_ready():   # Prints ready message in terminal
     global bot_is_ready
     bot_is_ready = True
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"guild_count"  : len(bot.guilds)}
+    payload = {"server_count"  : len(bot.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
             dbl_connector.close()
@@ -140,23 +143,21 @@ async def on_guild_join(guild):
     print(str(datetime.now()) + " " + "{} initialized. Guild count: {}.".format(guild.name, guild_count))
     print(str(datetime.now()) + " " + guild.name + " just ADDED lmao-bot ^_^")
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"guild_count"  : len(bot.guilds)}
+    payload = {"server_count"  : len(bot.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
             dbl_connector.close()
             await aioclient.close()
-    await asyncio.sleep(60)
 
 @bot.event
 async def on_guild_remove(guild):
     print(str(datetime.now()) + " " + guild.name + " just REMOVED lmao-bot ;_;")
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"guild_count"  : len(bot.guilds)}
+    payload = {"server_count"  : len(bot.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
             dbl_connector.close()
             await aioclient.close()
-    await asyncio.sleep(60)
 
 #Welcomes people in the lmao-bot support server
 @bot.event
@@ -228,7 +229,7 @@ async def on_message(message):  # Event triggers when message is sent
         if len(words) > 0:
             cmd_name = words[0]
 
-        vars.import_settings()
+        # vars.import_settings()
 
         if cmd_name.lower() in get_all_commands():
             await bot.process_commands(message)
@@ -238,9 +239,12 @@ async def on_message(message):  # Event triggers when message is sent
             except KeyError:
                 if "lmao" in message.content.lower() or "lmfao" in message.content.lower():
                     await replace_ass()
+
         if not vars.get_no_command_invoked():
             vars.set_last_use_time(time.time())
         vars.set_no_command_invoked(False)
+
+        vars.export_settings(guild_id)
 
     elif msg == "lmao help":
         await message.channel.send(f"Type `{prefix} help` to see the help menu.")
@@ -250,6 +254,7 @@ async def on_message(message):  # Event triggers when message is sent
     # GENERIC REPLY
     elif ("lmao" in msg or "lmfao" in msg): #generic ass substitution
         await replace_ass()
+        vars.export_settings(guild_id)
 
     if guild_id in ["345655060740440064", "407274897350328345"] and ("pollard" in msg or "buh-bye" in msg or "buhbye" in msg or "buh bye" in msg):
         emoji_list = bot.get_guild(345655060740440064).emojis
@@ -262,7 +267,5 @@ async def on_message(message):  # Event triggers when message is sent
             pass
         except discord.errors.Forbidden:
             pass
-
-    vars.export_settings(guild_id)
 
 bot.run(bot_token)

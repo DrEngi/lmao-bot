@@ -19,7 +19,7 @@ class Secret:
                     try:
                         if channel.permissions_for(guild.me).send_messages:
                             with io.open("management/announcement_finished.txt", "a") as f:
-                                f.write("{} ({})".format(guild.name, guild.id))
+                                f.write(f"{guild.name} ({guild.id})")
                             await channel.send(arg)
                             break
                     except AttributeError:
