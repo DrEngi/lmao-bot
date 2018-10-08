@@ -193,7 +193,7 @@ class Info:
         e.set_thumbnail(url=self.bot.user.avatar_url)
         e.add_field(name="Server Count", value=str(len(self.bot.guilds)))
         e.add_field(name="Total Members", value=usage.count_total_members(self.bot))
-        e.add_field(name="Invite me to your server", value="[You won't regret it :eyes:](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)")
+        e.add_field(name="Invite me to your server", value="[You won't regret it 👀](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)")
         e.add_field(name="Join the support server", value="[Send help pls](https://discord.gg/JQgB7p7)")
         e.add_field(name="Vote for me on Discord Bot List", value="[The power is in your hands](https://discordbots.org/bot/459432854821142529/vote)")
         e.set_footer(text="Try saying \"lmao help\" in a server I'm in!", icon_url=self.bot.user.avatar_url)
