@@ -139,7 +139,7 @@ async def on_ready():   # Prints ready message in terminal
 
 @bot.event
 async def on_guild_join(guild):
-    vars.import_settings()
+    # vars.import_settings()
     vars.update_settings(guild.id, vars.GuildSettings(guild.id))
     guild_count = vars.increment_guild_count()
     print(str(datetime.now()) + " " + "{} initialized. Guild count: {}.".format(guild.name, guild_count))
@@ -176,9 +176,12 @@ async def on_member_join(member):
 #Bids people farewell in the lmao-bot support server
 @bot.event
 async def on_member_remove(member):
-    if member.guild.id == 407274897350328345:#463758816270483476:
-        channel = member.guild.get_channel(472965450045718528)#(469491274219782144)
-        await channel.send("Good night, sweet {}. You will be missed. :pensive:".format(str(member)))
+    if member.guild.id == 463758816270483476:
+        channel = member.guild.get_channel(472965450045718528)
+        await channel.send(f"Good night, sweet {member}. You will be missed. :pensive:")
+    if member.guild.id == 407274897350328345:
+        channel = member.guild.get_channel(469491274219782144)
+        await channel.send(f"Good night, sweet {member}. You will be missed. :pensive:")
 
 @bot.event
 async def on_message(message):  # Event triggers when message is sent

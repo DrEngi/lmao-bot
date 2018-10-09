@@ -65,13 +65,13 @@ class Info:
                       \n:arrow_forward: `{0}play` `number` Plays song number `number` from the song queue.
                       \n:arrow_forward: `{0}play` `search_term` Plays the first result from a YouTube search for `search_term`.
                       \n:arrow_forward: `{0}play` `url` Plays music from a given URL `url`. Works with many video sites, including YouTube and Soundcloud.
-                      \n:next_track: `{0}next` Ends the current song and plays the next song in the queue.
-                      \n:next_track: `{0}skip` Does the same thing as `{0}next`.
+                      \n:microphone: `{0}connect` `voice_channel` Connects the bot to a voice channel named `voice_channel`. If `voice_channel` is not specified, the bot connects to the user's current voice channel.
+                      \n:arrow_forward: `{0}nowplaying` or `{0}np` Shows information about the song currently playing.
+                      \n:next_track: `{0}next` or `{0}skip` Ends the current song and plays the next song in the queue.
                       \n:pause_button: `{0}pause` Pauses the current song.
                       \n:play_pause: `{0}resume` Resumes a paused song.
                       \n:loud_sound: `{0}volume` `percent` Changes the volumes to `percent`%.
-                      \n:radio: `{0}queue` Returns a list of all the songs in the queue.
-                      \n:radio: `{0}q` Does the same thing as `{0}queue`.
+                      \n:radio: `{0}queue` or `{0}q` Returns a list of all the songs in the queue.
                       \n:heavy_plus_sign: `{0}q` `add` `song` Adds a `song` (URL or search term) to the end of the queue.
                       \n:heavy_minus_sign: `{0}q` `remove` `number` Removes song number `number` from the queue.
                       \n:wastebasket: `{0}q` `clear` Clears the current queue.""",

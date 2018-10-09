@@ -657,7 +657,7 @@ class Music:
         Parameters
         ------------
         volume: float or int [Required]
-            The volume to set the player to in percentage. This must be between 0 and 100.
+            The volume to set the player to in percentage. This must be between 0 and 200.
         """
         in_channel = await self.is_in_channel(ctx)
         if not in_channel:
