@@ -70,7 +70,7 @@ class Info:
                       \n:next_track: `{0}next` or `{0}skip` Ends the current song and plays the next song in the queue.
                       \n:pause_button: `{0}pause` Pauses the current song.
                       \n:play_pause: `{0}resume` Resumes a paused song.
-                      \n:loud_sound: `{0}volume` `percent` Changes the volumes to `percent`%.
+                      \n:loud_sound: `{0}volume` `percent` Changes the volume to `percent`%.
                       \n:radio: `{0}queue` or `{0}q` Returns a list of all the songs in the queue.
                       \n:heavy_plus_sign: `{0}q` `add` `song` Adds a `song` (URL or search term) to the end of the queue.
                       \n:heavy_minus_sign: `{0}q` `remove` `number` Removes song number `number` from the queue.
