@@ -139,7 +139,7 @@ class Info:
                 await ctx.author.send(embed=e)
             else:
                 await ctx.author.send(help_title, embed=e)
-            #await asyncio.sleep(1)
+            await asyncio.sleep(0.1)
         if ctx.guild != None:
             await ctx.send(f"{ctx.author.mention} A full list of lmao-bot commands has been slid into your DMs. :mailbox_with_mail:")
         usage.update(ctx)

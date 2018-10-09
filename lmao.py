@@ -170,23 +170,23 @@ welcome = {
 #Welcomes people in the lmao-bot support server
 @bot.event
 async def on_member_join(member):
-    channel = welcome.get(member.guild.id, 0)
-    if channel == 0:
+    channel_id = welcome.get(member.guild.id, 0)
+    if channel_id == 0:
         return
     mention = True
-    if channel == 265156361791209475:
+    if channel_id == 265156361791209475:
         mention = False
-    channel = member.guild.get_channel(channel)
+    channel = member.guild.get_channel(channel_id)
     await channel.trigger_typing()
     await fun.beautiful_welcome(member, channel, mention=mention)
 
 #Bids people farewell in the lmao-bot support server
 @bot.event
 async def on_member_remove(member):
-    channel = welcome.get(member.guild.id, 0)
-    if channel == 0:
+    channel_id = welcome.get(member.guild.id, 0)
+    if channel_id == 0:
         return
-    channel = member.guild.get_channel(channel)
+    channel = member.guild.get_channel(channel_id)
     await channel.send(f"Good night, sweet {member}. You will be missed. :pensive:")
 
 @bot.event
