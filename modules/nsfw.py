@@ -30,6 +30,7 @@ class NSFW:
         self.reddit_posts = {}
         self.categories = {
             "ass": Category("ass", "🍑"),
+            "boobs": Category("boobs", "🍈"),
             "pussy": Category("pussy", "🌮"),
             "dick": Category("dick", "🍆")
         }
@@ -126,7 +127,7 @@ class NSFW:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="nsfw", aliases=["pussy", "dick", "ass"])
+    @commands.command(name="nsfw", aliases=["pussy", "dick", "ass", "boobs"])
     async def cmd_nsfw(self, ctx):
         await ctx.channel.trigger_typing()
         has_voted = await dbl.has_voted(ctx.author.id)
@@ -134,6 +135,7 @@ class NSFW:
             if ctx.invoked_with == "nsfw":
                 nsfw_commands = """:flushed: `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
                    \n:peach: `{0}ass` Sends a random NSFW ass picture.
+                   \n:melon: `{0}boobs` Sends a random NSFW boobs picture.
                    \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
                    \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
                    \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.

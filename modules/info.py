@@ -114,6 +114,7 @@ class Info:
                       \n:flag_white: `{0}guess giveup` Gives up an ongoing guessing game. Only use this if you're a quitter.""",
                    """:flushed: `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
                       \n:peach: `{0}ass` Sends a random NSFW ass picture.
+                      \n:melon: `{0}boobs` Sends a random NSFW boobs picture.
                       \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
                       \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
                       \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
