@@ -16,7 +16,7 @@ class Info:
     async def cmd_help(self, ctx):   # DMs list of commands
         # Idea: Create objects instead of multiple lists
         if ctx.guild == None:
-            prefix = "lmao"
+            prefix = "lmao "
         else:
             prefix = ctx.prefix
         await ctx.channel.trigger_typing()
@@ -30,7 +30,8 @@ class Info:
             0x808080,
             0x008000,
             0xD11919,
-            0xFBCEB1
+            0xFBCEB1#,
+            # 0xFFFFFF
         ]
         help_head = [
                     "🤖 **Bot Management** 🤖",
@@ -41,13 +42,14 @@ class Info:
                     "🛠️ **Utility** 🛠️",
                     "📊 **Probability Games & Commands** 📊",
                     "😏 **NSFW** 😏",
-                    "✍️ **Custom Commands** ✍️"
+                    "✍️ **Custom Commands** ✍️"#,
+                    # "️️️✍️ **Bracket Commands** ✍️"
                     ]
         help_desc = [""":exclamation: `lmao prefix` If the bot's command prefix is not `lmao`, this returns the current command prefix.
                       \n:question: `{0}help` Returns a list of commands for lmao-bot to your DMs (hey, that's meta).
                       \n:computer: `{0}uptime` Shows how long lmao-bot has been up for as well as the time for the next maintenance break.
-                      \n:ping_pong: `{0}ping` Returns \"pong\".
-                      \n:exclamation: `{0}prefix` `new_prefix` Changes the bot's command prefix to `new_prefix`. Available to guild admins and lmao admins only. Default is "lmao ".
+                      \n:ping_pong: `{0}ping` Sends the bot's latency (ping).
+                      \n:exclamation: `{0}prefix` `new_prefix` Changes the bot's command prefix to `new_prefix`. Available to guild admins and lmao admins only. Default is "lmao".
                       \n:information_source: `{0}about` Gives a brief description about the bot, including an invite to the support server.
                       \n:incoming_envelope: `{0}invite` Need ass insurance in other guilds? Invite lmao-bot to other guilds you're in!
                       \n:information_desk_person: `{0}support` Sends an invite link to the lmao-bot support server.
@@ -63,12 +65,14 @@ class Info:
                       \n:arrow_forward: `{0}play` `number` Plays song number `number` from the song queue.
                       \n:arrow_forward: `{0}play` `search_term` Plays the first result from a YouTube search for `search_term`.
                       \n:arrow_forward: `{0}play` `url` Plays music from a given URL `url`. Works with many video sites, including YouTube and Soundcloud.
-                      \n:fast_forward: `{0}next` Ends the current song and plays the next song in the queue.
-                      \n:fast_forward: `{0}skip` Does the same thing as `{0}next`.
+                      \n:microphone: `{0}connect` `voice_channel` Connects the bot to a voice channel named `voice_channel`. If `voice_channel` is not specified, the bot connects to the user's current voice channel.
+                      \n:arrow_forward: `{0}nowplaying` or `{0}np` Shows information about the song currently playing.
+                      \n:next_track: `{0}next` or `{0}skip` Ends the current song and plays the next song in the queue.
                       \n:pause_button: `{0}pause` Pauses the current song.
                       \n:play_pause: `{0}resume` Resumes a paused song.
-                      \n:radio: `{0}queue` Returns a list of all the songs in the queue.
-                      \n:radio: `{0}q` Does the same thing as `{0}queue`.
+                      \n:loud_sound: `{0}volume` `percent` Changes the volume to `percent`%.
+                      \n:loud_sound: `{0}vol` `percent` Does the same thing as `{0}volume`.
+                      \n:radio: `{0}queue` or `{0}q` Returns a list of all the songs in the queue.
                       \n:heavy_plus_sign: `{0}q` `add` `song` Adds a `song` (URL or search term) to the end of the queue.
                       \n:heavy_minus_sign: `{0}q` `remove` `number` Removes song number `number` from the queue.
                       \n:wastebasket: `{0}q` `clear` Clears the current queue.""",
@@ -92,8 +96,9 @@ class Info:
                       \n:cowboy: `{0}wanted` `member` Puts `member` on a WANTED poster.
                       \n:bust_in_silhouette: `{0}whosthat` `member` Who's that Pokémon? It's Pika-er... `member`?
                       \n:top: `{0}seenfromabove` `member` Voltorb? Pokéball? Electrode? Nope. It's `member`, seen from above.""",
-                   """:orange_book: `{0}urban` `term` Provides the definition for `term` on Urban Dictionary. Not yet available.
+                   """:orange_book: `{0}urban` `term` Provides the definition for `term` on Urban Dictionary. Only works in NSFW channels.
                       \n:mag: `{0}lmgtfy` `what_to_google` Provides a nifty LMGTFY (Let Me Google That For You) link for `what_to_google`.
+                      \n:wavy_dash: `{0}vaporwave` `text` Turns `text` into `ｔｅｘｔ`.
                       \n:reminder_ribbon: `{0}remind` Sets up a reminder. After the amount of time you specify, you will be DM'd your reminder.
                       \n:date: `{0}reminders` Lists all your reminders.""",
                    """:moneybag: `{0}coin` `number_of_coins` Flips `number_of_coins` coins. If `number_of_coins` is not specified, one coin will be flipped.
@@ -107,13 +112,25 @@ class Info:
                       \n:thinking: `{0}guess start` Starts a number guessing game with a random number from 0 to 100.
                       \n:raising_hand: `{0}guess` `number` Guesses a `number` in an ongoing guessing game.
                       \n:flag_white: `{0}guess giveup` Gives up an ongoing guessing game. Only use this if you're a quitter.""",
-                   """:flushed: `{0}gonewild` Sends a random post from the /r/gonewild subreddit.""",
+                   """:flushed: `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
+                      \n:peach: `{0}ass` Sends a random NSFW ass picture.
+                      \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
+                      \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
+                      \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
+                      \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
+                      \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.""",
                    """:heavy_plus_sign: `{0}add` `command_name` `command_text` Adds `command_name` as a custom command, which prints `command_text` when executed.
                       \n:pencil: `{0}edit` `command_name` `command_text` Edits a certain command, `command_name`, to instead print `command_text` when executed.
                       \n:wastebasket: `{0}delete` `command_name` Deletes a certain command, `command_name`.
                       \n:clipboard: `{0}list` Lists all custom commands.
-                      \n:speaking_head: `{0}command_name` Prints the message associated with the custom command `command_name`."""]
+                      \n:speaking_head: `{0}command_name` Prints the message associated with the custom command `command_name`."""]#,
+                   # """:thonking: `{0}brackets enable` Enables brackets.
+                   #    \n:thonking: `{0}brackets disable` Deletes brackets.
+                   #    \n:thonking: `{0}brackets add <group_name>` Adds a group
+                   #    \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
         for i in range(len(help_head)):
+            if "nsfw" in help_head[i].lower() and ctx.guild != None and not vars.get_allow_nsfw(ctx.guild.id):
+                continue
             e = discord.Embed(color=help_color[i], title=help_head[i], description=help_desc[i].format(prefix))
             if i > 0:
                 await ctx.author.send(embed=e)
@@ -177,7 +194,7 @@ class Info:
         e.set_thumbnail(url=self.bot.user.avatar_url)
         e.add_field(name="Server Count", value=str(len(self.bot.guilds)))
         e.add_field(name="Total Members", value=usage.count_total_members(self.bot))
-        e.add_field(name="Invite me to your server", value="[You won't regret it :eyes:](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)")
+        e.add_field(name="Invite me to your server", value="[You won't regret it 👀](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)")
         e.add_field(name="Join the support server", value="[Send help pls](https://discord.gg/JQgB7p7)")
         e.add_field(name="Vote for me on Discord Bot List", value="[The power is in your hands](https://discordbots.org/bot/459432854821142529/vote)")
         e.set_footer(text="Try saying \"lmao help\" in a server I'm in!", icon_url=self.bot.user.avatar_url)

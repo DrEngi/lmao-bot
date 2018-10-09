@@ -17,12 +17,14 @@
     "407274897350328345": {
         "cmd_prefix": "lmao",
         "replace_ass_chance": 100,
-        "react_chance": 100
+        "react_chance": 100,
+        "allow_nsfw": false
     },
     "417910147952934943": {
         "cmd_prefix": "lmao",
         "replace_ass_chance": 100,
-        "react_chance": 100
+        "react_chance": 100,
+        "allow_nsfw": true
     },
     "435206810824081419": {
         "cmd_prefix": "lmao ",

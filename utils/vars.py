@@ -4,6 +4,8 @@ import io
 
 replace_ass_msg = "You appear to have misplaced your ass while laughing. Here is a replacement: :peach:"
 
+custom_game = False # Changes to True of the activity of lmao-bot is manually altered
+
 deck = {}                   # TO BE WORKED ON: deck feature
 # init = []                   # Guilds where settings have been initialized
 guild_count = 0
@@ -25,7 +27,8 @@ def export_settings(guild_id):
         settings_data[guild_id] = {
             "cmd_prefix": get_prefix(guild_id),
             "replace_ass_chance": get_replace_ass_chance(guild_id),
-            "react_chance": get_react_chance(guild_id)
+            "react_chance": get_react_chance(guild_id),
+            "allow_nsfw": get_allow_nsfw(guild_id)
         }
         new_settings_data = json.dumps(settings_data, indent=4)
         with io.open("data/settings.json", "w+", encoding="utf-8") as fo:
@@ -61,18 +64,26 @@ class GuildSettings:
         # Prefix for lmao-bot commands; default is "lmao"
         self.prefix = "lmao"
         self.init_prefix()
+
         # Dictionary for storing lmao admins
         self.lmao_admin_list = "[]"
         self.init_lmao_admin_list()
+
         # Dictionary for storing custom commands.
         self.custom_cmd_list = "{}"
         self.init_custom_cmd_list()
+
         # Chance of ass replacement
         self.replace_ass_chance = 100
         self.init_replace_ass_chance()
+
         # Chance of ass reaction
         self.react_chance = 100
         self.init_react_chance()
+
+        # Whether NSFW commands are allowed on the server
+        self.allow_nsfw = True
+        self.init_allow_nsfw()
 
     def get_guild_id(self):
         return self.guild_id
@@ -118,6 +129,23 @@ class GuildSettings:
         return self.react_chance
     def get_react_chance(self):
         return self.react_chance
+
+    def init_allow_nsfw(self):
+        with io.open("data/settings.json") as f:
+            settings_data = json.load(f)
+            try:
+                self.allow_nsfw = settings_data[self.guild_id]["allow_nsfw"]
+            except (KeyError, NameError) as e:
+                self.allow_nsfw = True
+        return self.allow_nsfw
+    def toggle_allow_nsfw(self):
+        self.allow_nsfw = not allow_nsfw
+        return self.allow_nsfw
+    def set_allow_nsfw(self, allow_nsfw):
+        self.allow_nsfw = allow_nsfw
+        return self.allow_nsfw
+    def get_allow_nsfw(self):
+        return self.allow_nsfw
 
     def init_lmao_admin_list(self):
         with io.open("data/admins.json") as f:
@@ -172,7 +200,7 @@ def get_last_use_time():
     return last_use_time
 
 def set_maintenance_time(time):
-    global set_maintenance_time
+    global maintenance_time
     maintenance_time = time
     return maintenance_time
 def get_maintenance_time():
@@ -199,15 +227,6 @@ def reset_dm_count():
     return dm_count
 def get_dm_count():
     return dm_count
-
-# def add_to_init(guild_id):
-#     global init
-#     init.append(guild_id)
-#     return init
-# def get_init():
-#     return init
-# def is_in_init(guild_id):
-#     return guild_id in init
 
 def set_prefix(guild_id, prefix):
     settings[str(guild_id)].set_prefix(prefix)
@@ -247,6 +266,22 @@ def get_react_chance(guild_id):
         except KeyError:
             settings[str(guild_id)] = GuildSettings(guild_id)
             return settings[str(guild_id)].get_react_chance()
+
+def set_allow_nsfw(guild_id, allow_nsfw):
+    settings[str(guild_id)].set_allow_nsfw(allow_nsfw)
+    return settings[str(guild_id)].get_allow_nsfw()
+def get_allow_nsfw(guild_id):
+    try:
+        return settings[str(guild_id)].get_allow_nsfw()
+    except KeyError:
+        try:
+            return settings[str(guild_id)].init_allow_nsfw()
+        except KeyError:
+            settings[str(guild_id)] = GuildSettings(guild_id)
+            return settings[str(guild_id)].get_allow_nsfw()
+def toggle_allow_nsfw(guild_id):
+    set_allow_nsfw(guild_id, not get_allow_nsfw(guild_id))
+    return get_allow_nsfw(guild_id)
 
 def set_lmao_admin_list(guild_id, lmao_admin_list):
     settings[str(guild_id)].set_lmao_admin_list(lmao_admin_list)

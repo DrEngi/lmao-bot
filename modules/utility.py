@@ -100,11 +100,14 @@ class Utility:
             return 'urban'
         try:
            urban_def = define(arg)[0]
-           urban_msg = "**Urban Dictionary definition for {}:**\n\n{}\n\n\n**Example:**\n\n_{}_\n\n\n:thumbsup: {}     :thumbsdown: {}".format(urban_def.word, urban_def.definition, urban_def.example, urban_def.upvotes, urban_def.downvotes)
-           await ctx.send(urban_msg)
+           e = discord.Embed(title=f"**Urban Dictionary Entry for {urban_def.word}**")
+           e.add_field(name="Definition", value=urban_def.definition)
+           e.add_field(name="Example", value=urban_def.example)
+           e.add_field(name="Upvotes 👍", value=urban_def.upvotes)
+           e.add_field(name="Downvotes 👎", value=urban_def.downvotes)
+           await ctx.send(embed=e)
         except IndexError:
            await ctx.send("Sorry, **{}** could not be found on Urban Dictionary.".format(arg))
-        #await ctx.send("Sorry, this command is not available yet. Discord Bot List is strict about having this command being NSFW-channels-only, but my current library doesn't support that. Please be patient while the program is rewritten. :)")
         usage.update(ctx)
         return ctx.command.name
 
@@ -112,6 +115,23 @@ class Utility:
     async def cmd_lmgtfy(self, ctx, *, arg=""):
         await ctx.trigger_typing()
         await ctx.send(lmgtfy(arg))
+        usage.update(ctx)
+        return ctx.command.name
+
+    @commands.command(name="vaporwave", aliases=["aesthetic"])
+    async def cmd_vaporwave(self, ctx, *, text=""):
+        if text.strip() == "":
+            await ctx.send(f"{ctx.author.mention} You have to include TEXT you want to turn into ＴＥＸＴ. Use `{ctx.prefix}{ctx.invoked_with} text`.")
+            usage.update(ctx)
+            return ctx.command.name
+        vapor_h = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&()*+,-./:;<=>?@[]^_`{|}~'
+        vapor_f = '０１２３４５６７８９ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ！゛＃＄％＆（）＊＋、ー。／：；〈＝〉？＠［］＾＿‘｛｜｝～'
+        transformed = text
+        for i in range(0, len(vapor_h)):
+            transformed = transformed.replace(vapor_h[i], vapor_f[i])
+        # for i in range(0, len(text)):
+        #     transformed += text[i] + " "
+        await ctx.send(transformed[:2000])
         usage.update(ctx)
         return ctx.command.name
 
