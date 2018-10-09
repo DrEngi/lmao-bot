@@ -171,12 +171,12 @@ welcome = {
 @bot.event
 async def on_member_join(member):
     channel = welcome.get(member.guild.id, 0)
+    if channel == 0:
+        return
     mention = True
     if channel == 265156361791209475:
         mention = False
     channel = member.guild.get_channel(channel)
-    if channel == None:
-        return
     await channel.trigger_typing()
     await fun.beautiful_welcome(member, channel, mention=mention)
 
@@ -184,9 +184,9 @@ async def on_member_join(member):
 @bot.event
 async def on_member_remove(member):
     channel = welcome.get(member.guild.id, 0)
-    channel = member.guild.get_channel(channel)
-    if channel == None:
+    if channel == 0:
         return
+    channel = member.guild.get_channel(channel)
     await channel.send(f"Good night, sweet {member}. You will be missed. :pensive:")
 
 @bot.event
