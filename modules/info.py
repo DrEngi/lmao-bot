@@ -71,6 +71,7 @@ class Info:
                       \n:pause_button: `{0}pause` Pauses the current song.
                       \n:play_pause: `{0}resume` Resumes a paused song.
                       \n:loud_sound: `{0}volume` `percent` Changes the volume to `percent`%.
+                      \n:loud_sound: `{0}vol` `percent` Does the same thing as `{0}volume`.
                       \n:radio: `{0}queue` or `{0}q` Returns a list of all the songs in the queue.
                       \n:heavy_plus_sign: `{0}q` `add` `song` Adds a `song` (URL or search term) to the end of the queue.
                       \n:heavy_minus_sign: `{0}q` `remove` `number` Removes song number `number` from the queue.
