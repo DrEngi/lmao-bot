@@ -119,7 +119,9 @@ class Info:
                       \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
                       \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
                       \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
-                      \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.""",
+                      \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.
+                      \n:paintbrush: `{0}rule34` `search_term` Sends a random NSFW Rule 34 post for `search_term`.
+                      \n:paintbrush: `{0}r34` `search_term` Does the same thing as `{0}rule34`.""",
                    """:heavy_plus_sign: `{0}add` `command_name` `command_text` Adds `command_name` as a custom command, which prints `command_text` when executed.
                       \n:pencil: `{0}edit` `command_name` `command_text` Edits a certain command, `command_name`, to instead print `command_text` when executed.
                       \n:wastebasket: `{0}delete` `command_name` Deletes a certain command, `command_name`.

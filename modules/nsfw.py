@@ -12,6 +12,7 @@ import io
 import random
 import os
 import html
+import rule34
 
 #More NSFW commands: https://gist.github.com/PlanetTeamSpeakk/b35ad4dad4dc600730c629a1a037944d
 
@@ -130,7 +131,6 @@ class NSFW:
     @commands.command(name="nsfw", aliases=["pussy", "dick", "ass", "boobs"])
     async def cmd_nsfw(self, ctx):
         await ctx.channel.trigger_typing()
-        has_voted = await dbl.has_voted(ctx.author.id)
         if await self.check_voted(ctx):
             if ctx.invoked_with == "nsfw":
                 nsfw_commands = """:flushed: `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
@@ -140,12 +140,30 @@ class NSFW:
                    \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
                    \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
                    \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
-                   \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit."""
+                   \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.
+                   \n:paintbrush: `{0}rule34` `search_term` Sends a random NSFW Rule 34 post for `search_term`.
+                   \n:paintbrush: `{0}r34` `search_term` Does the same thing as `{0}rule34`."""
                 e = discord.Embed(title="😏 **NSFW Commands** 😏", description=nsfw_commands.format(ctx.prefix), color=0xD11919)
                 await ctx.send(embed=e)
                 usage.update(ctx)
                 return ctx.command.name
             await self.send_rand_img(ctx, ctx.invoked_with)
+        usage.update(ctx)
+        return ctx.command.name
+
+    @commands.command(name="rule34", aliases=["r34"])
+    async def cmd_rule_34(self, ctx, *, arg=""):
+        await ctx.channel.trigger_typing()
+        if await self.check_voted(ctx):
+            search = arg.replace(" ", "_")
+            r34 = rule34.Rule34(self.bot.loop)
+            urls = await r34.getImageURLS(search)
+            if urls != None:
+                e = discord.Embed(title=f"Rule 34 {arg}")
+                e.set_image(url=random.choice(urls))
+                await ctx.send(embed=e)
+            else:
+                await ctx.send(f"{ctx.author.mention} No Rule 34 results found for {arg}. :pensive:")
         usage.update(ctx)
         return ctx.command.name
 
