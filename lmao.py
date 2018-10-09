@@ -161,27 +161,30 @@ async def on_guild_remove(guild):
             dbl_connector.close()
             await aioclient.close()
 
+welcome = {
+    463758816270483476: 469491274219782144, # lmao-bot Support
+    407274897350328345: 472965450045718528, # Bot Testing Environment
+    264445053596991498: 265156361791209475  # Discord Bot List
+}
+
 #Welcomes people in the lmao-bot support server
 @bot.event
 async def on_member_join(member):
-    if member.guild.id == 463758816270483476:
-        channel = member.guild.get_channel(469491274219782144)
-    elif member.guild.id == 407274897350328345:
-        channel = member.guild.get_channel(472965450045718528)
-    else:
+    channel = welcome.get(member.guild.id, 0)
+    if channel == 0:
         return
+    channel = member.guild.get_channel(channel)
     await channel.trigger_typing()
     await fun.beautiful_welcome(member, channel)
 
 #Bids people farewell in the lmao-bot support server
 @bot.event
 async def on_member_remove(member):
-    if member.guild.id == 463758816270483476:
-        channel = member.guild.get_channel(472965450045718528)
-        await channel.send(f"Good night, sweet {member}. You will be missed. :pensive:")
-    if member.guild.id == 407274897350328345:
-        channel = member.guild.get_channel(469491274219782144)
-        await channel.send(f"Good night, sweet {member}. You will be missed. :pensive:")
+    channel = welcome.get(member.guild.id, 0)
+    if channel == 0:
+        return
+    channel = member.guild.get_channel(channel)
+    await channel.send(f"Good night, sweet {member}. You will be missed. :pensive:")
 
 @bot.event
 async def on_message(message):  # Event triggers when message is sent
