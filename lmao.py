@@ -85,7 +85,10 @@ async def check_reminders(late=False):
                     late_msg = "(If you are receiving this reminder late, the bot was likely offline when you should have received it.)"
                 e = discord.Embed(title=f"🎗️ Reminder for {reminder['set_for']}", description=f"{reminder['message']}\n\n{late_msg}")
                 e.set_footer(text=f"{reminder['time']} reminder set on {reminder['set_on']}.")
-                await bot.get_user(reminder["author"]).send(embed=e)
+                try:
+                    await bot.get_user(reminder["author"]).send(embed=e)
+                except AttributeError:
+                    print(f"Error in getting user {reminder['author']}")
                 reminders["reminders"].pop(i)
         new_reminders = json.dumps(reminders, indent=4)
         with io.open("data/reminders.json", "w+", encoding="utf-8") as fo:
@@ -132,7 +135,7 @@ async def on_ready():   # Prints ready message in terminal
         try:
             await check_reminders()
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Reminder check error: {e}")
         if not vars.custom_game:
             await bot.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(bot.guilds))))
         await asyncio.sleep(60)
