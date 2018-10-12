@@ -15,7 +15,7 @@ class Info:
     @commands.command(name="help", aliases=["helpme", "commands", "cmds"])
     async def cmd_help(self, ctx):   # DMs list of commands
         # Idea: Create objects instead of multiple lists
-        if ctx.guild == None:
+        if ctx.guild is None:
             prefix = "lmao "
         else:
             prefix = ctx.prefix
@@ -132,7 +132,7 @@ class Info:
                    #    \n:thonking: `{0}brackets add <group_name>` Adds a group
                    #    \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
         for i in range(len(help_head)):
-            if "nsfw" in help_head[i].lower() and ctx.guild != None and not vars.get_allow_nsfw(ctx.guild.id):
+            if "nsfw" in help_head[i].lower() and ctx.guild is not None and not vars.get_allow_nsfw(ctx.guild.id):
                 continue
             e = discord.Embed(color=help_color[i], title=help_head[i], description=help_desc[i].format(prefix))
             if i > 0:
@@ -140,7 +140,7 @@ class Info:
             else:
                 await ctx.author.send(help_title, embed=e)
             await asyncio.sleep(0.1)
-        if ctx.guild != None:
+        if ctx.guild is not None:
             await ctx.send(f"{ctx.author.mention} A full list of lmao-bot commands has been slid into your DMs. :mailbox_with_mail:")
         usage.update(ctx)
         return ctx.command.name

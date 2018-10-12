@@ -25,13 +25,13 @@ class Peach:
             with io.open("data/user_data.json", "w+", encoding="utf-8") as fo:
                 fo.write(new_user_data)
         x = random.randint(1, 100)
-        if ctx.guild == None or x <= vars.get_react_chance(ctx.guild.id):
+        if ctx.guild is None or x <= vars.get_react_chance(ctx.guild.id):
             try:
                 await ctx.message.add_reaction('🍑')
             except discord.errors.Forbidden:
                 pass
         y = random.randint(1, 100)
-        if ctx.guild == None or y <= vars.get_replace_ass_chance(ctx.guild.id):
+        if ctx.guild is None or y <= vars.get_replace_ass_chance(ctx.guild.id):
             try:
                 await ctx.send(f"{ctx.author.mention} {vars.replace_ass_msg}")
             except discord.errors.Forbidden:

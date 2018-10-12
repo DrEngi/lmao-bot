@@ -202,7 +202,7 @@ async def on_message(message):  # Event triggers when message is sent
         return
 
     guild = message.guild
-    if guild == None:
+    if guild is None:
         guild = message.channel
     guild_id = str(guild.id)
 
@@ -216,7 +216,7 @@ async def on_message(message):  # Event triggers when message is sent
         await bot.get_command("replaceass").invoke(ctx)
         vars.set_last_use_time(time.time())
 
-    if message.guild == None:
+    if message.guild is None:
         print(str(datetime.now()) + " DM from " + str(message.author) + ": " + message.content)
         if message.author.id == 309480972707954688:
             await message.channel.send("Hey, babe, what's up? :smirk:")

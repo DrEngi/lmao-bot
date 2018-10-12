@@ -452,7 +452,7 @@ class Music:
         # If download is False, source will be a dict which will be used later to regather the stream.
         # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
         source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=False)
-        if source == None:
+        if source is None:
             usage.update(ctx)
             return ctx.command.name
 
@@ -492,7 +492,7 @@ class Music:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="resume")
+    @commands.command(name="resume", aliases=["unpause"])
     async def cmd_resume(self, ctx):
         """Resume the currently paused song."""
         in_channel = await self.is_in_channel(ctx)
@@ -758,10 +758,10 @@ def setup(bot):
 # # Connects the bot to the voice channel the author is in; returns True if successful and False if not
 # async def connect_voice():
 #     global voice
-#     if guild.voice_client != None:
+#     if guild.voice_client is not None:
 #         return True
 #     else:
-#         if message.author.voice.channel != None:
+#         if message.author.voice.channel is not None:
 #             voice[guild_id] = await message.author.voice.channel.connect()
 #             return True
 #         else:
