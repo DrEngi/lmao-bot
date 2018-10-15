@@ -7,7 +7,7 @@ import json
 import time
 import math
 import asyncio
-import random as rand
+import random as rng
 from datetime import datetime
 import urllib.parse
 if sys.version < '3':
@@ -128,12 +128,19 @@ class Utility:
         vapor_f = '０１２３４５６７８９ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ！゛＃＄％＆（）＊＋、ー。／：；〈＝〉？＠［］＾＿‘｛｜｝～'
         transformed = text
         for i in range(0, len(vapor_h)):
+            # Replaces each character with its full-width counterpart
             transformed = transformed.replace(vapor_h[i], vapor_f[i])
-        # for i in range(0, len(text)):
-        #     transformed += text[i] + " "
+        transformed = transformed.replace(" ", "   ")
         await ctx.send(transformed[:2000])
         usage.update(ctx)
         return ctx.command.name
+
+    @commands.command(name="clap", aliases=["clappify"])
+    async def cmd_clap(self, ctx, *args):
+        skin_tones = ["👏", "👏🏻", "👏🏼", "👏🏽", "👏🏾", "👏🏿"]
+        # Sets a random skin tone for the emoji
+        emoji = rng.choice(skin_tones)
+        await ctx.send(f"{emoji} {f' {emoji} '.join(args)} {emoji}"[:2000])
 
     @commands.command(name="remind", aliases=["remindme"])
     async def cmd_remind(self, ctx, *, arg=""):
@@ -145,7 +152,7 @@ class Utility:
         ]
         reminder = arg
         if reminder == "":
-            await ctx.send(f"{ctx.author.mention} What do you want to be reminded for? e.g. `{rand.choice(humor)}`\n\n(_Psst:_ Say `cancel` to cancel the reminder.)")
+            await ctx.send(f"{ctx.author.mention} What do you want to be reminded for? e.g. `{rng.choice(humor)}`\n\n(_Psst:_ Say `cancel` to cancel the reminder.)")
             def check(message):
                 return message.author == ctx.author and message.channel == ctx.channel
             try:
