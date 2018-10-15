@@ -158,6 +158,8 @@ class NSFW:
             search = arg.replace(" ", "_")
             r34 = rule34.Rule34(self.bot.loop)
             urls = await r34.getImageURLS(search)
+            if urls is None:
+                urls = await r34.getImageURLS(arg)
             if urls is not None:
                 e = discord.Embed(title=f"Rule 34 {arg}")
                 e.set_image(url=random.choice(urls))
