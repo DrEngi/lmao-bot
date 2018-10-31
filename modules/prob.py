@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 import random
 from datetime import datetime
-from utils import vars, usage
+from utils import lbvars, usage
 
 ranks = [":regional_indicator_a:",
          ":two:",
@@ -149,7 +149,7 @@ class Prob:
         return 'deal'
 
     def shuffle_cards(self, ctx):
-        #The dream of creating a deal command is not dead, but possibly implement this through vars
+        #The dream of creating a deal command is not dead, but possibly implement this through lbvars
         self.deck[ctx.guild.id] = []
         for rank in ranks:
             for suit in suits:

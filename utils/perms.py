@@ -1,5 +1,5 @@
 import discord
-from utils import vars
+from utils import lbvars
 
 def get_perms(message):
     try:
@@ -12,7 +12,7 @@ def is_admin(message):
     return get_perms(message).administrator
 
 def is_lmao_admin(message):
-    return is_admin(message) or str(message.author.id) in vars.get_lmao_admin_list(message.guild.id) or is_lmao_developer(message)
+    return is_admin(message) or str(message.author.id) in lbvars.get_lmao_admin_list(message.guild.id) or is_lmao_developer(message)
 
 def is_lmao_developer(message):
     developers = [257203526390906880, 210220782012334081, 300763778608267266]

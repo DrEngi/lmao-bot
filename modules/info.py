@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils import vars, usage, lbutil, perms
+from utils import lbvars, usage, lbutil, perms
 import time
 import io
 import asyncio
@@ -133,7 +133,7 @@ class Info:
                    #    \n:thonking: `{0}brackets add <group_name>` Adds a group
                    #    \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
         for i in range(len(help_head)):
-            if "nsfw" in help_head[i].lower() and ctx.guild is not None and not vars.get_allow_nsfw(ctx.guild.id):
+            if "nsfw" in help_head[i].lower() and ctx.guild is not None and not lbvars.get_allow_nsfw(ctx.guild.id):
                 continue
             e = discord.Embed(color=help_color[i], title=help_head[i], description=help_desc[i].format(prefix))
             if i > 0:
@@ -151,7 +151,7 @@ class Info:
         if perms.is_admin(ctx.message):
             new_prefix = arg
             if new_prefix == "":
-                await ctx.send(f"{ctx.author.mention} My current prefix for {ctx.guild.name} is `{vars.get_prefix(ctx.guild.id)}`. What should I change it to?")
+                await ctx.send(f"{ctx.author.mention} My current prefix for {ctx.guild.name} is `{lbvars.get_prefix(ctx.guild.id)}`. What should I change it to?")
                 def check(message):
                     return message.author == ctx.author and message.channel == ctx.channel
                 try:
@@ -166,8 +166,8 @@ class Info:
             elif len(new_prefix) > 20:
                 await ctx.send(f"{ctx.author.mention} Your command prefix may not be longer than 20 characters.")
             else:
-                vars.set_prefix(ctx.guild.id, new_prefix)
-                await ctx.send(f"My command prefix for {ctx.guild.name} is now `{vars.get_prefix(ctx.guild.id)}`.")
+                lbvars.set_prefix(ctx.guild.id, new_prefix)
+                await ctx.send(f"My command prefix for {ctx.guild.name} is now `{lbvars.get_prefix(ctx.guild.id)}`.")
         else:
             await ctx.send(f"{ctx.author.mention} You do not have the permission to change the bot's prefix. Ask a guild administrator or lmao administrator to do so.")
         usage.update(ctx)
@@ -178,7 +178,7 @@ class Info:
         current_time = time.time()
         with io.open("management/next_maintenance.txt") as f:
             next_maintenance = f.read().strip()
-        await ctx.send(f"lmao-bot has been up for {lbutil.eng_time(current_time - vars.start_time)}\n\nNext maintenance break is scheduled for {next_maintenance}.")
+        await ctx.send(f"lmao-bot has been up for {lbutil.eng_time(current_time - lbvars.start_time)}\n\nNext maintenance break is scheduled for {next_maintenance}.")
         usage.update(ctx)
         return ctx.command.name
 

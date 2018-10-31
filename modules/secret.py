@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import io
 import asyncio
-from utils import vars, usage
+from utils import lbvars, usage
 
 class Secret:
 
@@ -35,9 +35,9 @@ class Secret:
     @commands.command(name="changemaintenance", hidden=True)
     async def cmd_change_maintenance(self, ctx, *, arg=""):
         if ctx.author.id == 210220782012334081:
-            vars.set_maintenance_time(arg)
-            await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {vars.maintenance_time} | Firestar493#6963"))
-            vars.custom_game = True
+            lbvars.set_maintenance_time(arg)
+            await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time} | Firestar493#6963"))
+            lbvars.custom_game = True
         usage.update(ctx)
         return ctx.command.name
 
@@ -45,15 +45,15 @@ class Secret:
     async def cmd_change_game(self, ctx, *, arg=""):
         if ctx.author.id == 210220782012334081:
             await self.bot.change_presence(activity=discord.Game(name=arg))
-            vars.custom_game = True
+            lbvars.custom_game = True
         usage.update(ctx)
         return ctx.command.name
 
     @commands.command(name="displaymaintenance", hidden=True)
     async def cmd_display_maintenance(self, ctx):
         if ctx.author.id == 210220782012334081:
-            await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {vars.maintenance_time} | Firestar493#6963"))
-            vars.custom_game = True
+            await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time} | Firestar493#6963"))
+            lbvars.custom_game = True
         usage.update(ctx)
         return ctx.command.name
 
@@ -61,7 +61,7 @@ class Secret:
     async def cmd_display_guild_count(self, ctx):
         if ctx.author.id == 210220782012334081:
             await self.bot.change_presence(activity=discord.Game(name=f"lmao help | in {len(self.bot.guilds)} guilds | Firestar493#6963"))
-            vars.custom_game = False
+            lbvars.custom_game = False
         usage.update(ctx)
         return ctx.command.name
 

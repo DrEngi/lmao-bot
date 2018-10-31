@@ -2,7 +2,7 @@
 
 import discord
 from discord.ext import commands
-from utils import vars, perms, dbl, usage#, reddit
+from utils import lbvars, perms, dbl, usage#, reddit
 #import sqlite3
 import aiohttp
 import asyncio
@@ -38,7 +38,7 @@ class NSFW:
 
     # Checks if guild allows NSFW commands; if not, then don't run commands
     async def __local_check(self, ctx):
-        allow_nsfw = ctx.command.name == "nsfwtoggle" or vars.get_allow_nsfw(ctx.guild.id)
+        allow_nsfw = ctx.command.name == "nsfwtoggle" or lbvars.get_allow_nsfw(ctx.guild.id)
         if not allow_nsfw:
             await ctx.send(f"{ctx.author.mention} NSFW commands are not allowed on this Christian Discord server. :angel:")
         return allow_nsfw
@@ -85,11 +85,11 @@ class NSFW:
             usage.update(ctx)
             return ctx.command.name
         if ctx.invoked_with == "nsfwon":
-            allow_nsfw = vars.set_allow_nsfw(ctx.guild.id, True)
+            allow_nsfw = lbvars.set_allow_nsfw(ctx.guild.id, True)
         elif ctx.invoked_with == "nsfwoff":
-            allow_nsfw = vars.set_allow_nsfw(ctx.guild.id, False)
+            allow_nsfw = lbvars.set_allow_nsfw(ctx.guild.id, False)
         else:
-            allow_nsfw = vars.toggle_allow_nsfw(ctx.guild.id)
+            allow_nsfw = lbvars.toggle_allow_nsfw(ctx.guild.id)
         if (allow_nsfw):
             await ctx.send(f":smirk: What's wrong, big boy? Never had your server filled with porn by a bot before?\n\n(NSFW commands enabled for {ctx.guild.name})")
         else:

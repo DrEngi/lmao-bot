@@ -1,30 +1,40 @@
-print("lmao-bot is loading...")
+"Main entry for lmao-bot"
 
-import discord
-from discord.ext import commands
-import asyncio
-# import logging
+# Standard Python imports
+import logging
 import io
 import time
 from datetime import datetime
-import aiohttp
 import socket
 import os
 import json
-from modules import *
-from utils import *
 
+# Pip imports
+import asyncio
+import discord
+from discord.ext import commands
+import aiohttp
+
+# First-party imports
+from modules import dblpy
+from modules import fun
+
+from utils import lbvars
+from utils import lbutil
+from utils import dbl
+
+print("lmao-bot is loading...")
 print("All modules imported successfully.")
 
-# logger = logging.getLogger('discord')
-# logger.setLevel(logging.DEBUG)
-# handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-# handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-# logger.addHandler(handler)
+logger = logging.getLogger('discord')
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 def get_pre(bot, message):
     try:
-        prefix = vars.get_prefix(message.guild.id)
+        prefix = lbvars.get_prefix(message.guild.id)
     except discord.ext.commands.errors.CommandInvokeError:
         prefix = "lmao"
     prefixes = lbutil.get_permutations(prefix)
@@ -65,7 +75,7 @@ print("All extensions loaded.")
 
 dblpy = bot.cogs.get("DBL")
 
-with io.open("tokens/token.txt", "r") as token:
+with io.open("tokens/lmao-dev.txt", "r") as token:
     bot_token = (token.read()).strip()
 with io.open("tokens/dbl.txt", "r") as token:
     dbl_token = (token.read()).strip()
@@ -97,13 +107,13 @@ async def check_reminders(late=False):
 @bot.event
 async def on_ready():   # Prints ready message in terminal
     await dblpy.get_upvote_info()
-    vars.reset_guild_count()
+    lbvars.reset_guild_count()
     print("Importing settings...")
-    vars.import_settings()
+    lbvars.import_settings()
     print("All settings successfully imported.")
     for guild in bot.guilds:
-        vars.update_settings(guild.id, vars.GuildSettings(guild.id))
-        guild_count = vars.increment_guild_count()
+        lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
+        guild_count = lbvars.increment_guild_count()
         print(str(datetime.now()) + " " + "{} initialized. Guild count: {}.".format(guild.name, guild_count))
     async def owner_has_voted():
         if (await dbl.has_voted(210220782012334081)):
@@ -117,7 +127,7 @@ async def on_ready():   # Prints ready message in terminal
     print(str(datetime.now()))
     print("------")
     await bot.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(bot.guilds))))
-    vars.set_start_time(time.time())
+    lbvars.set_start_time(time.time())
     global bot_is_ready
     bot_is_ready = True
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
@@ -136,15 +146,15 @@ async def on_ready():   # Prints ready message in terminal
             await check_reminders()
         except Exception as e:
             print(f"Reminder check error: {e}")
-        if not vars.custom_game:
+        if not lbvars.custom_game:
             await bot.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(bot.guilds))))
         await asyncio.sleep(60)
 
 @bot.event
 async def on_guild_join(guild):
-    # vars.import_settings()
-    vars.update_settings(guild.id, vars.GuildSettings(guild.id))
-    guild_count = vars.increment_guild_count()
+    # lbvars.import_settings()
+    lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
+    guild_count = lbvars.increment_guild_count()
     print(str(datetime.now()) + " " + "{} initialized. Guild count: {}.".format(guild.name, guild_count))
     print(str(datetime.now()) + " " + guild.name + " just ADDED lmao-bot ^_^")
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
@@ -206,7 +216,7 @@ async def on_message(message):  # Event triggers when message is sent
         guild = message.channel
     guild_id = str(guild.id)
 
-    prefix = vars.get_prefix(guild_id)
+    prefix = lbvars.get_prefix(guild_id)
     msg_raw = message.content
     msg = msg_raw.lower()
 
@@ -214,7 +224,7 @@ async def on_message(message):  # Event triggers when message is sent
 
     async def replace_ass():    # Sends the ass substitution message
         await bot.get_command("replaceass").invoke(ctx)
-        vars.set_last_use_time(time.time())
+        lbvars.set_last_use_time(time.time())
 
     if message.guild is None:
         print(str(datetime.now()) + " DM from " + str(message.author) + ": " + message.content)
@@ -226,39 +236,39 @@ async def on_message(message):  # Event triggers when message is sent
             await replace_ass()
         else:
             await bot.get_command("info").invoke(ctx)
-        vars.set_last_use_time(time.time())
+        lbvars.set_last_use_time(time.time())
         return
 
     # If used by bot's creator, displays last time a lmao-bot command was used
     if message.author.id == 210220782012334081 and message.content.lower().strip() == "last command used":
         current_time = time.time()
-        await message.channel.send(f"The last command was used {lbutil.eng_time(current_time - vars.get_last_use_time())} ago.")
+        await message.channel.send(f"The last command was used {lbutil.eng_time(current_time - lbvars.get_last_use_time())} ago.")
 
     # COMMANDS
     if starts_with_prefix(message): # Bot reacts to command prefix call
-        prefix = vars.get_prefix(guild_id)
+        prefix = lbvars.get_prefix(guild_id)
         msg_no_prefix = message.content[len(prefix):].strip()
         words = msg_no_prefix.split()
         cmd_name = ""
         if len(words) > 0:
             cmd_name = words[0]
 
-        # vars.import_settings()
+        # lbvars.import_settings()
 
         if cmd_name.lower() in get_all_commands():
             await bot.process_commands(message)
         else:
             try:
-                await message.channel.send(vars.get_custom_cmd_list(message.guild.id)[cmd_name].strip())
+                await message.channel.send(lbvars.get_custom_cmd_list(message.guild.id)[cmd_name].strip())
             except KeyError:
                 if "lmao" in message.content.lower() or "lmfao" in message.content.lower():
                     await replace_ass()
 
-        if not vars.get_no_command_invoked():
-            vars.set_last_use_time(time.time())
-        vars.set_no_command_invoked(False)
+        if not lbvars.get_no_command_invoked():
+            lbvars.set_last_use_time(time.time())
+        lbvars.set_no_command_invoked(False)
 
-        vars.export_settings(guild_id)
+        lbvars.export_settings(guild_id)
 
     elif msg == "lmao help":
         await message.channel.send(f"Type `{prefix} help` to see the help menu.")
@@ -268,7 +278,7 @@ async def on_message(message):  # Event triggers when message is sent
     # GENERIC REPLY
     elif ("lmao" in msg or "lmfao" in msg): #generic ass substitution
         await replace_ass()
-        vars.export_settings(guild_id)
+        lbvars.export_settings(guild_id)
 
     if guild_id in ["345655060740440064", "407274897350328345"] and ("pollard" in msg or "buh-bye" in msg or "buhbye" in msg or "buh bye" in msg):
         emoji_list = bot.get_guild(345655060740440064).emojis
