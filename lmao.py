@@ -26,12 +26,11 @@ from utils import dbl
 # Logger. We should try to use this instead of print.
 LOGGER = logging.getLogger('discord')
 LOGGER.setLevel(logging.INFO)
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-LOGGER.addHandler(handler)
+HANDLER = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+HANDLER.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+LOGGER.addHandler(HANDLER)
 
 LOGGER.info("lmao-bot is loading...")
-LOGGER.info("All modules imported successfully.")
 
 def get_pre(bot, message):
     "Gets the prefix for the guild the message was sent it, otherwise returns lmao"
