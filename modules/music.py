@@ -65,10 +65,8 @@ ffmpegopts = {
 ytdl = {}
 #YoutubeDL(ytdlopts)
 
-
 class VoiceConnectionError(commands.CommandError):
     """Custom Exception class for connection errors."""
-
 
 class InvalidVoiceChannel(VoiceConnectionError):
     """Exception for cases of invalid Voice Channels."""
@@ -207,6 +205,21 @@ class YTInfo:
 
     def get_path(self, guild_id):
         return f"downloads/{self.extractor}-{self.id}-{guild_id}.{self.ext}"
+
+    def to_dict(self):
+        YTInfoDict = {
+            webpage_url: self.webpage_url,
+            requester: self.requester,
+            title: self.title,
+            duration: self.duration,
+            url: self.url,
+            uploader: self.uploader,
+            upload_date: self.upload_date,
+            id: self.id,
+            extractor: self.extractor,
+            ext: self.ext
+        }
+        return YTInfoDict
 
 class MusicPlayer:
     """A class which is assigned to each guild using the bot for Music.
@@ -539,7 +552,7 @@ class Music:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.group(invoke_without_command=True, name="queue", aliases=["q", "playlist"])
+    @commands.group(invoke_without_command=True, name="queue", aliases=["q"])
     async def cmd_queue(self, ctx):
         """Retrieve a basic queue of upcoming songs."""
         vc = ctx.voice_client
@@ -728,266 +741,41 @@ class Music:
         usage.update(ctx)
         return ctx.command.name
 
+    # @commands.group(invoke_without_command=True, name="playlist", aliases=["p", "pl"])
+    # async def cmd_playlist(self, ctx):
+    #     in_channel = await self.is_in_channel(ctx)
+    #     if not in_channel:
+    #         usage.update(ctx)
+    #         return ctx.command.name
+    #     vc = ctx.voice_client
+    #
+    #     if not vc:
+    #         await ctx.send("lol not connected")
+    #     else:
+    #         await ctx.send("connected")
+    #
+    #     usage.update(ctx)
+    #     return ctx.command.name
+    #
+    # @cmd_playlist.command(name="save", aliases=["add", "export"])
+    # async def cmd_playlist_save(self, ctx):
+    #     in_channel = await self.is_in_channel(ctx)
+    #     if not in_channel:
+    #         usage.update(ctx)
+    #         return ctx.command.name
+    #     vc = ctx.voice_client
+    #     usage.update(ctx)
+    #     return ctx.command.name
+    #
+    # @cmd_playlist.command(name="load", aliases=["play", "import"])
+    # async def cmd_playlist_load(self, ctx):
+    #     in_channel = await self.is_in_channel(ctx)
+    #     if not in_channel:
+    #         usage.update(ctx)
+    #         return ctx.command.name
+    #     vc = ctx.voice_client
+    #     usage.update(ctx)
+    #     return ctx.command.name
+
 def setup(bot):
     bot.add_cog(Music(bot))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# "play": cmd_play,
-# "next": cmd_next,
-# "skip": cmd_next,
-# "pause": cmd_pause,
-# "resume": cmd_resume,
-# "stop": cmd_stop,
-# "queue": cmd_queue,
-# "q": cmd_queue,
-
-
-# # Connects the bot to the voice channel the author is in; returns True if successful and False if not
-# async def connect_voice():
-#     global voice
-#     if guild.voice_client is not None:
-#         return True
-#     else:
-#         if message.author.voice.channel is not None:
-#             voice[guild_id] = await message.author.voice.channel.connect()
-#             return True
-#         else:
-#             await message.channel.send(mention + " You must be in a voice channel first.")
-#             return False
-# Disconnects the bot from voice channels in the current guild
-# async def disconnect_voice():
-#     for vc in bot.voice_clients:
-#         if vc.guild == guild:
-#             await vc.disconnect()
-#             break
-# # Given a time in seconds, returns [h:mm:ss]
-# def video_duration(time):
-#     t = lbutil.dhms_time(time)
-#     h = t["h"] + 24 * t["d"]
-#     m = str(t["m"])
-#     s = str(t["s"])
-#     if len(s) < 2:
-#         s = "0" + s
-#     m = str(m)
-#     if len(m) < 2:
-#         m = "0" + m
-#     if h > 0:
-#         return "[{}:{}:{}]".format(h, m, s)
-#     else:
-#         return "[{}:{}]".format(m, s)
-# # Returns the video info in the form of Title [h:mm:ss], Title is not bold if bold=False
-# def video_info(vid, bold=True):
-#     bold_mark = "**"
-#     if bold == False:
-#         bold_mark = ""
-#     title = vid.title[:180]
-#     if title != vid.title:
-#         title += "..."
-#     return bold_mark + title + bold_mark + " " + video_duration(vid.duration)
-# # After a song finishes playing, the player will automatically start playing the next song in the queue
-# def next_song():
-#     player[guild_id][0].stop()
-#     player[guild_id].pop(0)
-#     if len(player[guild_id]) > 0:
-#         reload_song = voice[guild_id].create_ytdl_player(player[guild_id][0].url, after=next_song)
-#         song = asyncio.run_coroutine_threadsafe(reload_song, bot.loop)
-#         try:
-#             player[guild_id][0] = song.result()
-#             player[guild_id][0].start()
-#         except Exception as e:
-#             template = str(datetime.now()) + "Playing next song failed. Exception: {0}. Arguments:\n{1!r}"
-#             print(template.format(type(e).__name__, e.args))
-#             #pass
-#         coro_msg = message.channel.send(":arrow_forward: Now playing {}.".format(video_info(player[guild_id][0])))
-#     else:
-#         coro_dc = disconnect_voice()
-#         dc = asyncio.run_coroutine_threadsafe(coro_dc, bot.loop)
-#         try:
-#             dc.result()
-#         except Exception as e:
-#             template = str(datetime.now()) + "Disconnecting voice failed. Exception: {0}. Arguments:\n{1!r}"
-#             print(template.format(type(e).__name__, e.args))
-#             #pass
-#         coro_msg = message.channel.send(":stop_button: The queue has finished.")
-#     fut = asyncio.run_coroutine_threadsafe(coro_msg, bot.loop)
-#     try:
-#         fut.result()
-#     except Exception as e:
-#         template = str(datetime.now()) + "Message send failed. Exception: {0}. Arguments:\n{1!r}"
-#         print(template.format(type(e).__name__, e.args))
-#         #pass
-# # Someone can add a new song to the queue, resume a paused song, or skip to a song later in the queue
-# async def cmd_play():
-#     if not discord.opus.is_loaded():
-#         discord.opus.load_opus("libopus.so")
-#     global player
-#     connected = await connect_voice()
-#     if connected:
-#         await message.channel.trigger_typing()
-#         if cmd_arg == "":
-#             await cmd_resume()
-#             return "play"
-#         else:
-#             skip = False
-#             try:
-#                 i = int(cmd_arg) - 1
-#                 song_to_play = player[guild_id][i]
-#                 player[guild_id].insert(1, song_to_play)
-#                 player[guild_id].pop(i + 1)
-#                 player[guild_id].insert(2, player[guild_id][0])
-#                 player[guild_id][0].stop()
-#                 skip = True
-#             except (IndexError, ValueError) as e:
-#                 try:
-#                     player[guild_id].append(await voice[guild_id].create_ytdl_player(cmd_arg, after=next_song))
-#                     await message.channel.send(":white_check_mark: Added {} to the queue.".format(video_info(player[guild_id][len(player[guild_id]) - 1])))
-#                 except Exception as ex:
-#                     template = str(datetime.now()) + "Not a URL. Exception: {0}. Arguments:\n{1!r}"
-#                     print(template.format(type(ex).__name__, ex.args))
-#                     try:
-#                         player[guild_id].append(await voice[guild_id].create_ytdl_player("ytsearch:{" + cmd_arg + "}", after=next_song))
-#                         await message.channel.send(":white_check_mark: Added {} to the queue.".format(video_info(player[guild_id][len(player[guild_id]) - 1])))
-#                     except Exception as exc:
-#                         template = str(datetime.now()) + "No song found. Exception: {0}. Arguments:\n{1!r}"
-#                         print(template.format(type(exc).__name__, exc.args))
-#                         await message.channel.send(":x: " + mention + " No results were found on YouTube for **{}**. Try searching for the video's URL.".format(cmd_arg))
-#                         return "play"
-#             if (len(player[guild_id]) == 1):
-#                 await cmd_resume()
-#             return "play"
-# # Skips to the next song in the queue
-# async def cmd_next():
-#     global player
-#     connected = await connect_voice()
-#     if connected:
-#         if len(player[guild_id]) < 1:
-#             await message.channel.send(mention + " There are currently no songs in the queue.")
-#         else:
-#             player[guild_id][0].stop()
-#             if (len(player[guild_id]) <= 0):
-#                 await disconnect_voice()
-#                 await message.channel.send(":stop_button: The queue has finished.")
-#     return "next"
-# # Pauses the current song in the queue
-# async def cmd_pause():
-#     connected = await connect_voice()
-#     if connected:
-#         if len(player[guild_id]) > 0:
-#             player[guild_id][0].pause()
-#             await message.channel.send(":pause_button: Paused {}. Use the `resume` command to resume.".format(video_info(player[guild_id][0])))
-#         else:
-#             await message.channel.send("There is nothing in the queue to pause.")
-#         return "pause"
-# # Resumes a paused song in the queue
-# async def cmd_resume():
-#     global player
-#     global player_vol
-#     if len(player[guild_id]) > 0:
-#         try:
-#             player[guild_id][0].start()
-#             player[guild_id][0].pause()
-#             player[guild_id][0] = await voice[guild_id].create_ytdl_player(player[guild_id][0].url, after=next_song)
-#             player[guild_id][0].start()
-#             #player[guild_id][0].volume = player_vol[guild_id]
-#         except RuntimeError:
-#             player[guild_id][0].resume()
-#         await message.channel.send(":arrow_forward: Now playing {}.".format(video_info(player[guild_id][0])))
-#     else:
-#         await message.channel.send(mention + " There are currently no songs in the queue.")
-#     return "resume"
-# # Stops the queue
-# async def cmd_stop():
-#     connected = await connect_voice()
-#     if connected:
-#         if len(player[guild_id]) > 0:
-#             player[guild_id][0].stop()
-#             player[guild_id] = []
-#             await message.channel.send(":stop_button: The queue has been stopped.")
-#             await disconnect_voice()
-#         else:
-#             await message.channel.send(mention + " There are currently no songs in the queue.")
-#             await disconnect_voice()
-#     return "stop"
-# # Lists the song in the queue and allows for people to add songs, remove songs, or clear the queue
-# async def cmd_queue():
-#     global player
-#     q_cmd = cmd_arg.lower()
-#     q_arg = ""
-#     if cmd_arg.find(" ") != -1:
-#         q_cmd = cmd_arg[:cmd_arg.find(" ")].lower()
-#         q_arg = cmd_arg[cmd_arg.find(" ") + 1:]
-#     if q_cmd == "add":
-#         connected = await connect_voice()
-#         if connected:
-#             await message.channel.trigger_typing()
-#             try:
-#                 player[guild_id].append(await voice[guild_id].create_ytdl_player(q_arg, after=next_song))
-#                 await message.channel.send(":white_check_mark: Added {} to the queue.".format(video_info(player[guild_id][len(player[guild_id]) - 1])))
-#             except Exception as e:
-#                 template = str(datetime.now()) + "Not a URL. Exception: {0}. Arguments:\n{1!r}"
-#                 print(template.format(type(e).__name__, e.args))
-#                 try:
-#                     player[guild_id].append(await voice[guild_id].create_ytdl_player("ytsearch:{" + q_arg + "}", after=next_song))
-#                     await message.channel.send(":white_check_mark: Added {} to the queue.".format(video_info(player[guild_id][len(player[guild_id]) - 1])))
-#                 except Exception as ex:
-#                     template = str(datetime.now()) + "No song found. Exception: {0}. Arguments:\n{1!r}"
-#                     print(template.format(type(ex).__name__, ex.args))
-#                     await message.channel.send(":x: " + mention + " No results were found on YouTube for **{}**. Try searching for the video's URL.".format(q_arg))
-#         return "queue_add"
-#     elif q_cmd == "remove":
-#         connected = await connect_voice()
-#         if connected:
-#             try:
-#                 i = int(q_arg) - 1
-#                 if (i <= 0):
-#                     await cmd_next()
-#                 else:
-#                     await message.channel.send(":wastebasket: {} has been removed from the queue.".format(video_info(player[guild_id][i])))
-#                     player[guild_id].pop(i)
-#             except ValueError:
-#                 await message.channel.send(mention + " You must include the number of the song in the queue you want to remove. e.g. `" + prefix + " q remove 3`")
-#             except IndexError:
-#                 await message.channel.send(mention + " Song #{} does not exist in the queue.".format(i))
-#         return "queue_remove"
-#     elif q_cmd == "clear":
-#         connected = await connect_voice()
-#         if connected:
-#             while(len(player[guild_id]) > 1):
-#                 player[guild_id].pop(1)
-#         await message.channel.send("The queue has been cleared.")
-#         return "queue_clear"
-#     else:
-#         queue = []
-#         if (len(player[guild_id]) == 0):
-#             await message.channel.send("No songs are currently in queue.")
-#             return "queue"
-#         playtime = 0
-#         for i in range(len(player[guild_id])):
-#             queue.append("{}. {}\n".format(i + 1, video_info(player[guild_id][i], bold=False)))
-#             playtime += player[guild_id][i].duration
-#         playtime_str = video_duration(playtime)
-#         queue_msg = "**SONGS CURRENTLY IN QUEUE** {}:\n\n".format(playtime_str)
-#         while(True):
-#             if len(queue) == 0:
-#                 break
-#             for i in range(10):
-#                 if len(queue) == 0:
-#                     break
-#                 queue_msg += queue[0]
-#                 queue.pop(0)
-#             await message.channel.send(queue_msg)
-#             queue_msg = ""
-#         return "queue"
