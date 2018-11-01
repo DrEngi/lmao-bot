@@ -27,8 +27,6 @@ class Secret:
                     except discord.errors.Forbidden:
                         pass
                 await asyncio.sleep(10)
-        else:
-            await replace_ass()
         usage.update(ctx)
         return ctx.command.name
 

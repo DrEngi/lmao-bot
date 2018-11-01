@@ -23,12 +23,16 @@ from utils import lbvars
 from utils import lbutil
 from utils import dbl
 
-# Logger. We should try to use this instead of print.
+#Sets up logging here so we don't have to shoot ourselves
 LOGGER = logging.getLogger('discord')
 LOGGER.setLevel(logging.INFO)
-HANDLER = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-HANDLER.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-LOGGER.addHandler(HANDLER)
+FORMATTER = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
+FILEHANDLER = logging.FileHandler(filename='lmao.log', encoding='utf-8', mode='w')
+FILEHANDLER.setFormatter(FORMATTER)
+STREAMHANDLER = logging.StreamHandler()
+STREAMHANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(STREAMHANDLER)
+LOGGER.addHandler(FILEHANDLER)
 
 LOGGER.info("lmao-bot is loading...")
 
@@ -119,16 +123,16 @@ async def on_ready():
     "Prints ready message in terminal"
     await dblpy.get_upvote_info()
     lbvars.reset_guild_count()
-    print("Importing settings...")
+    LOGGER.info("Importing settings...")
     lbvars.import_settings()
-    print("All settings successfully imported.")
+    LOGGER.info("All settings successfully imported.")
     for guild in BOT.guilds:
         lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
         guild_count = lbvars.increment_guild_count()
-        LOGGER.info(str(datetime.now()) + " " + "{} initialized. Guild count: {}.".format(guild.name, guild_count))
+        LOGGER.info(str("{} initialized. Guild count: {}.".format(guild.name, guild_count)))
     async def owner_has_voted():
         if (await dbl.has_voted(210220782012334081)):
-            return "YES"
+            return "Yes"
         return "NO"
     owner_voted = await owner_has_voted()
     LOGGER.info(f"Have you voted yet? {owner_voted}")
