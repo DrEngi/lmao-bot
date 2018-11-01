@@ -16,11 +16,8 @@ from discord.ext import commands
 import aiohttp
 
 # First-party imports
-from modules import dblpy
-from modules import fun
-
-from utils import lbvars
-from utils import lbutil
+from modules import dblpy, fun
+from utils import lbvars, lbutil, dbl
 
 #Sets up logging here so we don't have to shoot ourselves
 LOGGER = logging.getLogger('discord')
@@ -118,7 +115,7 @@ async def check_reminders(late=False):
             fo.write(new_reminders)
 
 @BOT.event
-async def on_ready():   
+async def on_ready():
     "Prints ready message in terminal"
     await dblpy.get_upvote_info()
     lbvars.reset_guild_count()
@@ -129,14 +126,12 @@ async def on_ready():
         lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
         guild_count = lbvars.increment_guild_count()
         LOGGER.info(str("{} initialized. Guild count: {}.".format(guild.name, guild_count)))
-    '''
     async def owner_has_voted():
         if await dbl.has_voted(210220782012334081):
-            return "Yes"
+            return "YES"
         return "NO"
     owner_voted = await owner_has_voted()
     LOGGER.info("Have you voted yet? %s", owner_voted)
-    '''
     LOGGER.info("Logged in as")
     LOGGER.info(BOT.user.name)
     LOGGER.info(str(BOT.user.id))
