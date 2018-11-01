@@ -22,7 +22,7 @@ class DBL:
         if self.bot.user.id != 459432854821142529:
             return {}
         upvotes = await self.dblpy.get_upvote_info(days=1)
-        print(upvotes)
+        #print(upvotes)
         return upvotes
 
     # async def update_stats(self):
