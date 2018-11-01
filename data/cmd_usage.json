@@ -4,7 +4,7 @@
         "uptime": 5
     },
     "replaceass": {
-        "uses": 220
+        "uses": 221
     },
     "count": {
         "uses": 21,
@@ -20,8 +20,8 @@
         "urban": 3
     },
     "say": {
-        "uses": 41,
-        "say": 13
+        "uses": 43,
+        "say": 15
     },
     "play": {
         "uses": 247,
@@ -274,5 +274,17 @@
     "reminders": {
         "uses": 12,
         "reminders": 12
+    },
+    "displaymaintenance": {
+        "uses": 1,
+        "displaymaintenance": 1
+    },
+    "displayguildcount": {
+        "uses": 1,
+        "displayguildcount": 1
+    },
+    "lastcommand": {
+        "uses": 1,
+        "lastcommand": 1
     }
 }

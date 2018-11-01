@@ -260,8 +260,7 @@ async def on_message(message):  # Event triggers when message is sent
 
     # If used by bot's creator, displays last time a lmao-bot command was used
     if message.author.id == 210220782012334081 and message.content.lower().strip() == "last command used":
-        current_time = time.time()
-        await message.channel.send(f"The last command was used {lbutil.eng_time(current_time - lbvars.get_last_use_time())} ago.")
+        await message.channel.send("changed to `lmao lastcommand`, because why would we make such a random ass one?")
 
     # COMMANDS
     if starts_with_prefix(message): # Bot reacts to command prefix call
