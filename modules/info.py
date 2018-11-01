@@ -128,10 +128,6 @@ class Info:
                       \n:wastebasket: `{0}delete` `command_name` Deletes a certain command, `command_name`.
                       \n:clipboard: `{0}list` Lists all custom commands.
                       \n:speaking_head: `{0}command_name` Prints the message associated with the custom command `command_name`."""]#,
-                   # """:thonking: `{0}brackets enable` Enables brackets.
-                   #    \n:thonking: `{0}brackets disable` Deletes brackets.
-                   #    \n:thonking: `{0}brackets add <group_name>` Adds a group
-                   #    \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
         for i in range(len(help_head)):
             if "nsfw" in help_head[i].lower() and ctx.guild is not None and not lbvars.get_allow_nsfw(ctx.guild.id):
                 continue

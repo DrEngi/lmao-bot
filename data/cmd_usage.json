@@ -4,7 +4,7 @@
         "uptime": 5
     },
     "replaceass": {
-        "uses": 219
+        "uses": 220
     },
     "count": {
         "uses": 21,
@@ -88,9 +88,9 @@
         "uses": 1
     },
     "help": {
-        "uses": 33,
+        "uses": 34,
         "null": 1,
-        "help": 13
+        "help": 14
     },
     "invite": {
         "uses": 6,
@@ -263,8 +263,8 @@
         "next": 2
     },
     "garbage": {
-        "uses": 16,
-        "garbage": 15,
+        "uses": 17,
+        "garbage": 16,
         "trash": 1
     },
     "remind": {

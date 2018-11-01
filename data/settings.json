@@ -89,7 +89,8 @@
     "463758816270483476": {
         "cmd_prefix": "lmao",
         "replace_ass_chance": 100,
-        "react_chance": 100
+        "react_chance": 100,
+        "allow_nsfw": true
     },
     "488391824973496350": {
         "cmd_prefix": "lmao",

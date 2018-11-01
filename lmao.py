@@ -21,7 +21,6 @@ from modules import fun
 
 from utils import lbvars
 from utils import lbutil
-from utils import dbl
 
 #Sets up logging here so we don't have to shoot ourselves
 LOGGER = logging.getLogger('discord')
@@ -68,11 +67,11 @@ def load_extensions(bot):
                 if module != "__init__":
                     try:
                         bot.load_extension(f"modules.{module}")
-                        LOGGER.info("{} sucessfully loaded.".format(module))
-                    except Exception as E:
-                        LOGGER.info("{} could not be loaded because {}.".format(module, E))
+                        LOGGER.info("%s sucessfully loaded.", module)
+                    except Exception as Ex:
+                        LOGGER.info("%s could not be loaded because %s.", module, Ex)
     os.chdir("..")
-#TODO: This should probably be based at the bottom of the file
+
 load_extensions(BOT)
 
 def get_all_commands():
@@ -88,7 +87,7 @@ LOGGER.info("All extensions loaded.")
 
 dblpy = BOT.cogs.get("DBL")
 
-with io.open("tokens/lmao-dev.txt", "r") as token:
+with io.open("tokens/token.txt", "r") as token:
     bot_token = (token.read()).strip()
 with io.open("tokens/dbl.txt", "r") as token:
     dbl_token = (token.read()).strip()
@@ -130,12 +129,14 @@ async def on_ready():
         lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
         guild_count = lbvars.increment_guild_count()
         LOGGER.info(str("{} initialized. Guild count: {}.".format(guild.name, guild_count)))
+    '''
     async def owner_has_voted():
-        if (await dbl.has_voted(210220782012334081)):
+        if await dbl.has_voted(210220782012334081):
             return "Yes"
         return "NO"
     owner_voted = await owner_has_voted()
-    LOGGER.info(f"Have you voted yet? {owner_voted}")
+    LOGGER.info("Have you voted yet? %s", owner_voted)
+    '''
     LOGGER.info("Logged in as")
     LOGGER.info(BOT.user.name)
     LOGGER.info(str(BOT.user.id))
@@ -148,19 +149,19 @@ async def on_ready():
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
     payload = {"server_count"  : len(BOT.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
+        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
             await aioclient.close()
     try:
         await check_reminders(late=True)
-    except Exception as e:
-        LOGGER.info(f"Error: {e}")
+    except Exception as Ex:
+        LOGGER.warning("Error: %s", Ex)
     await asyncio.sleep(60 - round(time.time()) % 60)
     while(True):
         try:
             await check_reminders()
-        except Exception as e:
-            LOGGER.info(f"Reminder check error: {e}")
+        except Exception as Ex:
+            LOGGER.warning("Reminder check error: %s", Ex)
         if not lbvars.custom_game:
             await BOT.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(BOT.guilds))))
         await asyncio.sleep(60)
@@ -171,23 +172,23 @@ async def on_guild_join(guild):
     # lbvars.import_settings()
     lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
     guild_count = lbvars.increment_guild_count()
-    LOGGER.info(str(datetime.now()) + " " + "{} initialized. Guild count: {}.".format(guild.name, guild_count))
-    LOGGER.info(str(datetime.now()) + " " + guild.name + " just ADDED lmao-bot ^_^")
+    LOGGER.info("%s initialized. Guild count: %s.", guild.name, guild_count)
+    LOGGER.info("%s just ADDED lmao-bot ^_^", guild_count)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
     payload = {"server_count"  : len(BOT.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
+        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
             await aioclient.close()
 
 @BOT.event
 async def on_guild_remove(guild):
     "Runs whenver lmao-bot is removed from the server"
-    LOGGER.info(str(datetime.now()) + " " + guild.name + " just REMOVED lmao-bot ;_;")
+    LOGGER.info("%s just REMOVED lmao-bot ;_;", guild.name)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
     payload = {"server_count"  : len(BOT.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
+        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
             await aioclient.close()
 
@@ -245,7 +246,7 @@ async def on_message(message):  # Event triggers when message is sent
         lbvars.set_last_use_time(time.time())
 
     if message.guild is None:
-        LOGGER.info(str(datetime.now()) + " DM from " + str(message.author) + ": " + message.content)
+        LOGGER.info("DM from %s: %s", message.author, message.content)
         if message.author.id == 309480972707954688:
             await message.channel.send("Hey, babe, what's up? :smirk:")
         if "help" in message.content:
