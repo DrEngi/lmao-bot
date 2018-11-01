@@ -65,13 +65,5 @@ class Secret:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="lastcommand",hidden=True)
-    async def cmd_last_command_used(self, ctx):
-        if perms.is_lmao_developer(ctx.message):
-            current_time = time.time()
-            await ctx.send(f"The last command was used {lbutil.eng_time(current_time - lbvars.get_last_use_time())} ago.")
-        usage.update(ctx)
-        return ctx.command.name
-
 def setup(bot):
     bot.add_cog(Secret(bot))
