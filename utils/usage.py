@@ -7,7 +7,7 @@ import io
 def update(ctx, arg=None):
     name = ctx.command.name
     subcmd = None
-    if ctx.command.parent != None:
+    if ctx.command.parent is not None:
         name = ctx.command.parent.name
         subcmd = ctx.command.name
     alias = ctx.invoked_with
@@ -17,15 +17,15 @@ def update(ctx, arg=None):
             cmd_usage_data[name] = {"uses": 0}
         cmd_usage = cmd_usage_data[name]
         cmd_usage["uses"] += 1
-        if name != "replaceass" and subcmd == None:
+        if name != "replaceass" and subcmd is None:
             if alias not in cmd_usage:
                 cmd_usage[alias] = 0
             cmd_usage[alias] += 1
-            if arg != None and f"{name}:{arg}" not in cmd_usage:
+            if arg is not None and f"{name}:{arg}" not in cmd_usage:
                 cmd_usage[f"{name}:{arg}"] = 0
-            if arg != None:
+            if arg is not None:
                 cmd_usage[f"{name}:{arg}"] += 1
-        elif subcmd != None:
+        elif subcmd is not None:
             if subcmd not in cmd_usage:
                 cmd_usage[subcmd] = {"uses": 0}
             if alias not in cmd_usage[subcmd]:

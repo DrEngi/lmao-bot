@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils import vars, usage, lbutil, perms
+from utils import lbvars, usage, lbutil, perms
 import time
 import io
 import asyncio
@@ -15,7 +15,7 @@ class Info:
     @commands.command(name="help", aliases=["helpme", "commands", "cmds"])
     async def cmd_help(self, ctx):   # DMs list of commands
         # Idea: Create objects instead of multiple lists
-        if ctx.guild == None:
+        if ctx.guild is None:
             prefix = "lmao "
         else:
             prefix = ctx.prefix
@@ -99,6 +99,7 @@ class Info:
                    """:orange_book: `{0}urban` `term` Provides the definition for `term` on Urban Dictionary. Only works in NSFW channels.
                       \n:mag: `{0}lmgtfy` `what_to_google` Provides a nifty LMGTFY (Let Me Google That For You) link for `what_to_google`.
                       \n:wavy_dash: `{0}vaporwave` `text` Turns `text` into `ｔｅｘｔ`.
+                      \n:clap: `{0}clap` `message` 👏 Add 👏 some 👏 claps 👏 to 👏 your 👏 message. 👏
                       \n:reminder_ribbon: `{0}remind` Sets up a reminder. After the amount of time you specify, you will be DM'd your reminder.
                       \n:date: `{0}reminders` Lists all your reminders.""",
                    """:moneybag: `{0}coin` `number_of_coins` Flips `number_of_coins` coins. If `number_of_coins` is not specified, one coin will be flipped.
@@ -114,30 +115,29 @@ class Info:
                       \n:flag_white: `{0}guess giveup` Gives up an ongoing guessing game. Only use this if you're a quitter.""",
                    """:flushed: `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
                       \n:peach: `{0}ass` Sends a random NSFW ass picture.
+                      \n:melon: `{0}boobs` Sends a random NSFW boobs picture.
                       \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
                       \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
                       \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
                       \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
-                      \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.""",
+                      \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.
+                      \n:paintbrush: `{0}rule34` `search_term` Sends a random NSFW Rule 34 post for `search_term`.
+                      \n:paintbrush: `{0}r34` `search_term` Does the same thing as `{0}rule34`.""",
                    """:heavy_plus_sign: `{0}add` `command_name` `command_text` Adds `command_name` as a custom command, which prints `command_text` when executed.
                       \n:pencil: `{0}edit` `command_name` `command_text` Edits a certain command, `command_name`, to instead print `command_text` when executed.
                       \n:wastebasket: `{0}delete` `command_name` Deletes a certain command, `command_name`.
                       \n:clipboard: `{0}list` Lists all custom commands.
                       \n:speaking_head: `{0}command_name` Prints the message associated with the custom command `command_name`."""]#,
-                   # """:thonking: `{0}brackets enable` Enables brackets.
-                   #    \n:thonking: `{0}brackets disable` Deletes brackets.
-                   #    \n:thonking: `{0}brackets add <group_name>` Adds a group
-                   #    \n:thonking: `{0}brackets del <group_name>` Deletes a group   """]
         for i in range(len(help_head)):
-            if "nsfw" in help_head[i].lower() and ctx.guild != None and not vars.get_allow_nsfw(ctx.guild.id):
+            if "nsfw" in help_head[i].lower() and ctx.guild is not None and not lbvars.get_allow_nsfw(ctx.guild.id):
                 continue
             e = discord.Embed(color=help_color[i], title=help_head[i], description=help_desc[i].format(prefix))
             if i > 0:
                 await ctx.author.send(embed=e)
             else:
                 await ctx.author.send(help_title, embed=e)
-            #await asyncio.sleep(1)
-        if ctx.guild != None:
+            await asyncio.sleep(0.1)
+        if ctx.guild is not None:
             await ctx.send(f"{ctx.author.mention} A full list of lmao-bot commands has been slid into your DMs. :mailbox_with_mail:")
         usage.update(ctx)
         return ctx.command.name
@@ -147,7 +147,7 @@ class Info:
         if perms.is_admin(ctx.message):
             new_prefix = arg
             if new_prefix == "":
-                await ctx.send(f"{ctx.author.mention} My current prefix for {ctx.guild.name} is `{vars.get_prefix(ctx.guild.id)}`. What should I change it to?")
+                await ctx.send(f"{ctx.author.mention} My current prefix for {ctx.guild.name} is `{lbvars.get_prefix(ctx.guild.id)}`. What should I change it to?")
                 def check(message):
                     return message.author == ctx.author and message.channel == ctx.channel
                 try:
@@ -162,8 +162,8 @@ class Info:
             elif len(new_prefix) > 20:
                 await ctx.send(f"{ctx.author.mention} Your command prefix may not be longer than 20 characters.")
             else:
-                vars.set_prefix(ctx.guild.id, new_prefix)
-                await ctx.send(f"My command prefix for {ctx.guild.name} is now `{vars.get_prefix(ctx.guild.id)}`.")
+                lbvars.set_prefix(ctx.guild.id, new_prefix)
+                await ctx.send(f"My command prefix for {ctx.guild.name} is now `{lbvars.get_prefix(ctx.guild.id)}`.")
         else:
             await ctx.send(f"{ctx.author.mention} You do not have the permission to change the bot's prefix. Ask a guild administrator or lmao administrator to do so.")
         usage.update(ctx)
@@ -174,7 +174,7 @@ class Info:
         current_time = time.time()
         with io.open("management/next_maintenance.txt") as f:
             next_maintenance = f.read().strip()
-        await ctx.send(f"lmao-bot has been up for {lbutil.eng_time(current_time - vars.start_time)}\n\nNext maintenance break is scheduled for {next_maintenance}.")
+        await ctx.send(f"lmao-bot has been up for {lbutil.eng_time(current_time - lbvars.start_time)}\n\nNext maintenance break is scheduled for {next_maintenance}.")
         usage.update(ctx)
         return ctx.command.name
 
@@ -193,7 +193,7 @@ class Info:
         e = discord.Embed(title="Hello from lmao-bot! 👋", color=0xFF2500, description=desc)
         e.set_thumbnail(url=self.bot.user.avatar_url)
         e.add_field(name="Server Count", value=str(len(self.bot.guilds)))
-        e.add_field(name="Total Members", value=usage.count_total_members(self.bot))
+        e.add_field(name="Total Member Count", value=usage.count_total_members(self.bot))
         e.add_field(name="Invite me to your server", value="[You won't regret it 👀](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)")
         e.add_field(name="Join the support server", value="[Send help pls](https://discord.gg/JQgB7p7)")
         e.add_field(name="Vote for me on Discord Bot List", value="[The power is in your hands](https://discordbots.org/bot/459432854821142529/vote)")

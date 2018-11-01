@@ -3,7 +3,7 @@ from discord.ext import commands
 import io
 import json
 import asyncio
-from utils import vars, perms, usage
+from utils import lbvars, perms, usage
 
 class Settings:
 
@@ -19,7 +19,7 @@ class Settings:
             valid_shortcuts = ["on", "off", "lotto"]
             new_chance = arg
             if new_chance == "" and ctx.invoked_with not in valid_shortcuts:
-                await ctx.send(f"{ctx.author.mention} My current ass replacement chance for {ctx.guild.name} is `{vars.get_replace_ass_chance(guild_id)}%`. What should I change it to?\n\n(Note: Say `cancel` to cancel this change.)")
+                await ctx.send(f"{ctx.author.mention} My current ass replacement chance for {ctx.guild.name} is `{lbvars.get_replace_ass_chance(guild_id)}%`. What should I change it to?\n\n(Note: Say `cancel` to cancel this change.)")
                 def check(message):
                     return message.author == ctx.author and message.channel == ctx.channel
                 try:
@@ -34,7 +34,7 @@ class Settings:
                     usage.update(ctx)
                     return ctx.command.name
             valid_chance = True
-            chance = vars.get_replace_ass_chance(guild_id)
+            chance = lbvars.get_replace_ass_chance(guild_id)
             try:
                 chance = int(new_chance.replace("%", ""))
                 if chance < 0 or chance > 100:
@@ -54,7 +54,7 @@ class Settings:
                     after_msg = "Tread carefully, and hold onto your buns."
                 else:
                     after_msg = "Don't do anything reckless; you'll be fine."
-                vars.set_replace_ass_chance(guild_id, chance)
+                lbvars.set_replace_ass_chance(guild_id, chance)
                 await ctx.send(f"You have changed the automatic ass replacement chance for {ctx.guild.name} to `{chance}%`. {after_msg}")
             else:
                 await ctx.send(f"{ctx.author.mention} You must include an integer after toggleass from 0 to 100. This is the chance (in %) of automatic ass replacement.")
@@ -69,7 +69,7 @@ class Settings:
         if perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages:
             new_chance = arg
             if new_chance == "":
-                await ctx.send(f"{ctx.author.mention} My current reaction chance for {ctx.guild.name} is `{vars.get_react_chance(guild_id)}%`. What should I change it to?\n\n(Note: Say `cancel` to cancel this change.)")
+                await ctx.send(f"{ctx.author.mention} My current reaction chance for {ctx.guild.name} is `{lbvars.get_react_chance(guild_id)}%`. What should I change it to?\n\n(Note: Say `cancel` to cancel this change.)")
                 def check(message):
                     return message.author == ctx.author and message.channel == ctx.channel
                 try:
@@ -84,7 +84,7 @@ class Settings:
                     usage.update(ctx)
                     return ctx.command.name
             valid_chance = True
-            chance = vars.get_react_chance(guild_id)
+            chance = lbvars.get_react_chance(guild_id)
             try:
                 chance = int(new_chance.replace("%", ""))
                 if chance < 0 or chance > 100:
@@ -102,7 +102,7 @@ class Settings:
                     after_msg = "Looks like the Fine Bros found us. :pensive:"
                 else:
                     after_msg = "Watch out for the Fine Bros. :eyes:"
-                vars.set_react_chance(guild_id, chance)
+                lbvars.set_react_chance(guild_id, chance)
                 await ctx.send(f"You have changed the automatic emoji reaction chance for {ctx.guild.name} to `{chance}%`. {after_msg}")
             else:
                 await ctx.send(r'You must include an integer after `react` from 0 to 100. This is the chance (in %) of automatic emoji reactions.')
@@ -115,8 +115,8 @@ class Settings:
     async def cmd_chance(self, ctx):
         guild_id = ctx.guild.id
         e = discord.Embed(title=f"{ctx.guild.name} Chance Settings")
-        e.add_field(name="Ass replacement", value=f"{vars.get_replace_ass_chance(guild_id)}%")
-        e.add_field(name="Ass reaction", value=f"{vars.get_react_chance(guild_id)}%")
+        e.add_field(name="Ass replacement", value=f"{lbvars.get_replace_ass_chance(guild_id)}%")
+        e.add_field(name="Ass reaction", value=f"{lbvars.get_react_chance(guild_id)}%")
         await ctx.send(embed=e)
         usage.update(ctx)
         return ctx.command.name

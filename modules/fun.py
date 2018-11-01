@@ -145,10 +145,13 @@ async def seen_from_above(mentioned):
     out = Image.alpha_composite(canvas, txt)
     out.save(f"img/seen_from_above_{mentioned.id}.png")
 
-async def beautiful_welcome(member, channel):
+async def beautiful_welcome(member, channel, mention=True):
     await beautiful(member)
     img_file = "img/beautiful_{}.png".format(member.id)
-    await channel.send(f"Welcome to {member.guild.name}, {member.mention}!", file=discord.File(img_file))
+    user = member
+    if mention:
+        user = member.mention
+    await channel.send(f"Welcome to {member.guild.name}, {user}!", file=discord.File(img_file))
     os.remove(img_file)
 
 class Fun:

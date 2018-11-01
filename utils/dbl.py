@@ -3,7 +3,7 @@ import asyncio
 import socket
 import io
 
-with io.open("tokens/dbl.txt", "r") as token:
+with io.open("tokens/lmao-dbl.txt", "r") as token:
     dbl_token = (token.read()).strip()
 dbl_headers = {"Authorization" : dbl_token}
 

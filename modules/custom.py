@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils import vars, usage, perms
+from utils import lbvars, usage, perms
 import asyncio
 
 class Custom:
@@ -30,7 +30,7 @@ class Custom:
                     await ctx.send(f":x: {ctx.author.mention} Command timed out.")
                     usage.update(ctx)
                     return ctx.command.name
-            if name in vars.get_custom_cmd_list(ctx.guild.id):
+            if name in lbvars.get_custom_cmd_list(ctx.guild.id):
                 await ctx.send(f"{ctx.author.mention} `{name}` already exists as a command.")
                 usage.update(ctx)
                 return ctx.command.name
@@ -47,7 +47,7 @@ class Custom:
                     await ctx.send(f":x: {ctx.author.mention} Command timed out.")
                     usage.update(ctx)
                     return ctx.command.name
-            vars.add_custom_cmd(ctx.guild.id, name, arg)
+            lbvars.add_custom_cmd(ctx.guild.id, name, arg)
             await ctx.send(f"`{name}` added as a custom command.")
         else:
             await ctx.send(f"{ctx.author.mention} You do not have the permission to add custom commands. Ask a guild administrator, lmao administrator, or user with the `Manage Messages` permission to do so.")
@@ -74,7 +74,7 @@ class Custom:
                     await ctx.send(f":x: {ctx.author.mention} Command timed out.")
                     usage.update(ctx)
                     return ctx.command.name
-            if name not in vars.get_custom_cmd_list(ctx.guild.id):
+            if name not in lbvars.get_custom_cmd_list(ctx.guild.id):
                 await ctx.send(f"{ctx.author.mention} `{name}` does not exist as a command.")
                 usage.update(ctx)
                 return ctx.command.name
@@ -91,7 +91,7 @@ class Custom:
                     await ctx.send(f":x: {ctx.author.mention} Command timed out.")
                     usage.update(ctx)
                     return ctx.command.name
-            vars.add_custom_cmd(ctx.guild.id, name, arg)
+            lbvars.add_custom_cmd(ctx.guild.id, name, arg)
             await ctx.send(f"`{name}` custom command updated.")
         else:
             await ctx.send(f"{ctx.author.mention} You do not have the permission to edit custom commands. Ask a guild administrator, lmao administrator, or user with the `Manage Messages` permission to do so.")
@@ -117,9 +117,9 @@ class Custom:
                     await ctx.send(f":x: {ctx.author.mention} Command timed out.")
                     usage.update(ctx)
                     return ctx.command.name
-            if name in vars.get_custom_cmd_list(ctx.guild.id):
-                deleted_cmd_text = vars.get_custom_cmd_list(ctx.guild.id)[name]
-                vars.delete_custom_cmd(ctx.guild.id, name)
+            if name in lbvars.get_custom_cmd_list(ctx.guild.id):
+                deleted_cmd_text = lbvars.get_custom_cmd_list(ctx.guild.id)[name]
+                lbvars.delete_custom_cmd(ctx.guild.id, name)
                 await ctx.send(f"`{name}` custom command deleted. It originally printed:")
                 await ctx.send(deleted_cmd_text)
             else:
@@ -134,7 +134,7 @@ class Custom:
         title = f"Custom Commands for {ctx.guild.name}"
         embeds = [discord.Embed(title=title)]
         count = 0
-        for name, value in vars.get_custom_cmd_list(ctx.guild.id).items():
+        for name, value in lbvars.get_custom_cmd_list(ctx.guild.id).items():
             if count >= 20:
                 embeds.append(discord.Embed(title=title))
                 count = 0

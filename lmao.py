@@ -1,44 +1,61 @@
-print("lmao-bot is loading...")
+"Main entry for lmao-bot"
 
-import discord
-from discord.ext import commands
-import asyncio
-# import logging
+# Standard Python imports
+import logging
 import io
 import time
 from datetime import datetime
-import aiohttp
 import socket
 import os
 import json
-from modules import *
-from utils import *
 
-print("All modules imported successfully.")
+# Pip imports
+import asyncio
+import discord
+from discord.ext import commands
+import aiohttp
 
-# logger = logging.getLogger('discord')
-# logger.setLevel(logging.DEBUG)
-# handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-# handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-# logger.addHandler(handler)
+# First-party imports
+from modules import dblpy, fun
+from utils import lbvars, lbutil, dbl
+
+#Sets up logging here so we don't have to shoot ourselves
+LOGGER = logging.getLogger('discord')
+LOGGER.setLevel(logging.INFO)
+FORMATTER = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
+FILEHANDLER = logging.FileHandler(filename='lmao.log', encoding='utf-8', mode='w')
+FILEHANDLER.setFormatter(FORMATTER)
+STREAMHANDLER = logging.StreamHandler()
+STREAMHANDLER.setFormatter(FORMATTER)
+LOGGER.addHandler(STREAMHANDLER)
+LOGGER.addHandler(FILEHANDLER)
+
+LOGGER.info("lmao-bot is loading...")
 
 def get_pre(bot, message):
+    "Gets the prefix for the guild the message was sent it, otherwise returns lmao"
     try:
-        prefix = vars.get_prefix(message.guild.id)
+        prefix = lbvars.get_prefix(message.guild.id)
     except discord.ext.commands.errors.CommandInvokeError:
         prefix = "lmao"
     prefixes = lbutil.get_permutations(prefix)
     return prefixes
-bot = commands.Bot(command_prefix=get_pre, case_insensitive=True)
-bot.remove_command("help")
+
+#smh bradon you really put this here?
+#btw global variables such as this should be all uppercase, apparently.
+BOT = commands.Bot(command_prefix=get_pre, case_insensitive=True)
+BOT.remove_command("help")
+
 def starts_with_prefix(message):
-    prefixes = get_pre(bot, message)
+    "Determines whether or not the current prefix was used in the message."
+    prefixes = get_pre(BOT, message)
     for prefix in prefixes:
         if message.content.startswith(prefix):
             return True
     return False
 
 def load_extensions(bot):
+    "Loads all extensions found in the modules folder."
     os.chdir("modules")
     if __name__ == "__main__":
         for path in os.listdir():
@@ -47,23 +64,25 @@ def load_extensions(bot):
                 if module != "__init__":
                     try:
                         bot.load_extension(f"modules.{module}")
-                        print("{} sucessfully loaded.".format(module))
-                    except Exception as e:
-                        print("{} could not be loaded because {}.".format(module, e))
+                        LOGGER.info("%s sucessfully loaded.", module)
+                    except Exception as Ex:
+                        LOGGER.info("%s could not be loaded because %s.", module, Ex)
     os.chdir("..")
-load_extensions(bot)
+
+load_extensions(BOT)
 
 def get_all_commands():
+    "Returns all commands in the bot set by Discord.ext"
     commands = []
-    for command in bot.commands:
+    for command in BOT.commands:
         commands.append(command.name)
         for alias in command.aliases:
             commands.append(alias)
     return commands
 
-print("All extensions loaded.")
+LOGGER.info("All extensions loaded.")
 
-dblpy = bot.cogs.get("DBL")
+dblpy = BOT.cogs.get("DBL")
 
 with io.open("tokens/token.txt", "r") as token:
     bot_token = (token.read()).strip()
@@ -75,6 +94,7 @@ dbl_headers = {"Authorization" : dbl_token}
 bot_is_ready = False        # If bot is not ready, on_message event will not fire
 
 async def check_reminders(late=False):
+    "Check all reminders"
     with io.open("data/reminders.json") as f:
         reminders = json.load(f)
         for i in range(len(reminders["reminders"]) - 1, -1, -1):
@@ -85,79 +105,85 @@ async def check_reminders(late=False):
                     late_msg = "(If you are receiving this reminder late, the bot was likely offline when you should have received it.)"
                 e = discord.Embed(title=f"🎗️ Reminder for {reminder['set_for']}", description=f"{reminder['message']}\n\n{late_msg}")
                 e.set_footer(text=f"{reminder['time']} reminder set on {reminder['set_on']}.")
-                await bot.get_user(reminder["author"]).send(embed=e)
+                try:
+                    await BOT.get_user(reminder["author"]).send(embed=e)
+                except AttributeError:
+                    print(f"Error in getting user {reminder['author']}")
                 reminders["reminders"].pop(i)
         new_reminders = json.dumps(reminders, indent=4)
         with io.open("data/reminders.json", "w+", encoding="utf-8") as fo:
             fo.write(new_reminders)
 
-@bot.event
-async def on_ready():   # Prints ready message in terminal
+@BOT.event
+async def on_ready():
+    "Prints ready message in terminal"
     await dblpy.get_upvote_info()
-    vars.reset_guild_count()
-    print("Importing settings...")
-    vars.import_settings()
-    print("All settings successfully imported.")
-    for guild in bot.guilds:
-        vars.update_settings(guild.id, vars.GuildSettings(guild.id))
-        guild_count = vars.increment_guild_count()
-        print(str(datetime.now()) + " " + "{} initialized. Guild count: {}.".format(guild.name, guild_count))
+    lbvars.reset_guild_count()
+    LOGGER.info("Importing settings...")
+    lbvars.import_settings()
+    LOGGER.info("All settings successfully imported.")
+    for guild in BOT.guilds:
+        lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
+        guild_count = lbvars.increment_guild_count()
+        LOGGER.info(str("{} initialized. Guild count: {}.".format(guild.name, guild_count)))
     async def owner_has_voted():
-        if (await dbl.has_voted(210220782012334081)):
+        if await dbl.has_voted(210220782012334081):
             return "YES"
         return "NO"
     owner_voted = await owner_has_voted()
-    print(f"Have you voted yet? {owner_voted}")
-    print("Logged in as")
-    print(bot.user.name)
-    print(str(bot.user.id))
-    print(str(datetime.now()))
-    print("------")
-    await bot.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(bot.guilds))))
-    vars.set_start_time(time.time())
+    LOGGER.info("Have you voted yet? %s", owner_voted)
+    LOGGER.info("Logged in as")
+    LOGGER.info(BOT.user.name)
+    LOGGER.info(str(BOT.user.id))
+    LOGGER.info(str(datetime.now()))
+    LOGGER.info("------")
+    await BOT.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(BOT.guilds))))
+    lbvars.set_start_time(time.time())
     global bot_is_ready
     bot_is_ready = True
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"server_count"  : len(bot.guilds)}
+    payload = {"server_count"  : len(BOT.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
+        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
             await aioclient.close()
     try:
         await check_reminders(late=True)
-    except Exception as e:
-        print(f"Error: {e}")
+    except Exception as Ex:
+        LOGGER.warning("Error: %s", Ex)
     await asyncio.sleep(60 - round(time.time()) % 60)
     while(True):
         try:
             await check_reminders()
-        except Exception as e:
-            print(f"Error: {e}")
-        if not vars.custom_game:
-            await bot.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(bot.guilds))))
+        except Exception as Ex:
+            LOGGER.warning("Reminder check error: %s", Ex)
+        if not lbvars.custom_game:
+            await BOT.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(BOT.guilds))))
         await asyncio.sleep(60)
 
-@bot.event
+@BOT.event
 async def on_guild_join(guild):
-    # vars.import_settings()
-    vars.update_settings(guild.id, vars.GuildSettings(guild.id))
-    guild_count = vars.increment_guild_count()
-    print(str(datetime.now()) + " " + "{} initialized. Guild count: {}.".format(guild.name, guild_count))
-    print(str(datetime.now()) + " " + guild.name + " just ADDED lmao-bot ^_^")
+    "Runs whenever LMAO joins a new server"
+    # lbvars.import_settings()
+    lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
+    guild_count = lbvars.increment_guild_count()
+    LOGGER.info("%s initialized. Guild count: %s.", guild.name, guild_count)
+    LOGGER.info("%s just ADDED lmao-bot ^_^", guild_count)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"server_count"  : len(bot.guilds)}
+    payload = {"server_count"  : len(BOT.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
+        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
             await aioclient.close()
 
-@bot.event
+@BOT.event
 async def on_guild_remove(guild):
-    print(str(datetime.now()) + " " + guild.name + " just REMOVED lmao-bot ;_;")
+    "Runs whenver lmao-bot is removed from the server"
+    LOGGER.info("%s just REMOVED lmao-bot ;_;", guild.name)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"server_count"  : len(bot.guilds)}
+    payload = {"server_count"  : len(BOT.guilds)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers) as r:
+        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
             await aioclient.close()
 
@@ -167,27 +193,31 @@ welcome = {
     264445053596991498: 265156361791209475  # Discord Bot List
 }
 
-#Welcomes people in the lmao-bot support server
-@bot.event
+@BOT.event
 async def on_member_join(member):
-    channel = welcome.get(member.guild.id, 0)
-    if channel == 0:
+    "Runs welcome message whenever a member joins"
+    channel_id = welcome.get(member.guild.id, 0)
+    if channel_id == 0:
         return
-    channel = member.guild.get_channel(channel)
+    mention = True
+    if channel_id == 265156361791209475:
+        mention = False
+    channel = member.guild.get_channel(channel_id)
     await channel.trigger_typing()
-    await fun.beautiful_welcome(member, channel)
+    await fun.beautiful_welcome(member, channel, mention=mention)
 
-#Bids people farewell in the lmao-bot support server
-@bot.event
+@BOT.event
 async def on_member_remove(member):
-    channel = welcome.get(member.guild.id, 0)
-    if channel == 0:
+    "Bids people farewell in the lmao-bot support server"
+    channel_id = welcome.get(member.guild.id, 0)
+    if channel_id == 0:
         return
-    channel = member.guild.get_channel(channel)
-    await channel.send(f"Good night, sweet {member}. You will be missed. :pensive:")
+    channel = member.guild.get_channel(channel_id)
+    await channel.send(f"Goodbye, {member}. You will be missed. :pensive:")
 
-@bot.event
+@BOT.event
 async def on_message(message):  # Event triggers when message is sent
+    "Runs whenever a message is sent"
     if not bot_is_ready:
         return
 
@@ -196,63 +226,63 @@ async def on_message(message):  # Event triggers when message is sent
         return
 
     guild = message.guild
-    if guild == None:
+    if guild is None:
         guild = message.channel
     guild_id = str(guild.id)
 
-    prefix = vars.get_prefix(guild_id)
+    prefix = lbvars.get_prefix(guild_id)
     msg_raw = message.content
     msg = msg_raw.lower()
 
-    ctx = commands.Context(message=message, bot=bot, prefix=prefix)
+    ctx = commands.Context(message=message, bot=BOT, prefix=prefix)
 
     async def replace_ass():    # Sends the ass substitution message
-        await bot.get_command("replaceass").invoke(ctx)
-        vars.set_last_use_time(time.time())
+        await BOT.get_command("replaceass").invoke(ctx)
+        lbvars.set_last_use_time(time.time())
 
-    if message.guild == None:
-        print(str(datetime.now()) + " DM from " + str(message.author) + ": " + message.content)
+    if message.guild is None:
+        LOGGER.info("DM from %s: %s", message.author, message.content)
         if message.author.id == 309480972707954688:
             await message.channel.send("Hey, babe, what's up? :smirk:")
         if "help" in message.content:
-            await bot.get_command("help").invoke(ctx)
+            await BOT.get_command("help").invoke(ctx)
         elif "lmao" in message.content or "lmfao" in message.content:
             await replace_ass()
         else:
-            await bot.get_command("info").invoke(ctx)
-        vars.set_last_use_time(time.time())
+            await BOT.get_command("info").invoke(ctx)
+        lbvars.set_last_use_time(time.time())
         return
 
-    # If used by bot's creator, displays last time a lmao-bot command was used
+        # If used by bot's creator, displays last time a lmao-bot command was used
     if message.author.id == 210220782012334081 and message.content.lower().strip() == "last command used":
         current_time = time.time()
-        await message.channel.send(f"The last command was used {lbutil.eng_time(current_time - vars.get_last_use_time())} ago.")
+        await message.channel.send(f"The last command was used {lbutil.eng_time(current_time - lbvars.get_last_use_time())} ago.")
 
     # COMMANDS
     if starts_with_prefix(message): # Bot reacts to command prefix call
-        prefix = vars.get_prefix(guild_id)
+        prefix = lbvars.get_prefix(guild_id)
         msg_no_prefix = message.content[len(prefix):].strip()
         words = msg_no_prefix.split()
         cmd_name = ""
         if len(words) > 0:
             cmd_name = words[0]
 
-        # vars.import_settings()
+        # lbvars.import_settings()
 
         if cmd_name.lower() in get_all_commands():
-            await bot.process_commands(message)
+            await BOT.process_commands(message)
         else:
             try:
-                await message.channel.send(vars.get_custom_cmd_list(message.guild.id)[cmd_name].strip())
+                await message.channel.send(lbvars.get_custom_cmd_list(message.guild.id)[cmd_name].strip())
             except KeyError:
                 if "lmao" in message.content.lower() or "lmfao" in message.content.lower():
                     await replace_ass()
 
-        if not vars.get_no_command_invoked():
-            vars.set_last_use_time(time.time())
-        vars.set_no_command_invoked(False)
+        if not lbvars.get_no_command_invoked():
+            lbvars.set_last_use_time(time.time())
+        lbvars.set_no_command_invoked(False)
 
-        vars.export_settings(guild_id)
+        lbvars.export_settings(guild_id)
 
     elif msg == "lmao help":
         await message.channel.send(f"Type `{prefix} help` to see the help menu.")
@@ -262,10 +292,10 @@ async def on_message(message):  # Event triggers when message is sent
     # GENERIC REPLY
     elif ("lmao" in msg or "lmfao" in msg): #generic ass substitution
         await replace_ass()
-        vars.export_settings(guild_id)
+        lbvars.export_settings(guild_id)
 
     if guild_id in ["345655060740440064", "407274897350328345"] and ("pollard" in msg or "buh-bye" in msg or "buhbye" in msg or "buh bye" in msg):
-        emoji_list = bot.get_guild(345655060740440064).emojis
+        emoji_list = BOT.get_guild(345655060740440064).emojis
         for emoji in emoji_list:
             if emoji.name == "buhbye":
                 buhbye = emoji
@@ -276,4 +306,4 @@ async def on_message(message):  # Event triggers when message is sent
         except discord.errors.Forbidden:
             pass
 
-bot.run(bot_token)
+BOT.run(bot_token)

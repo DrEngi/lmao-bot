@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils import vars, usage, perms
+from utils import lbvars, usage, perms
 import asyncio
 import math
 
@@ -15,7 +15,7 @@ class Mod:
     async def cmd_admin_list(self, ctx):
         title = "**lmao administrators for this guild**"
         admins = []
-        for admin in vars.get_lmao_admin_list(ctx.guild.id):
+        for admin in lbvars.get_lmao_admin_list(ctx.guild.id):
             admins.append(ctx.guild.get_member(int(admin)).name)
         for i in range(int(math.ceil(len(admins) / 25))):
             desc = ""
@@ -34,10 +34,10 @@ class Mod:
     async def cmd_add_admin(self, ctx, *, arg=""):
         if perms.is_lmao_admin(ctx.message):
             if len(ctx.message.mentions) == 1:
-                if str(ctx.message.mentions[0].id) in vars.get_lmao_admin_list(ctx.guild.id):
+                if str(ctx.message.mentions[0].id) in lbvars.get_lmao_admin_list(ctx.guild.id):
                     await ctx.send(ctx.message.mentions[0].name + " is already a lmao administrator.")
                 else:
-                    vars.add_lmao_admin(ctx.guild.id, ctx.message.mentions[0].id)
+                    lbvars.add_lmao_admin(ctx.guild.id, ctx.message.mentions[0].id)
                     await ctx.send(ctx.message.mentions[0].mention + " has been added as a lmao administrator for this guild.")
             elif len(ctx.message.mentions) > 1:
                 await ctx.send(f"{ctx.author.mention} You may only add one lmao administrator at a time.")
@@ -52,10 +52,10 @@ class Mod:
     async def cmd_remove_admin(self, ctx, *, arg=""):
         if perms.is_admin(ctx.message) or perms.is_lmao_developer(ctx.message):
             if len(ctx.message.mentions) == 1:
-                if str(ctx.message.mentions[0].id) not in vars.get_lmao_admin_list(ctx.guild.id):
+                if str(ctx.message.mentions[0].id) not in lbvars.get_lmao_admin_list(ctx.guild.id):
                     await ctx.send(ctx.message.mentions[0].name + " is not a lmao administrator.")
                 else:
-                    vars.set_lmao_admin_list(ctx.guild.id, [admin for admin in vars.get_lmao_admin_list(ctx.guild.id) if admin != str(ctx.message.mentions[0].id)])
+                    lbvars.set_lmao_admin_list(ctx.guild.id, [admin for admin in lbvars.get_lmao_admin_list(ctx.guild.id) if admin != str(ctx.message.mentions[0].id)])
                     await ctx.send(ctx.message.mentions[0].mention + " has been removed as a lmao administrator for this guild.")
             elif len(ctx.message.mentions) > 1:
                 await ctx.send(f"{ctx.author.mention} You may only remove one lmao administrator at a time.")

@@ -139,7 +139,7 @@ class GuildSettings:
                 self.allow_nsfw = True
         return self.allow_nsfw
     def toggle_allow_nsfw(self):
-        self.allow_nsfw = not allow_nsfw
+        self.allow_nsfw = not self.allow_nsfw
         return self.allow_nsfw
     def set_allow_nsfw(self, allow_nsfw):
         self.allow_nsfw = allow_nsfw
@@ -158,7 +158,7 @@ class GuildSettings:
         self.lmao_admin_list.append(str(member_id))
         return self.lmao_admin_list
     def remove_lmao_admin(self, member_id):
-        self.lmao_admin_list = [admin for admin in lmao_admin_list[self.guild_id] if admin != str(member_id)]
+        self.lmao_admin_list = [admin for admin in self.lmao_admin_list[self.guild_id] if admin != str(member_id)]
         return self.lmao_admin_list
     def set_lmao_admin_list(self, lmao_admin_list):
         self.lmao_admin_list = lmao_admin_list

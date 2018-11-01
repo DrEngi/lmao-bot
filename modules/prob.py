@@ -5,7 +5,7 @@ import discord
 from discord.ext import commands
 import random
 from datetime import datetime
-from utils import vars, usage
+from utils import lbvars, usage
 
 ranks = [":regional_indicator_a:",
          ":two:",
@@ -138,8 +138,9 @@ class Prob:
         await ctx.send(card_msg)
         usage.update(ctx)
         return ctx.command.name
-
-    #@commands.command(name="dice", aliases=["roll"])
+    '''
+    //Commented out because something appears to be broken here, at least there are a bunch of syntax errors.
+    @commands.command(name="dice", aliases=["roll"])
     async def cmd_deal(self, ctx, *, arg=""):
         #global deck
         deck_msg = ctx.author.mention + " The full deck: "
@@ -149,12 +150,13 @@ class Prob:
         return 'deal'
 
     def shuffle_cards(self, ctx):
-        #The dream of creating a deal command is not dead, but possibly implement this through vars
+        #The dream of creating a deal command is not dead, but possibly implement this through lbvars
         self.deck[ctx.guild.id] = []
         for rank in ranks:
             for suit in suits:
                 deck[ctx.guild.id].append([rank, suit])
         random.shuffle(deck[ctx.guild.id])
+    '''
 
     @commands.command(name="8ball", aliases=["eightball", "8-ball"])
     async def cmd_8ball(self, ctx):
