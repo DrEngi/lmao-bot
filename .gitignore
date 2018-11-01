@@ -120,6 +120,8 @@ old/
 testing/
 async/
 data_dev/
+data/
+management/
 
 lmao_count.txt
 
