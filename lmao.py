@@ -17,7 +17,7 @@ import aiohttp
 
 # First-party imports
 from modules import dblpy, fun
-from utils import lbvars, lbutil, dbl
+from utils import lbvars, lbutil, dbl, perms
 
 #Sets up logging here so we don't have to shoot ourselves
 LOGGER = logging.getLogger('discord')
@@ -43,7 +43,7 @@ def get_pre(bot, message):
 
 #smh bradon you really put this here?
 #btw global variables such as this should be all uppercase, apparently.
-BOT = commands.Bot(command_prefix=get_pre, case_insensitive=True)
+BOT = commands.AutoShardedBot(command_prefix=get_pre, case_insensitive=True)
 BOT.remove_command("help")
 
 def starts_with_prefix(message):
@@ -255,7 +255,7 @@ async def on_message(message):  # Event triggers when message is sent
         return
 
         # If used by bot's creator, displays last time a lmao-bot command was used
-    if message.author.id == 210220782012334081 and message.content.lower().strip() == "last command used":
+    if perms.is_lmao_developer(ctx.message) and message.content.lower().strip() == "last command used":
         current_time = time.time()
         await message.channel.send(f"The last command was used {lbutil.eng_time(current_time - lbvars.get_last_use_time())} ago.")
 
