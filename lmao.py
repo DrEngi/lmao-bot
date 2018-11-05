@@ -117,7 +117,8 @@ async def check_reminders(late=False):
 @BOT.event
 async def on_ready():
     "Prints ready message in terminal"
-    await dblpy.get_upvote_info()
+    voted = await dblpy.get_upvote_info()
+    LOGGER.info(voted)
     lbvars.reset_guild_count()
     LOGGER.info("Importing settings...")
     lbvars.import_settings()
