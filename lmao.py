@@ -142,7 +142,7 @@ async def on_ready():
     global bot_is_ready
     bot_is_ready = True
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"server_count"  : len(BOT.guilds)}
+    payload = {"server_count"  : len(BOT.guilds), "shard_count": len(BOT.shards)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
@@ -170,7 +170,7 @@ async def on_guild_join(guild):
     LOGGER.info("%s initialized. Guild count: %s.", guild.name, guild_count)
     LOGGER.info("%s just ADDED lmao-bot ^_^", guild_count)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"server_count"  : len(BOT.guilds)}
+    payload = {"server_count"  : len(BOT.guilds), "shard_count": len(BOT.shards)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
@@ -181,7 +181,7 @@ async def on_guild_remove(guild):
     """Runs whenver lmao-bot is removed from the server"""
     LOGGER.info("%s just REMOVED lmao-bot ;_;", guild.name)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"server_count"  : len(BOT.guilds)}
+    payload = {"server_count"  : len(BOT.guilds), "shard_count": len(BOT.shards)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
         async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
             dbl_connector.close()
