@@ -13,7 +13,7 @@ class Mod:
 
     @commands.command(name="adminlist", aliases=["listadmins"])
     async def cmd_admin_list(self, ctx):
-        title = "**lmao administrators for this guild**"
+        title = f"**lmao administrators for {ctx.guild.name}**"
         admins = []
         for admin in lbvars.get_lmao_admin_list(ctx.guild.id):
             admins.append(ctx.guild.get_member(int(admin)).name)
