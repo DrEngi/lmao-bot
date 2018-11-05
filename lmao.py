@@ -1,4 +1,5 @@
-"Main entry for lmao-bot"
+"""Main entry for lmao-bot"""
+# TODO: Use docstrings to clean up help menu
 
 # Standard Python imports
 import logging
@@ -41,8 +42,6 @@ def get_pre(bot, message):
     prefixes = lbutil.get_permutations(prefix)
     return prefixes
 
-#smh bradon you really put this here?
-#btw global variables such as this should be all uppercase, apparently.
 BOT = commands.AutoShardedBot(command_prefix=get_pre, case_insensitive=True)
 BOT.remove_command("help")
 
@@ -55,7 +54,7 @@ def starts_with_prefix(message):
     return False
 
 def load_extensions(bot):
-    "Loads all extensions found in the modules folder."
+    """Loads all extensions found in the modules folder."""
     os.chdir("modules")
     if __name__ == "__main__":
         for path in os.listdir():
@@ -72,7 +71,7 @@ def load_extensions(bot):
 load_extensions(BOT)
 
 def get_all_commands():
-    "Returns all commands in the bot set by Discord.ext"
+    """Returns all commands in the bot set by Discord.ext"""
     commands = []
     for command in BOT.commands:
         commands.append(command.name)
@@ -94,7 +93,7 @@ dbl_headers = {"Authorization" : dbl_token}
 bot_is_ready = False        # If bot is not ready, on_message event will not fire
 
 async def check_reminders(late=False):
-    "Check all reminders"
+    """Check all reminders"""
     with io.open("data/reminders.json") as f:
         reminders = json.load(f)
         for i in range(len(reminders["reminders"]) - 1, -1, -1):
@@ -116,7 +115,7 @@ async def check_reminders(late=False):
 
 @BOT.event
 async def on_ready():
-    "Prints ready message in terminal"
+    """Prints ready message in terminal"""
     voted = await dblpy.get_upvote_info()
     LOGGER.info(voted)
     lbvars.reset_guild_count()
@@ -164,7 +163,7 @@ async def on_ready():
 
 @BOT.event
 async def on_guild_join(guild):
-    "Runs whenever LMAO joins a new server"
+    """Runs whenever lmao-bot joins a new server"""
     # lbvars.import_settings()
     lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
     guild_count = lbvars.increment_guild_count()
@@ -179,7 +178,7 @@ async def on_guild_join(guild):
 
 @BOT.event
 async def on_guild_remove(guild):
-    "Runs whenver lmao-bot is removed from the server"
+    """Runs whenver lmao-bot is removed from the server"""
     LOGGER.info("%s just REMOVED lmao-bot ;_;", guild.name)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
     payload = {"server_count"  : len(BOT.guilds)}
@@ -196,7 +195,7 @@ welcome = {
 
 @BOT.event
 async def on_member_join(member):
-    "Runs welcome message whenever a member joins"
+    """Runs welcome message whenever a member joins"""
     channel_id = welcome.get(member.guild.id, 0)
     if channel_id == 0:
         return
@@ -209,7 +208,7 @@ async def on_member_join(member):
 
 @BOT.event
 async def on_member_remove(member):
-    "Bids people farewell in the lmao-bot support server"
+    """Bids people farewell in the lmao-bot support server"""
     channel_id = welcome.get(member.guild.id, 0)
     if channel_id == 0:
         return
@@ -218,7 +217,7 @@ async def on_member_remove(member):
 
 @BOT.event
 async def on_message(message):  # Event triggers when message is sent
-    "Runs whenever a message is sent"
+    """Runs whenever a message is sent"""
     if not bot_is_ready:
         return
 

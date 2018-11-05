@@ -20,7 +20,7 @@ class Info:
         else:
             prefix = ctx.prefix
         await ctx.channel.trigger_typing()
-        help_title = ":peach: **FULL LIST OF LMAO-BOT COMMANDS** :peach:"
+        help_title = "🍑 **FULL LIST OF LMAO-BOT COMMANDS** 🍑"
         help_color = [
             0x008080,
             0xFF2500,
@@ -30,8 +30,7 @@ class Info:
             0x808080,
             0x008000,
             0xD11919,
-            0xFBCEB1#,
-            # 0xFFFFFF
+            0xFBCEB1
         ]
         help_head = [
                     "🤖 **Bot Management** 🤖",
@@ -42,8 +41,7 @@ class Info:
                     "🛠️ **Utility** 🛠️",
                     "📊 **Probability Games & Commands** 📊",
                     "😏 **NSFW** 😏",
-                    "✍️ **Custom Commands** ✍️"#,
-                    # "️️️✍️ **Bracket Commands** ✍️"
+                    "✍️ **Custom Commands** ✍️"
                     ]
         help_desc = [""":exclamation: `lmao prefix` If the bot's command prefix is not `lmao`, this returns the current command prefix.
                       \n:question: `{0}help` Returns a list of commands for lmao-bot to your DMs (hey, that's meta).
@@ -61,21 +59,25 @@ class Info:
                       \n:astonished: `{0}react` `chance` Changes the chance of emoji reaction features to `chance` percent. Default is 100%.
                       \n:chart_with_upwards_trend: `{0}chance` Returns the chance of automatic ass replacement and the chance of emoji reaction features.
                       \n:100: `{0}count` Counts the number of times you have used \"lmao\" or \"lmfao\".""",
-                   """:arrow_forward: `{0}play` Plays the first song in the song queue.
-                      \n:arrow_forward: `{0}play` `number` Plays song number `number` from the song queue.
-                      \n:arrow_forward: `{0}play` `search_term` Plays the first result from a YouTube search for `search_term`.
-                      \n:arrow_forward: `{0}play` `url` Plays music from a given URL `url`. Works with many video sites, including YouTube and Soundcloud.
-                      \n:microphone: `{0}connect` `voice_channel` Connects the bot to a voice channel named `voice_channel`. If `voice_channel` is not specified, the bot connects to the user's current voice channel.
-                      \n:arrow_forward: `{0}nowplaying` or `{0}np` Shows information about the song currently playing.
-                      \n:next_track: `{0}next` or `{0}skip` Ends the current song and plays the next song in the queue.
-                      \n:pause_button: `{0}pause` Pauses the current song.
-                      \n:play_pause: `{0}resume` Resumes a paused song.
-                      \n:loud_sound: `{0}volume` `percent` Changes the volume to `percent`%.
-                      \n:loud_sound: `{0}vol` `percent` Does the same thing as `{0}volume`.
-                      \n:radio: `{0}queue` or `{0}q` Returns a list of all the songs in the queue.
-                      \n:heavy_plus_sign: `{0}q` `add` `song` Adds a `song` (URL or search term) to the end of the queue.
-                      \n:heavy_minus_sign: `{0}q` `remove` `number` Removes song number `number` from the queue.
-                      \n:wastebasket: `{0}q` `clear` Clears the current queue.""",
+                   """▶️ `{0}play` Plays the first song in the song queue.
+                      \n▶️ `{0}play` `number` Plays song number `number` from the song queue.
+                      \n▶️ `{0}play` `search_term` Plays the first result from a YouTube search for `search_term`.
+                      \n▶️ `{0}play` `url` Plays music from a given URL `url`. Works with many video sites, including YouTube and Soundcloud.
+                      \n🎤 `{0}connect` `voice_channel` Connects the bot to a voice channel named `voice_channel`. If `voice_channel` is not specified, the bot connects to the user's current voice channel.
+                      \n▶️ `{0}nowplaying` or `{0}np` Shows information about the song currently playing.
+                      \n⏭️ `{0}next` or `{0}skip` Ends the current song and plays the next song in the queue.
+                      \n⏸️ `{0}pause` Pauses the current song.
+                      \n⏯️ `{0}resume` Resumes a paused song.
+                      \n🔊 `{0}volume` `percent` or `{0}vol` `percent` Changes the volume to `percent`%.
+                      \n📻 `{0}queue` or `{0}q` Returns a list of all the songs in the queue.
+                      \n➕ `{0}q` `add` `song` Adds a `song` (URL or search term) to the end of the queue.
+                      \n➖ `{0}q` `remove` `number` Removes song number `number` from the queue.
+                      \n🗑️ `{0}q` `clear` Clears the current queue.
+                      \n📇 `{0}playlist` or `{0}pl` Shows the list of playlists.
+                      \n🎶 `{0}pl` `playlist_name` Shows the songs in `playlist_name`.
+                      \n🔖 `{0}save` Saves the current queue to a playlist.
+                      \n🔂 `{0}load` `playlist_name` Loads `playlist_name` to the queue.
+                      \n❌ `{0}pl` `remove` `playlist_name` Removes `playlist_name` from the list of playlists.""",
                    """:police_car: `{0}adminlist` Sends a list of everyone who is a lmao administrator.
                       \n:cop: `{0}addadmin` `member` Makes `member` a lmao administrator. Available to guild admins and existing lmao admins only.
                       \n:put_litter_in_its_place: `{0}removeadmin` `member` Removes `member` from the lmao administrator list. Available to guild admins only.
