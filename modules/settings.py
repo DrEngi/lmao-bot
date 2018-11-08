@@ -122,13 +122,23 @@ class Settings:
         return ctx.command.name
 
     @commands.command(name="count")
-    async def cmd_count(self, ctx):  # Counts the number of times someone says lmao
-        with io.open("data/user_data.json") as f:
-            lmao_count_data = json.load(f)
-            try:
-                await ctx.send(ctx.author.mention + " You have laughed your ass off {} times.".format(lmao_count_data[str(ctx.author.id)]["lmao_count"]))
-            except KeyError:
-                await ctx.send(ctx.author.mention + " You have yet to laugh your ass off.")
+    async def cmd_count(self, ctx, arg=""):  # Counts the number of times someone says lmao
+        if len(ctx.message.mentions) > 1:
+            await ctx.send(ctx.author.mention + " You may only check the count of one user at a time")
+        elif len(ctx.message.mentions) == 1:
+            with io.open("data/user_data.json") as f:
+                lmao_count_data = json.load(f)
+                try:
+                    await ctx.send(ctx.author.mention + ", " + ctx.message.mentions[0].mention + " has laughed their ass off {} times.".format(lmao_count_data[str(ctx.message.mentions[0].id)]["lmao_count"]))
+                except KeyError:
+                    await ctx.send(ctx.author.mention + ", " + ctx.message.mentions[0].mention + " has yet to laugh their ass off.")
+        else:
+            with io.open("data/user_data.json") as f:
+                lmao_count_data = json.load(f)
+                try:
+                    await ctx.send(ctx.author.mention + " you have laughed your ass off {} times.".format(lmao_count_data[str(ctx.author.id)]["lmao_count"]))
+                except KeyError:
+                    await ctx.send(ctx.author.mention + " You have yet to laugh your ass off.")
         usage.update(ctx)
         return ctx.command.name
 

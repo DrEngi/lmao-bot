@@ -126,12 +126,14 @@ async def on_ready():
         lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
         guild_count = lbvars.increment_guild_count()
         LOGGER.info(str("{} initialized. Guild count: {}.".format(guild.name, guild_count)))
+    '''
     async def owner_has_voted():
         if await dbl.has_voted(210220782012334081):
             return "YES"
         return "NO"
     owner_voted = await owner_has_voted()
     LOGGER.info("Have you voted yet? %s", owner_voted)
+    '''
     LOGGER.info("Logged in as")
     LOGGER.info(BOT.user.name)
     LOGGER.info(str(BOT.user.id))
