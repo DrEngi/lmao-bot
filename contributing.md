@@ -18,7 +18,7 @@ There are many ways you can help improve this repository! For example:
 To contribute and test, you need a text editor, git, a GitHub account, python 3.6.5, and you'll need to install the requirements listed in https://github.com/DrEngi/lmao-bot/blob/master/requirements.txt.
 If you want to work with music or voice, please ensure that [ffmpeg](https://ffmpeg.org/) is installed on your machine.
 
-As far as text/code editors go, there are more editors than you can shake a stick at, so it's down to personal preference. [Atom](https://atom.io/) is a great, open source editor we can definitely recommend (and one of uses it).
+As far as text/code editors go, there are more editors than you can shake a stick at, so it's down to personal preference. [Atom](https://atom.io/) is a great, open source editor we can definitely recommend (and one of us uses it).
 
 For more information on setting up Git on your machine, [read this article](https://help.github.com/articles/set-up-git/).
 
