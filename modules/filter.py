@@ -147,7 +147,7 @@ class Filter:
         usage.update(ctx)
         return ctx.command.name
 
-    @cmd_filter.command(name="flags", aliases=["flags", "configure", "settings"])
+    @cmd_filter.command(name="flags", aliases=["config", "configure", "settings"])
     @commands.check(can_edit_filters)
     async def cmd_filter_config(self, ctx, *, arg=""):
         def check(message):
