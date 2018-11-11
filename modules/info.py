@@ -30,7 +30,8 @@ class Info:
             0x808080,
             0x008000,
             0xD11919,
-            0xFBCEB1
+            0xFBCEB1,
+            0x666666
         ]
         help_head = [
                     "🤖 **Bot Management** 🤖",
@@ -41,7 +42,8 @@ class Info:
                     "🛠️ **Utility** 🛠️",
                     "📊 **Probability Games & Commands** 📊",
                     "😏 **NSFW** 😏",
-                    "✍️ **Custom Commands** ✍️"
+                    "✍️ **Custom Commands** ✍️",
+                    "🔭 **Custom Filters** 🔭"
                     ]
         help_desc = [""":exclamation: `lmao prefix` If the bot's command prefix is not `lmao`, this returns the current command prefix.
                       \n:question: `{0}help` Returns a list of commands for lmao-bot to your DMs (hey, that's meta).
@@ -129,7 +131,12 @@ class Info:
                       \n:pencil: `{0}edit` `command_name` `command_text` Edits a certain command, `command_name`, to instead print `command_text` when executed.
                       \n:wastebasket: `{0}delete` `command_name` Deletes a certain command, `command_name`.
                       \n:clipboard: `{0}list` Lists all custom commands.
-                      \n:speaking_head: `{0}command_name` Prints the message associated with the custom command `command_name`."""]#,
+                      \n:speaking_head: `{0}command_name` Prints the message associated with the custom command `command_name`.""",
+                   """🔭 `{0}filter` Lists all the custom filters for the guild.
+                      \n➕ `{0}filter` `add` Adds a custom filter in the guild. When someone says a given word or phrase in a channel, lmao-bot automatically replies with a message.
+                      \n✏️ `{0}filter` `edit` Edits a custom filter to say something else.
+                      \n🚩 `{0}filter` `flags` Change the configuration (flags) of a filter. Flags include `nomention` and `casesensitive`.
+                      \n🗑️ `{0}filter` `remove` Removes a custom filter."""]
         for i in range(len(help_head)):
             if "nsfw" in help_head[i].lower() and ctx.guild is not None and not lbvars.get_allow_nsfw(ctx.guild.id):
                 continue
