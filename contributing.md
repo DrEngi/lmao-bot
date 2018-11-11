@@ -39,7 +39,6 @@ pip install -r requirements.txt
 This will ensure that you have all the required development modules installed to build your contributions. You are now ready to contribute.
 
 Once you're satisfied, [submit your pull request](https://help.github.com/articles/creating-a-pull-request/). Please be sure you create a pull request to the DEVELOP branch, not Master. Direct PRs to Master will be denied.
-where `TYPE` is the kind of example (such as `js`, `css`, or `tabbed`) and `FILENAME` is the name of the file that contains the example (like `margin.html` or `date-constructor.html`).
 
 ## Thank you!
 
