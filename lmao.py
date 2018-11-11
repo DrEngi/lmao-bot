@@ -39,14 +39,20 @@ def get_pre(bot, message):
         prefix = lbvars.get_prefix(message.guild.id)
     except discord.ext.commands.errors.CommandInvokeError:
         prefix = "lmao"
-    prefixes = lbutil.get_permutations(prefix)
+    prefixes = lbutil.get_permutations(prefix) # Returns a list of strings that are prefixes
     return prefixes
 
-BOT = commands.AutoShardedBot(command_prefix=get_pre, case_insensitive=True)
+def get_mentioned_or_pre(bot, message):
+    prefixes = get_pre(bot, message)
+    return commands.when_mentioned_or(*prefixes)(bot, message)
+
+BOT = commands.AutoShardedBot(command_prefix=get_mentioned_or_pre, case_insensitive=True)
 BOT.remove_command("help")
 
 def starts_with_prefix(message):
     "Determines whether or not the current prefix was used in the message."
+    if message.content.startswith(BOT.user.mention):
+        return True
     prefixes = get_pre(BOT, message)
     for prefix in prefixes:
         if message.content.startswith(prefix):
@@ -262,7 +268,10 @@ async def on_message(message):  # Event triggers when message is sent
 
     # COMMANDS
     if starts_with_prefix(message): # Bot reacts to command prefix call
-        prefix = lbvars.get_prefix(guild_id)
+        if message.content.startswith(BOT.user.mention):
+            prefix = BOT.user.mention
+        else:
+            prefix = lbvars.get_prefix(guild_id)
         msg_no_prefix = message.content[len(prefix):].strip()
         words = msg_no_prefix.split()
         cmd_name = ""
