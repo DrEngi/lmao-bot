@@ -126,12 +126,14 @@ async def on_ready():
         lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
         guild_count = lbvars.increment_guild_count()
         LOGGER.info(str("{} initialized. Guild count: {}.".format(guild.name, guild_count)))
+
     async def owner_has_voted():
         if await dbl.has_voted(210220782012334081):
             return "YES"
         return "NO"
     owner_voted = await owner_has_voted()
     LOGGER.info("Have you voted yet? %s", owner_voted)
+
     LOGGER.info("Logged in as")
     LOGGER.info(BOT.user.name)
     LOGGER.info(str(BOT.user.id))
@@ -292,6 +294,21 @@ async def on_message(message):  # Event triggers when message is sent
     # GENERIC REPLY
     elif ("lmao" in msg or "lmfao" in msg): #generic ass substitution
         await replace_ass()
+        lbvars.export_settings(guild_id)
+
+    #FILTERS
+    else:
+        filters = lbvars.get_filter_list(guild_id)
+        for key, value in filters.items():
+            flags = value["flags"]
+            contains_key = key.lower() in ctx.message.content.lower()
+            if "casesensitive" in flags:
+                contains_key = key in ctx.message.content
+            if contains_key:
+                mention = f"{message.author.mention} "
+                if "nomention" in flags:
+                    mention = ""
+                await ctx.send(f"{mention}{value['message']}")
         lbvars.export_settings(guild_id)
 
     if guild_id in ["345655060740440064", "407274897350328345"] and ("pollard" in msg or "buh-bye" in msg or "buhbye" in msg or "buh bye" in msg):

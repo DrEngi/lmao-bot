@@ -123,12 +123,21 @@ class Settings:
 
     @commands.command(name="count")
     async def cmd_count(self, ctx):  # Counts the number of times someone says lmao
+        if len(ctx.message.mentions) > 0:
+            user = ctx.message.mentions[0]
+            message_laughed = f"{ctx.author.mention}, {user} has laughed their ass off"
+            message_not_laughed = f"{ctx.author.mention}, {user} has yet to laugh their ass off."
+        else:
+            user = ctx.author
+            message_laughed = f"{ctx.author.mention} You have laughed your ass off"
+            message_not_laughed = f"{ctx.author.mention} You have yet to laugh your ass off."
         with io.open("data/user_data.json") as f:
             lmao_count_data = json.load(f)
             try:
-                await ctx.send(ctx.author.mention + " You have laughed your ass off {} times.".format(lmao_count_data[str(ctx.author.id)]["lmao_count"]))
+                count = lmao_count_data[str(user.id)]['lmao_count']
+                await ctx.send(f"{message_laughed} {count} times.")
             except KeyError:
-                await ctx.send(ctx.author.mention + " You have yet to laugh your ass off.")
+                await ctx.send(message_not_laughed)
         usage.update(ctx)
         return ctx.command.name
 

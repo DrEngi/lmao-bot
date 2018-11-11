@@ -387,7 +387,10 @@ class Music:
                         out += f"{song}\n"
                     out += "\n"
                 f.write(out)
-            await ctx.send(str(self.players)[:1000])
+                if out.strip() != "":
+                    await ctx.send(out[:2000])
+                else:
+                    await ctx.send("No one is playing music at the moment.")
 
     @commands.command(name="connect", aliases=["join"])
     async def cmd_connect(self, ctx, *, channel: discord.VoiceChannel=None):

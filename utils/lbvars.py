@@ -39,6 +39,12 @@ def export_settings(guild_id):
         new_admins_data = json.dumps(admins_data, indent=4)
         with io.open("data/admins.json", "w+", encoding="utf-8") as fo:
             fo.write(new_admins_data)
+    with io.open("data/filters.json") as f:
+        filters_data = json.load(f)
+        filters_data[guild_id] = get_filter_list(guild_id)
+        new_filters_data = json.dumps(filters_data, indent=4)
+        with io.open("data/filters.json", "w+", encoding="utf-8") as fo:
+            fo.write(new_filters_data)
     with io.open("data/customs.json") as f:
         customs_data = json.load(f)
         customs_data[guild_id] = get_custom_cmd_list(guild_id)
@@ -65,9 +71,13 @@ class GuildSettings:
         self.prefix = "lmao"
         self.init_prefix()
 
-        # Dictionary for storing lmao admins
+        # List for storing lmao admins
         self.lmao_admin_list = "[]"
         self.init_lmao_admin_list()
+
+        # Dictionary for storing custom filters
+        self.filter_list = "{}"
+        self.init_filter_list()
 
         # Dictionary for storing custom commands.
         self.custom_cmd_list = "{}"
@@ -165,6 +175,28 @@ class GuildSettings:
         return self.lmao_admin_list
     def get_lmao_admin_list(self):
         return self.lmao_admin_list
+
+    def init_filter_list(self):
+        with io.open("data/filters.json") as f:
+            full_filter_list = json.load(f)
+            try:
+                self.filter_list = full_filter_list[self.guild_id]
+            except KeyError:
+                self.filter_list = {}
+    def add_filter(self, key, message, flags):
+        self.filter_list[key] = {
+            "message": str(message),
+            "flags": str(flags)
+        }
+        return self.filter_list
+    def delete_filter(self, key):
+        self.filter_list.pop(key, None)
+        return self.filter_list
+    def set_filter_list(self, filter_list):
+        self.filter_list = filter_list
+        return self.filter_list
+    def get_filter_list(self):
+        return self.filter_list
 
     def init_custom_cmd_list(self):
         with io.open("data/customs.json") as f:
@@ -301,6 +333,25 @@ def add_lmao_admin(guild_id, member_id):
 def remove_lmao_admin(guild_id, member_id):
     settings[str(guild_id)].remove_lmao_admin(member_id)
     return settings[str(guild_id)].get_lmao_admin_list()
+
+def set_filter_list(guild_id, filter_list):
+    settings[str(guild_id)].set_filter_list(filter_list)
+    return settings[str(guild_id)].get_filter_list()
+def get_filter_list(guild_id):
+    try:
+        return settings[str(guild_id)].get_filter_list()
+    except KeyError:
+        try:
+            return settings[str(guild_id)].init_filter_list()
+        except KeyError:
+            settings[str(guild_id)] = GuildSettings(guild_id)
+            return settings[str(guild_id)].get_custom_cmd_list()
+def add_filter(guild_id, key, message, flags):
+    settings[str(guild_id)].add_filter(key, message, flags)
+    return settings[str(guild_id)].get_filter_list()
+def delete_filter(guild_id, key):
+    settings[str(guild_id)].delete_filter(key)
+    return settings[str(guild_id)].get_filter_list()
 
 def set_custom_cmd_list(guild_id, custom_cmd_list):
     settings[str(guild_id)].set_custom_cmd_list(custom_cmd_list)
