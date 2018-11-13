@@ -92,6 +92,7 @@ class Info:
                    """:loudspeaker: `{0}say` `message` Has lmao-bot say the `message` you want it to say.
                       \n:peach: `{0}booty` Sends a random SFW booty image in the chat.
                       \n:new_moon_with_face: `{0}moon` `member` Moons the mentioned `member`(s) with a SFW booty image.
+                      \n:b: `{0}deepfry` Deepfries an attached image, an image via URL, a mention user's profile picture, or one's own profile picture.
                       \n:princess: `{0}beautiful` `member` Lets a mentioned `member` know that they're beautiful with a frame from Gravity Falls.
                       \n:japanese_goblin: `{0}ugly` `member` Lets a mentioned `member` know that they're ugly with a frame from SpongeBob.
                       \n:wastebasket: `{0}garbage` `member` Lets a mentioned `member` know that they're garbage with a cute cartoon of a garbage can.
