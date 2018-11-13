@@ -1,14 +1,13 @@
 import urllib.request
 import discord
 from discord.ext import commands
-from utils import usage
+from utils import usage, deeppyer
 import io
 import os
 import random
 from PIL import Image, ImageDraw, ImageFont
 
-async def get_avatar(mentioned):
-    url = mentioned.avatar_url
+def save_url(url, path):
     req = urllib.request.Request(
         url,
         data=None,
@@ -16,10 +15,41 @@ async def get_avatar(mentioned):
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
         }
     )
-    f = urllib.request.urlopen(req)
-    with io.open("img/pfp.png", "wb") as img:
-        img.write(f.read())
-    return Image.open("img/pfp.png")
+    fi = urllib.request.urlopen(req)
+    with io.open(path, "wb") as fo:
+        fo.write(fi.read())
+    return path
+
+async def save_file_from_ctx(ctx, path, detect_ext=False):
+    files = ctx.message.attachments
+    ext = ""
+    if len(files) > 0:
+        if detect_ext:
+            ext = os.path.splitext(files[0].filename)[1]
+        await files[0].save(f"{path}{ext}")
+        return f"{path}{ext}"
+    command = ctx.invoked_with
+    msg_no_prefix = ctx.message.content[ctx.message.content.find(command):]
+    url = msg_no_prefix[len(command) + 1:].strip()
+    try:
+        if detect_ext:
+            ext = os.path.splitext(url)[1]
+        return save_url(url, f"{path}{ext}")
+    except (ValueError, urllib.error.HTTPError) as e:
+        if detect_ext:
+            ext = ".png"
+        if len(ctx.message.mentions) > 0:
+            return save_url(ctx.message.mentions[0].avatar_url, f"{path}{ext}")
+        else:
+            return save_url(ctx.author.avatar_url, f"{path}{ext}")
+
+def get_image_from_url(url, path):
+    return Image.open(save_url(url, path))
+
+def get_avatar(mentioned):
+    return get_image_from_url(mentioned.avatar_url, "img/pfp.png")
+
+
 
 def change_opacity(img, opacity): # Changes the opacity of Image object `img` to proportion out of 1 `opacity`
     img = img.convert("RGBA")
@@ -33,7 +63,7 @@ def change_opacity(img, opacity): # Changes the opacity of Image object `img` to
     return img
 
 async def beautiful(mentioned):
-    img = await get_avatar(mentioned)
+    img = get_avatar(mentioned)
     beautiful = Image.open("img/beautiful.png").convert('RGBA')
 
     canvas_w, canvas_h = beautiful.size
@@ -48,7 +78,7 @@ async def beautiful(mentioned):
     canvas.save(f"img/beautiful_{mentioned.id}.png")
 
 async def ugly(mentioned):
-    img = await get_avatar(mentioned)
+    img = get_avatar(mentioned)
     ugly = Image.open("img/ugly.png").convert('RGBA')
 
     canvas_w, canvas_h = ugly.size
@@ -61,7 +91,7 @@ async def ugly(mentioned):
     canvas.save(f"img/ugly_{mentioned.id}.png")
 
 async def garbage(mentioned):
-    img = await get_avatar(mentioned)
+    img = get_avatar(mentioned)
     garbage = Image.open("img/garbage.png")
 
     canvas_w, canvas_h = garbage.size
@@ -74,7 +104,7 @@ async def garbage(mentioned):
     canvas.save(f"img/garbage_{mentioned.id}.png")
 
 async def triggered(mentioned):
-    img = await get_avatar(mentioned)
+    img = get_avatar(mentioned)
     triggered = Image.open("img/triggered.png").convert('RGBA')
 
     canvas_w, canvas_h = triggered.size
@@ -84,7 +114,7 @@ async def triggered(mentioned):
     specimen.save(f"img/triggered_{mentioned.id}.png")
 
 async def victory(mentioned):
-    img = await get_avatar(mentioned)
+    img = get_avatar(mentioned)
     victory = Image.open("img/victory.png").convert('RGBA')
 
     canvas_w, canvas_h = victory.size
@@ -97,7 +127,7 @@ async def victory(mentioned):
     canvas.save(f"img/victory_{mentioned.id}.png")
 
 async def wanted(mentioned):
-    img = await get_avatar(mentioned)
+    img = get_avatar(mentioned)
     wanted = Image.open("img/wanted.png").convert('RGBA')
 
     specimen = img.resize((244,239))
@@ -107,7 +137,7 @@ async def wanted(mentioned):
     wanted.save(f"img/wanted_{mentioned.id}.png")
 
 async def whos_that(mentioned):
-    img = await get_avatar(mentioned)
+    img = get_avatar(mentioned)
     whos_that = Image.open("img/whos_that.png").convert('RGBA')
 
     canvas_w, canvas_h = whos_that.size
@@ -122,7 +152,7 @@ async def whos_that(mentioned):
     canvas.save(f"img/whos_that_{mentioned.id}.png")
 
 async def seen_from_above(mentioned):
-    img = await get_avatar(mentioned)
+    img = get_avatar(mentioned)
     seen_from_above = Image.open("img/seen_from_above.png").convert('RGBA')
 
     canvas_w, canvas_h = seen_from_above.size
@@ -193,6 +223,21 @@ class Fun:
         else:
             mention_msg = ""
         await ctx.send(mention_msg, file=discord.File("img/booties/booty" + str(random.randint(1,10)) + ".jpg"))
+        usage.update(ctx)
+        return ctx.command.name
+
+    @commands.command(name="deepfry")
+    async def cmd_deepfry(self, ctx):
+        await ctx.trigger_typing()
+        fp = await save_file_from_ctx(ctx, f"img/deepfry_{ctx.message.id}.jpg")
+        try:
+            img = Image.open(fp)
+        except OSError:
+            img = get_avatar(ctx.author)
+        fried = await deeppyer.deepfry(img)
+        fried.save(fp)
+        await ctx.send(file=discord.File(fp))
+        os.remove(fp)
         usage.update(ctx)
         return ctx.command.name
 
