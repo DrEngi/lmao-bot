@@ -87,12 +87,12 @@ class Info:
                       \n:zipper_mouth: `{0}mute` `member` Prevents `member` from sending messages (mutes `member`) in a given text channel.
                       \n:zipper_mouth: `{0}mute` `time` `member` Mutes `member` in a given text channel for `time` (in minutes).
                       \n:open_mouth: `{0}unmute` `member` Allows `member` to send messages (unmutes `member`) in a given text channel.
-                      \n:boot: `{0}kick` `member` Kicks `member` from the guild.
-                      \n:hammer: `{0}ban` `member` Bans `member` from the guild.""",
+                      \n:boot: `{0}kick` `member` `reason` Kicks `member` from the guild. `reason` is optional.
+                      \n:hammer: `{0}ban` `member` `reason` Bans `member` from the guild. `reason` is optional.""",
                    """:loudspeaker: `{0}say` `message` Has lmao-bot say the `message` you want it to say.
                       \n:peach: `{0}booty` Sends a random SFW booty image in the chat.
                       \n:new_moon_with_face: `{0}moon` `member` Moons the mentioned `member`(s) with a SFW booty image.
-                      \n:b: `{0}deepfry` Deepfries an attached image, an image via URL, a mention user's profile picture, or one's own profile picture.
+                      \n:fire: `{0}deepfry` Deepfries an attached image, an image via URL, a mention user's profile picture, or one's own profile picture.
                       \n:princess: `{0}beautiful` `member` Lets a mentioned `member` know that they're beautiful with a frame from Gravity Falls.
                       \n:japanese_goblin: `{0}ugly` `member` Lets a mentioned `member` know that they're ugly with a frame from SpongeBob.
                       \n:wastebasket: `{0}garbage` `member` Lets a mentioned `member` know that they're garbage with a cute cartoon of a garbage can.
@@ -137,7 +137,7 @@ class Info:
                    """🔭 `{0}filter` Lists all the custom filters for the guild.
                       \n➕ `{0}filter` `add` Adds a custom filter in the guild. When someone says a given word or phrase in a channel, lmao-bot automatically replies with a message.
                       \n✏️ `{0}filter` `edit` Edits a custom filter to say something else.
-                      \n🚩 `{0}filter` `flags` Change the configuration (flags) of a filter. Flags include `nomention` and `casesensitive`.
+                      \n🚩 `{0}filter` `options` Change the options (flags) for a filter. Flags include `nomention`, `casesensitive`, `wholeword`, and `chance`.
                       \n🗑️ `{0}filter` `remove` Removes a custom filter."""]
         for i in range(len(help_head)):
             if "nsfw" in help_head[i].lower() and ctx.guild is not None and not lbvars.get_allow_nsfw(ctx.guild.id):

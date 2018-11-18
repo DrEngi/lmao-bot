@@ -21,7 +21,7 @@ def find_next(big_string, little_string, n):
     substr = big_string[n + 1:]
     return (substr.find(little_string) + len(big_string) - len(substr))
 
-# Wait I feel like there's something built in that can do the same thing...
+#TODO: Wait I feel like there's something built in that can do the same thing...
 def find_nth(big_string, little_string, n):
     """Utility function for finding the nth occurrence of little_string in big_string"""
     index = big_string.find(little_string)
@@ -31,7 +31,7 @@ def find_nth(big_string, little_string, n):
         index += big_string[index + 1:].find(little_string) + 1
     return index
 
-# Returns a time object with day, hour, minute, and second from t in seconds
+# Returns a time dictionary with day, hour, minute, and second from t in seconds
 def dhms_time(t):
     s = round(t)
     m = int(s / 60)
@@ -64,8 +64,8 @@ def eng_time(t, seconds=True):
         t_msg += f"{m} minute(s)"
     return t_msg
 
-# Parses time from a string of characters
-def parse_time(time):
+# Parses time from a string of characters, returning a dictionary containing different time categorizations
+def parse_time(time: str):
     char_is_int = []
     t = ""
     for char in time:
@@ -108,6 +108,9 @@ def parse_time(time):
 
     return times
 
+def get_seconds_from_dict(time: dict):
+    return time["d"] * 24 * 60 * 60 + time["h"] * 60 * 60 + time["m"] * 60 + time["s"]
+
 def get_emoji(name):
     """Gets an emoji's code listed in emojis.json by its name."""
     with io.open("data/emojis.json") as f:
@@ -121,6 +124,19 @@ def get_emoji_id(name):
     colon = find_nth(emoji, ":", 2)
     bracket = emoji.find(">")
     return int(emoji[colon + 1:bracket])
+
+def parse_chance(string):
+    flag = "chance"
+    chance_index = string.find(flag) + len(flag)
+    try:
+        chance = int(string[chance_index:].replace(".", " ").replace(",", "").split()[0])
+        if chance > 100:
+            chance = 100
+        elif chance < 0:
+            chance = 0
+    except ValueError:
+        chance = 50
+    return chance
 
 # Utility function for determining if an object is an integer
 #def is_int(s):
