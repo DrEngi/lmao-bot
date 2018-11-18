@@ -123,6 +123,7 @@ class Info:
                       \n:melon: `{0}boobs` Sends a random NSFW boobs picture.
                       \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
                       \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
+                      \n:octopus: `{0}hentai` Sends a random NSFW hentai GIF.
                       \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
                       \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
                       \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.

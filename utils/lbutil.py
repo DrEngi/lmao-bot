@@ -1,3 +1,6 @@
+import io
+import json
+
 ### UTILITY FUNCTIONS ###
 
 # Returns a list of valid prefix permutations
@@ -17,6 +20,16 @@ def get_permutations(prefix):
 def find_next(big_string, little_string, n):
     substr = big_string[n + 1:]
     return (substr.find(little_string) + len(big_string) - len(substr))
+
+# Wait I feel like there's something built in that can do the same thing...
+def find_nth(big_string, little_string, n):
+    """Utility function for finding the nth occurrence of little_string in big_string"""
+    index = big_string.find(little_string)
+    for i in range(n - 1):
+        if index == -1:
+            return index
+        index += big_string[index + 1:].find(little_string) + 1
+    return index
 
 # Returns a time object with day, hour, minute, and second from t in seconds
 def dhms_time(t):
@@ -95,16 +108,19 @@ def parse_time(time):
 
     return times
 
-# Utility function for finding the nth occurrence of little_string in big_string
-#def find_nth(big_string, little_string, n):
-#    substr = big_string
-#    for x in range(n - 1):
-#        ind = big_string.find(little_string)
-#        if ind == -1:
-#            return -1
-#        else:
-#            substr = big_string[ind + 1:]
-#    return big_string.find(little_string)
+def get_emoji(name):
+    """Gets an emoji's code listed in emojis.json by its name."""
+    with io.open("data/emojis.json") as f:
+        emojis = json.load(f)
+    return emojis.get(name)
+
+def get_emoji_id(name):
+    emoji = get_emoji(name)
+    if emoji is None:
+        return None
+    colon = find_nth(emoji, ":", 2)
+    bracket = emoji.find(">")
+    return int(emoji[colon + 1:bracket])
 
 # Utility function for determining if an object is an integer
 #def is_int(s):
