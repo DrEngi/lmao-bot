@@ -171,7 +171,7 @@ class Mod:
                     reason = arg.replace(to_kick.mention, "").strip()
                     reason_message = f"Reason: {reason}"
                     if reason == "":
-                        reason_message += "(none given)"
+                        reason_message = "No reason given."
                     e = discord.Embed(title=f"You have been kicked from {ctx.guild.name} by {ctx.author}", description=reason_message, timestamp=datetime.now())
                     await to_kick.send(embed=e)
                     await to_kick.kick(reason=reason)
@@ -202,7 +202,7 @@ class Mod:
                     reason = arg.replace(to_ban.mention, "").strip()
                     reason_message = f"Reason: {reason}"
                     if reason == "":
-                        reason_message += "(none given)"
+                        reason_message = "No reason given."
                     e = discord.Embed(title=f"You have been banned from {ctx.guild.name} by {ctx.author}", description=reason_message, timestamp=datetime.now())
                     await to_ban.send(embed=e)
                     await to_ban.ban(reason=reason)
