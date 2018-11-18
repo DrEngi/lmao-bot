@@ -4,3 +4,4 @@ dblpy
 Youtube-dl
 rule34
 urlib2
+pandas
