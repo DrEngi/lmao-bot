@@ -3,7 +3,7 @@ from discord.ext import commands
 import json
 import io
 import asyncio
-from utils import lbvars, usage, perms
+from utils import lbvars, usage, perms, lbutil
 
 class Filter:
 
@@ -38,7 +38,7 @@ class Filter:
                 return ctx.command.name
             filters = filter_data[str(ctx.guild.id)]
         title = f"Custom filters for {ctx.guild.name}"
-        desc = "Change filters with `{0} add`, `{0} edit`, `{0} flags`, and `{0} remove`.".format(f"{ctx.prefix}filter")
+        desc = "Change filters with `{0} add`, `{0} edit`, `{0} options`, and `{0} remove`.".format(f"{ctx.prefix}filter")
         count = 0
         page = 1
         e = discord.Embed(title=title, description=desc)
@@ -147,9 +147,9 @@ class Filter:
         usage.update(ctx)
         return ctx.command.name
 
-    @cmd_filter.command(name="flags", aliases=["config", "configure", "settings"])
+    @cmd_filter.command(name="options", aliases=["option", "flag", "flags", "config", "configure", "settings"])
     @commands.check(can_edit_filters)
-    async def cmd_filter_config(self, ctx, *, arg=""):
+    async def cmd_filter_options(self, ctx, *, arg=""):
         def check(message):
             return message.author == ctx.author and message.channel == ctx.channel
         filter = arg.strip()
@@ -175,7 +175,7 @@ class Filter:
         flags = filter_list[filter]["flags"]
         await ctx.send(f"{ctx.author.mention} What flags should lmao-bot have for the `{filter}` filter?\n\n" \
             f"**Current flags**: `{flags}`\n\n" \
-            f"**Possible flags**: `none` (no flags), `nomention` (filter does not mention user), `casesensitive` (filter is case-sensitive)\n\n" \
+            f"**Possible flags**: `none` (no flags), `nomention` (filter does not mention user), `casesensitive` (filter is case-sensitive), `wholeword` (filter only reacts to whole words), `chance<percent>` (filter has a percent% chance to activate, e.g. chance20 = 20%)\n\n" \
             "(Tip: You can include multiple flags if desired. Type `cancel` to cancel the filter configuration.)")
         try:
             message = await self.bot.wait_for("message", timeout=30.0, check=check)
@@ -188,11 +188,14 @@ class Filter:
             await ctx.send(f":x: {ctx.author.mention} Command timed out.")
             usage.update(ctx)
             return ctx.command.name
-        viable_flags = ["nomention", "casesensitive"]
+        viable_flags = ["nomention", "casesensitive", "wholeword"]
         flags = ""
         for flag in viable_flags:
             if flag in flag_message:
-                flags+= f"{flag} "
+                flags += f"{flag} "
+        if "chance" in flag_message:
+            chance = lbutil.parse_chance(flag_message)
+            flags += f"chance{chance} "
         flags = flags.strip()
         if flags == "":
             flags = "none"

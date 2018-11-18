@@ -87,12 +87,12 @@ class Info:
                       \n:zipper_mouth: `{0}mute` `member` Prevents `member` from sending messages (mutes `member`) in a given text channel.
                       \n:zipper_mouth: `{0}mute` `time` `member` Mutes `member` in a given text channel for `time` (in minutes).
                       \n:open_mouth: `{0}unmute` `member` Allows `member` to send messages (unmutes `member`) in a given text channel.
-                      \n:boot: `{0}kick` `member` Kicks `member` from the guild.
-                      \n:hammer: `{0}ban` `member` Bans `member` from the guild.""",
+                      \n:boot: `{0}kick` `member` `reason` Kicks `member` from the guild. `reason` is optional.
+                      \n:hammer: `{0}ban` `member` `reason` Bans `member` from the guild. `reason` is optional.""",
                    """:loudspeaker: `{0}say` `message` Has lmao-bot say the `message` you want it to say.
                       \n:peach: `{0}booty` Sends a random SFW booty image in the chat.
                       \n:new_moon_with_face: `{0}moon` `member` Moons the mentioned `member`(s) with a SFW booty image.
-                      \n:b: `{0}deepfry` Deepfries an attached image, an image via URL, a mention user's profile picture, or one's own profile picture.
+                      \n:fire: `{0}deepfry` Deepfries an attached image, an image via URL, a mention user's profile picture, or one's own profile picture.
                       \n:princess: `{0}beautiful` `member` Lets a mentioned `member` know that they're beautiful with a frame from Gravity Falls.
                       \n:japanese_goblin: `{0}ugly` `member` Lets a mentioned `member` know that they're ugly with a frame from SpongeBob.
                       \n:wastebasket: `{0}garbage` `member` Lets a mentioned `member` know that they're garbage with a cute cartoon of a garbage can.
@@ -123,6 +123,7 @@ class Info:
                       \n:melon: `{0}boobs` Sends a random NSFW boobs picture.
                       \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
                       \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
+                      \n:octopus: `{0}hentai` Sends a random NSFW hentai GIF.
                       \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
                       \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
                       \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.
@@ -136,7 +137,7 @@ class Info:
                    """🔭 `{0}filter` Lists all the custom filters for the guild.
                       \n➕ `{0}filter` `add` Adds a custom filter in the guild. When someone says a given word or phrase in a channel, lmao-bot automatically replies with a message.
                       \n✏️ `{0}filter` `edit` Edits a custom filter to say something else.
-                      \n🚩 `{0}filter` `flags` Change the configuration (flags) of a filter. Flags include `nomention` and `casesensitive`.
+                      \n🚩 `{0}filter` `options` Change the options (flags) for a filter. Flags include `nomention`, `casesensitive`, `wholeword`, and `chance`.
                       \n🗑️ `{0}filter` `remove` Removes a custom filter."""]
         for i in range(len(help_head)):
             if "nsfw" in help_head[i].lower() and ctx.guild is not None and not lbvars.get_allow_nsfw(ctx.guild.id):
@@ -198,7 +199,7 @@ class Info:
 
     @commands.command(name="info", aliases=["about"])
     async def cmd_info(self, ctx):  # Returns about lmao-bot message
-        desc = """I am a fun utility bot created by Firestar493#6963 with discord.py in June 2018. I replace people's asses after they \"lmao\" or \"lmfao\". Try it out!\n
+        desc = """I am a fun utility bot created by Firestar493#6963 and DrEngineer#0001 with discord.py in June 2018. I replace people's asses after they \"lmao\" or \"lmfao\". Try it out!\n
         I do all sorts of other things too, such as play music, provide moderation commands, and give answers from the almighty magic 8-ball. Invite me to one of your servers to see for yourself!"""
         e = discord.Embed(title="Hello from lmao-bot! 👋", color=0xFF2500, description=desc)
         e.set_thumbnail(url=self.bot.user.avatar_url)

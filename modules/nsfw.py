@@ -3,6 +3,8 @@
 import discord
 from discord.ext import commands
 from utils import lbvars, perms, dbl, usage#, reddit
+import urllib.request
+import requests
 #import sqlite3
 import aiohttp
 import asyncio
@@ -15,6 +17,16 @@ import html
 import rule34
 
 #More NSFW commands: https://gist.github.com/PlanetTeamSpeakk/b35ad4dad4dc600730c629a1a037944d
+
+def url_exists(url):
+    """Checks if a URL is valid"""
+    if url == "":
+        return False
+    request = requests.get(url)
+    if request.status_code == 200:
+        return True
+    else:
+        return False
 
 class Category:
 
@@ -33,11 +45,12 @@ class NSFW:
             "ass": Category("ass", "🍑"),
             "boobs": Category("boobs", "🍈"),
             "pussy": Category("pussy", "🌮"),
-            "dick": Category("dick", "🍆")
+            "dick": Category("dick", "🍆"),
+            "hentai": Category("hentai", "🐙")
         }
 
-    # Checks if guild allows NSFW commands; if not, then don't run commands
     async def __local_check(self, ctx):
+        """Checks if the guild allows NSFW commands; if not, then don't run commands"""
         allow_nsfw = ctx.command.name == "nsfwtoggle" or lbvars.get_allow_nsfw(ctx.guild.id)
         if not allow_nsfw:
             await ctx.send(f"{ctx.author.mention} NSFW commands are not allowed on this Christian Discord server. :angel:")
@@ -72,6 +85,8 @@ class NSFW:
     async def send_rand_img(self, ctx, category):
         with io.open("data/nsfw_urls.json") as f:
             urls = json.load(f)
+        url = ""
+        while not url_exists(url):
             url = random.choice(urls[category])
         cat = self.categories[category]
         e = discord.Embed(title=cat.icon)
@@ -109,7 +124,8 @@ class NSFW:
             while True:
                 post = random.choice(self.reddit_posts[sub])["data"]
                 title = html.unescape(post["title"])
-                e = discord.Embed(title=title)
+                permalink = f"https://www.reddit.com{post['permalink']}"
+                e = discord.Embed(title=title, url=permalink)
                 try:
                     if post["post_hint"] == "image":
                         e.set_image(url=post["url"])
@@ -128,7 +144,7 @@ class NSFW:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="nsfw", aliases=["pussy", "dick", "ass", "boobs"])
+    @commands.command(name="nsfw", aliases=["pussy", "dick", "ass", "boobs", "hentai"])
     async def cmd_nsfw(self, ctx):
         await ctx.channel.trigger_typing()
         if await self.check_voted(ctx):
@@ -138,6 +154,7 @@ class NSFW:
                    \n:melon: `{0}boobs` Sends a random NSFW boobs picture.
                    \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
                    \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
+                   \n:octopus: `{0}hentai` Sends a random NSFW hentai GIF.
                    \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
                    \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
                    \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.

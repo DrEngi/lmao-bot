@@ -9,6 +9,7 @@ from datetime import datetime
 import socket
 import os
 import json
+import random
 
 # Pip imports
 import asyncio
@@ -310,9 +311,19 @@ async def on_message(message):  # Event triggers when message is sent
         filters = lbvars.get_filter_list(guild_id)
         for key, value in filters.items():
             flags = value["flags"]
-            contains_key = key.lower() in ctx.message.content.lower()
+            if "chance" in flags:
+                chance = lbutil.parse_chance(flags)
+                x = random.randint(1, 100)
+                if x > chance:
+                    continue
+            needle = key.lower()
+            haystack = ctx.message.content.lower()
             if "casesensitive" in flags:
-                contains_key = key in ctx.message.content
+                needle = key
+                haystack = ctx.message.content
+            if "wholeword" in flags:
+                haystack = haystack.split()
+            contains_key = needle in haystack
             if contains_key:
                 mention = f"{message.author.mention} "
                 if "nomention" in flags:

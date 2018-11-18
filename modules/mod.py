@@ -3,6 +3,7 @@ from discord.ext import commands
 from utils import lbvars, usage, perms
 import asyncio
 import math
+from datetime import datetime
 
 class Mod:
 
@@ -155,47 +156,63 @@ class Mod:
 
     @commands.command(name="kick", aliases=["getouttahere"])
     async def cmd_kick(self, ctx, *, arg=""):
-        if perms.get_perms(ctx.message).kick_members or perms.is_lmao_admin(ctx.message):
-            try:
-                if len(ctx.message.mentions) == 1:
-                    if ctx.message.mentions[0] == self.bot.user:
-                        await ctx.send(f"Silly {ctx.author.mention}, I can't kick myself!")
-                    elif ctx.message.mentions[0].id == 210220782012334081:
-                        await ctx.send(f"Please, {ctx.author.mention}, you can't kick my creator.")
-                    else:
-                        await ctx.message.mentions[0].kick()
-                        await ctx.send(f"Goodbye, {ctx.message.mentions[0]}, I'll see you in therapy!")
-                elif len(ctx.message.mentions) < 1:
-                    await ctx.send(f"{ctx.author.mention} You must mention the user you want to kick from the guild.")
-                elif len(ctx.message.mentions) > 1:
-                    await ctx.send(f"{ctx.author.mention} You may not kick more than one member at a time.")
-            except discord.errors.Forbidden:
-                await ctx.send(f"{ctx.author.mention} lmao-bot eithers lacks the permission to kick members or the member you tried to kick is of an equal or higher role than lmao-bot. Make sure `Kick Members` is enabled for lmao-bot and that lmao-bot is a higher role than the member you are trying to kick.")
-        else:
+        if not perms.get_perms(ctx.message).kick_members and not perms.is_lmao_admin(ctx.message):
             await ctx.send(f"{ctx.author.mention} You do not have the permission to kick members.")
+            usage.update(ctx)
+            return ctx.command.name
+        try:
+            if len(ctx.message.mentions) == 1:
+                to_kick = ctx.message.mentions[0]
+                if to_kick == self.bot.user:
+                    await ctx.send(f"Silly {ctx.author.mention}, I can't kick myself!")
+                elif to_kick.id == 210220782012334081:
+                    await ctx.send(f"Please, {ctx.author.mention}, you can't kick my creator.")
+                else:
+                    reason = arg.replace(to_kick.mention, "").strip()
+                    reason_message = f"Reason: {reason}"
+                    if reason == "":
+                        reason_message = "No reason given."
+                    e = discord.Embed(title=f"You have been kicked from {ctx.guild.name} by {ctx.author}", description=reason_message, timestamp=datetime.now())
+                    await to_kick.send(embed=e)
+                    await to_kick.kick(reason=reason)
+                    await ctx.send(f"Goodbye, {to_kick}, I'll see you in therapy!")
+            elif len(ctx.message.mentions) < 1:
+                await ctx.send(f"{ctx.author.mention} You must mention the user you want to kick from the guild.")
+            elif len(ctx.message.mentions) > 1:
+                await ctx.send(f"{ctx.author.mention} You may not kick more than one member at a time.")
+        except discord.errors.Forbidden:
+            await ctx.send(f"{ctx.author.mention} lmao-bot eithers lacks the permission to kick members or the member you tried to kick is of an equal or higher role than lmao-bot. Make sure `Kick Members` is enabled for lmao-bot and that lmao-bot is a higher role than the member you are trying to kick.")
         usage.update(ctx)
         return ctx.command.name
 
     @commands.command(name="ban")
     async def cmd_ban(self, ctx, *, arg=""):
-        if perms.get_perms(ctx.message).ban_members or perms.is_lmao_admin(ctx.message):
-            try:
-                if len(ctx.message.mentions) == 1:
-                    if ctx.message.mentions[0] == self.bot.user:
-                        await ctx.send(f"Silly {ctx.author.mention}, I can't ban myself!")
-                    elif ctx.message.mentions[0].id == 210220782012334081:
-                        await ctx.send(f"Please, {ctx.author.mention}, you can't ban my creator.")
-                    else:
-                        await ctx.message.mentions[0].ban()
-                        await ctx.send(f"Goodbye, {ctx.message.mentions[0]}, I'll see you in therapy! (Or never, 'cause, you know, you're banned...)")
-                elif len(ctx.message.mentions) < 1:
-                    await ctx.send(f"{ctx.author.mention} You must mention the user you want to ban from the guild.")
-                elif len(ctx.message.mentions) > 1:
-                    await ctx.send(f"{ctx.author.mention} You may not ban more than one member at a time.")
-            except discord.errors.Forbidden:
-                await ctx.send(f"{ctx.author.mention} lmao-bot eithers lacks the permission to ban members or the member you tried to ban is of an equal or higher role than lmao-bot. Make sure `Ban Members` is enabled for lmao-bot and that lmao-bot is a higher role than the member you are trying to ban.")
-        else:
+        if not perms.get_perms(ctx.message).ban_members and not perms.is_lmao_admin(ctx.message):
             await ctx.send(f"{ctx.author.mention} You do not have the permission to ban members.")
+            usage.update(ctx)
+            return ctx.command.name
+        try:
+            if len(ctx.message.mentions) == 1:
+                to_ban = ctx.message.mentions[0]
+                if to_ban == self.bot.user:
+                    await ctx.send(f"Silly {ctx.author.mention}, I can't ban myself!")
+                elif to_ban.id == 210220782012334081:
+                    await ctx.send(f"Please, {ctx.author.mention}, you can't ban my creator.")
+                else:
+                    reason = arg.replace(to_ban.mention, "").strip()
+                    reason_message = f"Reason: {reason}"
+                    if reason == "":
+                        reason_message = "No reason given."
+                    e = discord.Embed(title=f"You have been banned from {ctx.guild.name} by {ctx.author}", description=reason_message, timestamp=datetime.now())
+                    await to_ban.send(embed=e)
+                    await to_ban.ban(reason=reason)
+                    await ctx.send(f"Goodbye, {to_ban}, I'll see you in therapy! (Or never, 'cause, you know, you're banned...)")
+            elif len(ctx.message.mentions) < 1:
+                await ctx.send(f"{ctx.author.mention} You must mention the user you want to ban from the guild.")
+            elif len(ctx.message.mentions) > 1:
+                await ctx.send(f"{ctx.author.mention} You may not ban more than one member at a time.")
+        except discord.errors.Forbidden:
+            await ctx.send(f"{ctx.author.mention} lmao-bot eithers lacks the permission to ban members or the member you tried to ban is of an equal or higher role than lmao-bot. Make sure `Ban Members` is enabled for lmao-bot and that lmao-bot is a higher role than the member you are trying to ban.")
         usage.update(ctx)
         return ctx.command.name
 
