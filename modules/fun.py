@@ -1,9 +1,10 @@
 import urllib.request
 import discord
 from discord.ext import commands
-from utils import usage, deeppyer
+from utils import usage, deeppyer, perms
 import io
 import os
+import re
 import random
 from PIL import Image, ImageDraw, ImageFont
 
@@ -202,7 +203,10 @@ class Fun:
                 pass
             except discord.errors.NotFound:
                 pass
-            await ctx.send(arg)
+            if perms.get_perms(ctx.message).mention_everyone:
+                await ctx.send(arg)
+            else:
+                await ctx.send(re.sub(r"@(everyone|here)", "@\u200b\\1", arg))
         usage.update(ctx)
         return ctx.command.name
 
