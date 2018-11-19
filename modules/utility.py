@@ -98,6 +98,8 @@ class Utility:
     async def cmd_someone(self, ctx, *, arg=""):
         someone = rng.choice(ctx.guild.members)
         await ctx.send(perms.clean_everyone(ctx, f"{someone.mention} {arg}"))
+        usage.update(ctx)
+        return ctx.command.name
 
     @commands.command(name="avatar", aliases=["pfp", "image", "profilepic", "profilepicture"])
     async def cmd_avatar(self, ctx):
