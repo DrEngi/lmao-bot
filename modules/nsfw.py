@@ -149,22 +149,22 @@ class NSFW:
         await ctx.channel.trigger_typing()
         if await self.check_voted(ctx):
             if ctx.invoked_with == "nsfw":
-                nsfw_commands = """:flushed: `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
-                   \n:peach: `{0}ass` Sends a random NSFW ass picture.
-                   \n:melon: `{0}boobs` Sends a random NSFW boobs picture.
-                   \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
-                   \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
-                   \n:octopus: `{0}hentai` Sends a random NSFW hentai GIF.
-                   \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
-                   \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
+                nsfw_commands = """😳 `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
+                   \n🍑 `{0}ass` Sends a random NSFW ass picture.
+                   \n🍈 `{0}boobs` Sends a random NSFW boobs picture.
+                   \n🌮 `{0}pussy` Sends a random NSFW pussy picture.
+                   \n🍆 `{0}dick` Sends a random NSFW dick picture.
+                   \n🐙 `{0}hentai` Sends a random NSFW hentai GIF.
+                   \n👩 `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
+                   \n👨 `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
                    \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.
-                   \n:paintbrush: `{0}rule34` `search_term` Sends a random NSFW Rule 34 post for `search_term`.
-                   \n:paintbrush: `{0}r34` `search_term` Does the same thing as `{0}rule34`."""
+                   \n🖌️ `{0}rule34` `search_term` Sends a random NSFW Rule 34 post for `search_term`.
+                   \n🖌️ `{0}r34` `search_term` Does the same thing as `{0}rule34`."""
                 e = discord.Embed(title="😏 **NSFW Commands** 😏", description=nsfw_commands.format(ctx.prefix), color=0xD11919)
                 await ctx.send(embed=e)
                 usage.update(ctx)
                 return ctx.command.name
-            await self.send_rand_img(ctx, ctx.invoked_with)
+            await self.send_rand_img(ctx, ctx.invoked_with.lower())
         usage.update(ctx)
         return ctx.command.name
 

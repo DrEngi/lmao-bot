@@ -1,7 +1,9 @@
 import discord
 from discord.ext import commands
-from utils import usage, lbutil
+from modules import fun
+from utils import usage, lbutil, perms
 import sys
+import os
 import io
 import json
 import time
@@ -91,6 +93,23 @@ class Utility:
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command(name="someone", aliases=["@someone", "@random", "mention"])
+    async def cmd_someone(self, ctx, *, arg=""):
+        someone = rng.choice(ctx.guild.members)
+        await ctx.send(perms.clean_everyone(ctx, f"{someone.mention} {arg}"))
+
+    @commands.command(name="avatar", aliases=["pfp", "image", "profilepic", "profilepicture"])
+    async def cmd_avatar(self, ctx):
+        member = ctx.author
+        if len(ctx.message.mentions) > 0:
+            member = ctx.message.mentions[0]
+        path = f"img/avatar_{member.id}"
+        path = fun.save_avatar(member, path)
+        await ctx.send(file=discord.File(path))
+        os.remove(path)
+        usage.update(ctx)
+        return ctx.command.name
 
     @commands.command(name="urban", aliases=["define", "dictionary", "urbandictionary", "ud"])
     async def cmd_urban(self, ctx, *, arg=""):
