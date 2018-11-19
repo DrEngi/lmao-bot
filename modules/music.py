@@ -4,6 +4,7 @@
     # stop_vote ?
 # Perhaps consider permissions
 # Add multiple options for videos to play upon searching
+# Consider using this for to_dict: https://stackoverflow.com/questions/61517/python-dictionary-from-an-objects-fields
 
 """
 Please understand Music bots are complex, and that even this basic example can be daunting to a beginner.
@@ -229,7 +230,7 @@ class MusicPlayer:
     When the bot disconnects from the Voice its instance will be destroyed.
     """
 
-    __slots__ = ("ctx", "bot", "_guild", "_channel", "_cog", "queue", "volume", "np")
+    __slots__ = ("ctx", "bot", "_guild", "_channel", "_cog", "queue", "volume", "loop_queue", "np")
 
     def __init__(self, ctx):
         self.ctx = ctx
@@ -238,6 +239,7 @@ class MusicPlayer:
         self._channel = ctx.channel
         self._cog = ctx.cog
         self.volume = .5
+        self.loop_queue = False
 
         self.queue = []
         self.np = None
@@ -249,6 +251,8 @@ class MusicPlayer:
         if error:
             print(f"Error: {error} trying to play next song. Guild: {self._guild.name} ({self._guild.id}).")
         # path = self.np.get_path(self._guild.id)
+        if self.loop_queue:
+            self.queue.append(self.queue[0])
         self.queue.pop(0)
         if len(self.queue) > 0:
             coro = self.set_np()
@@ -405,7 +409,7 @@ class Music:
         if not channel:
             try:
                 channel = ctx.author.voice.channel
-            except AttributeError:
+            except AttributeError: #TODO: Perhaps make this quiet?
                 raise InvalidVoiceChannel(f"{ctx.author.mention} Please join or specify a voice channel to play music.")
 
         vc = ctx.voice_client
@@ -714,6 +718,36 @@ class Music:
         player.volume = vol / 100
         await ctx.send(f":loud_sound: {ctx.author} set the volume to **{player.volume * 100}%**.")
         usage.update(ctx)
+        return ctx.command.name
+
+    @commands.command(name="loop", aliases=["repeat"])
+    async def cmd_loop(self, ctx, arg=""):
+        in_channel = await self.is_in_channel(ctx)
+        if not in_channel:
+            usage.update(ctx)
+            return ctx.command.name
+        player = self.players[ctx.guild.id]
+        option = arg.lower().strip()
+        options = {
+            "on": True,
+            "enable": True,
+            "loop": True,
+            "off": False,
+            "disable": False,
+            "noloop": False,
+            "toggle": not player.loop_queue
+        }
+        current_queue = f"**{len(player.queue)}** songs {player.print_total_time()}"
+        player.loop_queue = options.get(option, player.loop_queue)
+        if player.loop_queue:
+            title = f"🔁 Now looping {current_queue}"
+            desc = f"To turn off looping, use `{ctx.prefix}loop off` or `{ctx.prefix}loop toggle`."
+        else:
+            title = f"▶️ Now playing (no loop) {current_queue}"
+            desc = f"To turn on looping, use `{ctx.prefix}loop on` or `{ctx.prefix}loop toggle.`"
+        e = discord.Embed(title=title, description=desc)
+        await ctx.send(embed=e)
+        usage.update(ctx, option)
         return ctx.command.name
 
     @commands.command(name="stop")

@@ -50,7 +50,7 @@ class Info:
                       \n:computer: `{0}uptime` Shows how long lmao-bot has been up for as well as the time for the next maintenance break.
                       \n:ping_pong: `{0}ping` Sends the bot's latency (ping).
                       \n:exclamation: `{0}prefix` `new_prefix` Changes the bot's command prefix to `new_prefix`. Available to guild admins and lmao admins only. Default is "lmao".
-                      \n:information_source: `{0}about` Gives a brief description about the bot, including an invite to the support server.
+                      \n:information_source: `{0}info` Gives a brief description about the bot, including an invite to the support server.
                       \n:incoming_envelope: `{0}invite` Need ass insurance in other guilds? Invite lmao-bot to other guilds you're in!
                       \n:information_desk_person: `{0}support` Sends an invite link to the lmao-bot support server.
                       \n:ballot_box: `{0}vote` Like lmao-bot? This gives you a link to vote for it on Discord Bot List!""",
@@ -71,6 +71,7 @@ class Info:
                       \n⏸️ `{0}pause` Pauses the current song.
                       \n⏯️ `{0}resume` Resumes a paused song.
                       \n🔊 `{0}volume` `percent` or `{0}vol` `percent` Changes the volume to `percent`%.
+                      \n🔁 `{0}loop` Play the current queue on loop.
                       \n📻 `{0}queue` or `{0}q` Returns a list of all the songs in the queue.
                       \n➕ `{0}q` `add` `song` Adds a `song` (URL or search term) to the end of the queue.
                       \n➖ `{0}q` `remove` `number` Removes song number `number` from the queue.
@@ -101,12 +102,14 @@ class Info:
                       \n:cowboy: `{0}wanted` `member` Puts `member` on a WANTED poster.
                       \n:bust_in_silhouette: `{0}whosthat` `member` Who's that Pokémon? It's Pika-er... `member`?
                       \n:top: `{0}seenfromabove` `member` Voltorb? Pokéball? Electrode? Nope. It's `member`, seen from above.""",
-                   """:orange_book: `{0}urban` `term` Provides the definition for `term` on Urban Dictionary. Only works in NSFW channels.
-                      \n:mag: `{0}lmgtfy` `what_to_google` Provides a nifty LMGTFY (Let Me Google That For You) link for `what_to_google`.
-                      \n:wavy_dash: `{0}vaporwave` `text` Turns `text` into `ｔｅｘｔ`.
-                      \n:clap: `{0}clap` `message` 👏 Add 👏 some 👏 claps 👏 to 👏 your 👏 message. 👏
-                      \n:reminder_ribbon: `{0}remind` Sets up a reminder. After the amount of time you specify, you will be DM'd your reminder.
-                      \n:date: `{0}reminders` Lists all your reminders.""",
+                   """🖼️ `{0}avatar` `mention` Sends an image of the mentioned user's avatar.
+                      \n❔ `{0}someone` `message` Pings a random person in the server with your message.
+                      \n📙 `{0}urban` `term` Provides the definition for `term` on Urban Dictionary. Only works in NSFW channels.
+                      \n🔍 `{0}lmgtfy` `what_to_google` Provides a nifty LMGTFY (Let Me Google That For You) link for `what_to_google`.
+                      \n〰️ `{0}vaporwave` `text` Turns `text` into `ｔｅｘｔ`.
+                      \n👏 `{0}clap` `message` 👏 Add 👏 some 👏 claps 👏 to 👏 your 👏 message. 👏
+                      \n🎗️ `{0}remind` Sets up a reminder. After the amount of time you specify, you will be DM'd your reminder.
+                      \n📅 `{0}reminders` Lists all your reminders.""",
                    """:moneybag: `{0}coin` `number_of_coins` Flips `number_of_coins` coins. If `number_of_coins` is not specified, one coin will be flipped.
                       \n:moneybag: `{0}flip` `number_of_coins` Does the same thing as `{0}coin`.
                       \n:game_die: `{0}dice` `number_of_dice` Rolls `number_of_dice` six-sided dice. If `number_of_dice` is not specified, one die will be rolled.
@@ -118,17 +121,17 @@ class Info:
                       \n:thinking: `{0}guess start` Starts a number guessing game with a random number from 0 to 100.
                       \n:raising_hand: `{0}guess` `number` Guesses a `number` in an ongoing guessing game.
                       \n:flag_white: `{0}guess giveup` Gives up an ongoing guessing game. Only use this if you're a quitter.""",
-                   """:flushed: `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
-                      \n:peach: `{0}ass` Sends a random NSFW ass picture.
-                      \n:melon: `{0}boobs` Sends a random NSFW boobs picture.
-                      \n:taco: `{0}pussy` Sends a random NSFW pussy picture.
-                      \n:eggplant: `{0}dick` Sends a random NSFW dick picture.
-                      \n:octopus: `{0}hentai` Sends a random NSFW hentai GIF.
-                      \n:woman: `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
-                      \n:man: `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
+                   """😳 `{0}nsfwtoggle` Toggles whether NSFW commands are allowed on the server or not.
+                      \n🍑 `{0}ass` Sends a random NSFW ass picture.
+                      \n🍈 `{0}boobs` Sends a random NSFW boobs picture.
+                      \n🌮 `{0}pussy` Sends a random NSFW pussy picture.
+                      \n🍆 `{0}dick` Sends a random NSFW dick picture.
+                      \n🐙 `{0}hentai` Sends a random NSFW hentai GIF.
+                      \n👩 `{0}gonewild` Sends a random post from the NSFW /r/gonewild subreddit.
+                      \n👨 `{0}gonewildmale` Sends a random post from the NSFW /r/Ladybonersgw subreddit.
                       \n🧦 `{0}thighhighs` Sends a random post from the NSFW /r/thighhighs subreddit.
-                      \n:paintbrush: `{0}rule34` `search_term` Sends a random NSFW Rule 34 post for `search_term`.
-                      \n:paintbrush: `{0}r34` `search_term` Does the same thing as `{0}rule34`.""",
+                      \n🖌️ `{0}rule34` `search_term` Sends a random NSFW Rule 34 post for `search_term`.
+                      \n🖌️ `{0}r34` `search_term` Does the same thing as `{0}rule34`.""",
                    """:heavy_plus_sign: `{0}add` `command_name` `command_text` Adds `command_name` as a custom command, which prints `command_text` when executed.
                       \n:pencil: `{0}edit` `command_name` `command_text` Edits a certain command, `command_name`, to instead print `command_text` when executed.
                       \n:wastebasket: `{0}delete` `command_name` Deletes a certain command, `command_name`.
@@ -185,7 +188,10 @@ class Info:
         current_time = time.time()
         with io.open("management/next_maintenance.txt") as f:
             next_maintenance = f.read().strip()
-        await ctx.send(f"lmao-bot has been up for {lbutil.eng_time(current_time - lbvars.start_time)}\n\nNext maintenance break is scheduled for {next_maintenance}.")
+        e = discord.Embed(color=lbvars.LMAO_ORANGE)
+        e.add_field(name="lmao-bot Uptime", value=lbutil.eng_time(current_time - lbvars.start_time))
+        e.add_field(name="Next Maintenance Break", value=next_maintenance)
+        await ctx.send(embed=e)
         usage.update(ctx)
         return ctx.command.name
 
@@ -197,14 +203,15 @@ class Info:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="info", aliases=["about"])
+    @commands.command(name="info", aliases=["about", "botinfo"])
     async def cmd_info(self, ctx):  # Returns about lmao-bot message
         desc = """I am a fun utility bot created by Firestar493#6963 and DrEngineer#0001 with discord.py in June 2018. I replace people's asses after they \"lmao\" or \"lmfao\". Try it out!\n
         I do all sorts of other things too, such as play music, provide moderation commands, and give answers from the almighty magic 8-ball. Invite me to one of your servers to see for yourself!"""
-        e = discord.Embed(title="Hello from lmao-bot! 👋", color=0xFF2500, description=desc)
+        e = discord.Embed(title="Hello from lmao-bot! 👋", color=lbvars.LMAO_ORANGE, description=desc)
         e.set_thumbnail(url=self.bot.user.avatar_url)
-        e.add_field(name="Server Count", value=str(len(self.bot.guilds)))
+        e.add_field(name="Server Count", value=len(self.bot.guilds))
         e.add_field(name="Total Member Count", value=usage.count_total_members(self.bot))
+        e.add_field(name="Shard Count", value=len(self.bot.shards))
         e.add_field(name="Invite me to your server", value="[You won't regret it 👀](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)")
         e.add_field(name="Join the support server", value="[Send help pls](https://discord.gg/JQgB7p7)")
         e.add_field(name="Vote for me on Discord Bot List", value="[The power is in your hands](https://discordbots.org/bot/459432854821142529/vote)")
@@ -221,13 +228,21 @@ class Info:
 
     @commands.command(name="invite")
     async def cmd_invite(self, ctx):
-        await ctx.send("Need ass insurance on other servers you're in?\n\nInvite me to more servers! https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575")
+        invite_link = "https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575"
+        desc = f"Need ass insurance on other servers you're in?\n\n[Click here to invite me to more servers!]({invite_link})"
+        e = discord.Embed(title="Invite lmao-bot!", color=lbvars.LMAO_ORANGE, description=desc)
+        e.set_thumbnail(url=self.bot.user.avatar_url)
+        await ctx.send(embed=e)
         usage.update(ctx)
         return ctx.command.name
 
     @commands.command(name="vote", aliases=["upvote"])
     async def cmd_vote(self, ctx):
-        await ctx.send("Like lmao-bot? **Vote** for lmao-bot on Discord Bot List!\n\nhttps://discordbots.org/bot/459432854821142529/vote")
+        vote_link = "https://discordbots.org/bot/459432854821142529/vote"
+        desc = f"Like lmao-bot?\n\n[**Vote** for lmao-bot on Discord Bot List!]({vote_link})"
+        e = discord.Embed(title="Vote for lmao-bot!", color=lbvars.LMAO_ORANGE, description=desc)
+        e.set_thumbnail(url=self.bot.user.avatar_url)
+        await ctx.send(embed=e)
         usage.update(ctx)
         return ctx.command.name
 

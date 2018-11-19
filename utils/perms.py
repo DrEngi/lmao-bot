@@ -1,4 +1,6 @@
 import discord
+import re
+from discord.ext import commands
 from utils import lbvars
 
 def get_perms(message):
@@ -17,3 +19,8 @@ def is_lmao_admin(message):
 def is_lmao_developer(message):
     developers = [257203526390906880, 210220782012334081, 300763778608267266]
     return message.author.id in developers
+
+def clean_everyone(ctx, arg):
+    if get_perms(ctx.message).mention_everyone:
+        return arg
+    return re.sub(r"@(everyone|here)", "@\u200b\\1", arg)

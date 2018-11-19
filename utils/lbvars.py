@@ -1,10 +1,13 @@
 import time
 import json
 import io
+from datetime import datetime
 
 replace_ass_msg = "You appear to have misplaced your ass while laughing. Here is a replacement: :peach:"
 
 custom_game = False # Changes to True of the activity of lmao-bot is manually altered
+
+dc_time = {} # Disconnects the bot from these guilds if the time passes the time given
 
 deck = {}                   # TO BE WORKED ON: deck feature
 # init = []                   # Guilds where settings have been initialized
@@ -14,6 +17,8 @@ start_time = time.time()    # Start time for lmao uptime command
 last_use_time = time.time()
 maintenance_time = "TBD"
 no_command_invoked = False
+
+LMAO_ORANGE = 0xFF2500 # Color of lmao-bot
 
 settings = {}
 def import_settings():

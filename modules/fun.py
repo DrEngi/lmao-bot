@@ -21,6 +21,12 @@ def save_url(url, path):
         fo.write(fi.read())
     return path
 
+def save_avatar(member, path="img/pfp", detect_ext=True):
+    if detect_ext:
+        ext = os.path.splitext(member.avatar_url)[1].split("?")[0]
+        path += ext
+    return save_url(member.avatar_url, path)
+
 async def save_file_from_ctx(ctx, path, detect_ext=False):
     files = ctx.message.attachments
     ext = ""
@@ -192,7 +198,7 @@ class Fun:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="say", aliases=["speak", "repeat"])
+    @commands.command(name="say", aliases=["speak"])
     async def cmd_say(self, ctx, *, arg=""):    # Allows user to have lmao-bot say a message
         if arg == "":
             await ctx.send(f"You have to have a message for me to say. e.g. `{ctx.prefix}say Replacing asses by day, kicking asses by night.`")
@@ -203,10 +209,7 @@ class Fun:
                 pass
             except discord.errors.NotFound:
                 pass
-            if perms.get_perms(ctx.message).mention_everyone:
-                await ctx.send(arg)
-            else:
-                await ctx.send(re.sub(r"@(everyone|here)", "@\u200b\\1", arg))
+            await ctx.send(perms.clean_everyone(ctx, arg))
         usage.update(ctx)
         return ctx.command.name
 

@@ -5,7 +5,7 @@
 import logging
 import io
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import socket
 import os
 import json
@@ -120,6 +120,24 @@ async def check_reminders(late=False):
         with io.open("data/reminders.json", "w+", encoding="utf-8") as fo:
             fo.write(new_reminders)
 
+async def check_dc():
+    keys_to_delete = []
+    for guild_id, dc_time in lbvars.dc_time.items():
+        if round((datetime.now() - dc_time).total_seconds()) >= 0:
+            try:
+                channel = BOT.get_cog("Music").players[guild_id]._channel
+                await channel.send("⏰ The voice channel has been inactive for 15 minutes. Now leaving...")
+                BOT.get_cog("Music").players.pop(guild_id, 0)
+                await BOT.get_guild(guild_id).voice_client.disconnect()
+                # player.destroy(player._guild)
+                # await player.send_np(finished=True, timeout=True)
+                # await BOT.get_guild(guild_id).voice_client.disconnect()
+            except KeyError:
+                pass
+            keys_to_delete.append(guild_id)
+    for key in keys_to_delete:
+        del lbvars.dc_time[key]
+
 @BOT.event
 async def on_ready():
     """Prints ready message in terminal"""
@@ -166,9 +184,32 @@ async def on_ready():
             await check_reminders()
         except Exception as Ex:
             LOGGER.warning("Reminder check error: %s", Ex)
+        try:
+            await check_dc()
+        except Exception as Ex:
+            LOGGER.warning("Disconnection check error: %s", Ex)
         if not lbvars.custom_game:
             await BOT.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(BOT.guilds))))
         await asyncio.sleep(60)
+
+@BOT.event
+async def on_voice_state_update(member, before, after):
+    if member.guild.voice_client is None or not member.guild.voice_client.is_connected():
+        return
+    channel = member.guild.voice_client.channel # Gets the voice_client for the bot in this guild
+    active = False
+    for member in channel.members:
+        if not member.bot:
+            active = True
+            break
+    if active:
+        del lbvars.dc_time[member.guild.id]
+    if not active:
+        now = datetime.now()
+        later = now + timedelta(minutes=15)
+        # later = now + timedelta(minutes=0) # Testing
+        if member.guild.id not in lbvars.dc_time:
+            lbvars.dc_time[member.guild.id] = later
 
 @BOT.event
 async def on_guild_join(guild):
@@ -285,7 +326,7 @@ async def on_message(message):  # Event triggers when message is sent
             await BOT.process_commands(message)
         else:
             try:
-                await message.channel.send(lbvars.get_custom_cmd_list(message.guild.id)[cmd_name].strip())
+                await message.channel.send(perms.clean_everyone(ctx, lbvars.get_custom_cmd_list(message.guild.id)[cmd_name].strip()))
             except KeyError:
                 if "lmao" in message.content.lower() or "lmfao" in message.content.lower():
                     await replace_ass()
@@ -328,7 +369,7 @@ async def on_message(message):  # Event triggers when message is sent
                 mention = f"{message.author.mention} "
                 if "nomention" in flags:
                     mention = ""
-                await ctx.send(f"{mention}{value['message']}")
+                await ctx.send(perms.clean_everyone(ctx, f"{mention}{value['message']}"))
         lbvars.export_settings(guild_id)
 
     if guild_id in ["345655060740440064", "407274897350328345"] and ("pollard" in msg or "buh-bye" in msg or "buhbye" in msg or "buh bye" in msg):
