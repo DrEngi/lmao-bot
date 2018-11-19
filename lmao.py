@@ -164,7 +164,7 @@ async def on_ready():
     LOGGER.info(str(BOT.user.id))
     LOGGER.info(str(datetime.now()))
     LOGGER.info("------")
-    await BOT.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(BOT.guilds))))
+    await BOT.change_presence(activity=discord.Game(name=f"lmao help | {len(BOT.guilds)} servers | Firestar493#6963"))
     lbvars.set_start_time(time.time())
     global bot_is_ready
     bot_is_ready = True
@@ -189,7 +189,7 @@ async def on_ready():
         except Exception as Ex:
             LOGGER.warning("Disconnection check error: %s", Ex)
         if not lbvars.custom_game:
-            await BOT.change_presence(activity=discord.Game(name="lmao help | in {} guilds | Firestar493#6963".format(len(BOT.guilds))))
+            await BOT.change_presence(activity=discord.Game(name=f"lmao help | {len(BOT.guilds)} servers | Firestar493#6963"))
         await asyncio.sleep(60)
 
 @BOT.event
