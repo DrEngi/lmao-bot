@@ -97,7 +97,7 @@ class Dev:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="displayguildcount", aliases=["displayservercount"] hidden=True)
+    @commands.command(name="displayguildcount", aliases=["displayservercount"], hidden=True)
     async def cmd_display_guild_count(self, ctx):
         await self.bot.change_presence(activity=discord.Game(name=f"lmao help | {len(self.bot.guilds)} servers | Firestar493#6963"))
         lbvars.custom_game = False
