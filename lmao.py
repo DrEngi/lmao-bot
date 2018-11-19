@@ -203,7 +203,7 @@ async def on_voice_state_update(member, before, after):
             active = True
             break
     if active:
-        del lbvars.dc_time[member.guild.id]
+        lbvars.dc_time.pop(member.guild.id, 0)
     if not active:
         now = datetime.now()
         later = now + timedelta(minutes=15)
