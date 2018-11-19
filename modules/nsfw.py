@@ -164,7 +164,7 @@ class NSFW:
                 await ctx.send(embed=e)
                 usage.update(ctx)
                 return ctx.command.name
-            await self.send_rand_img(ctx, ctx.invoked_with)
+            await self.send_rand_img(ctx, ctx.invoked_with.lower())
         usage.update(ctx)
         return ctx.command.name
 
