@@ -45,7 +45,7 @@
           font-family: Tahoma, Verdana, Sans-Serif;
           font-size: 20px;
       }
-      h2 {
+      h2, h3 {
       	text-align: center;
       }
       a {
@@ -114,11 +114,11 @@
       <td>Sends the bot's latency (ping).</td>
     </tr>
     <tr>
-      <td>lmao prefix <span class="noweight">&quot;new_prefix&quot;</span></td>
+      <td>lmao prefix <span class="noweight">new_prefix</span></td>
       <td>Changes the bot's command prefix to <code>new_prefix</code>. Available to server admins and lmao admins only. Default is "lmao".</td>
     </tr>
     <tr>
-      <td>lmao about</td>
+      <td>lmao info</td>
       <td>Gives a brief description about the bot, including an invite to the support server.</td>
     </tr>
     <tr>
@@ -236,6 +236,10 @@
     <tr>
       <td>lmao vol <span class="noweight">percent</span></td>
       <td>Does the same thing as <code>lmao volume</code>.</td>
+    </tr>
+    <tr>
+      <td>lmao loop</td>
+      <td>Play the current queue on loop.</td>
     </tr>
     <tr>
       <td>lmao queue</td>
@@ -398,6 +402,14 @@
       <th>Description</th>
     </tr>
     <tr>
+      <td>lmao avatar <span class="noweight">mention</span></td>
+      <td>Sends an image of the mentioned user's avatar.</td>
+    </tr>
+    <tr>
+      <td>lmao someone <span class="noweight">message</span></td>
+      <td>Pings a random person in the server with your message.</td>
+    </tr>
+    <tr>
       <td>lmao urban <span class="noweight">term</span></td>
       <td>Provides the definition for <code>term</code> on Urban Dictionary. Only works in NSFW channels.</td>
     </tr>
@@ -532,14 +544,20 @@
       <td>Edits a custom filter to say something else.</td>
     </tr>
     <tr>
-      <td>lmao filter flags</td>
-      <td>Change the configuration (flags) of a filter. Flags include <code>nomention</code> and <code>casesensitive</code>.</td>
+      <td>lmao filter options</td>
+      <td>Change the options (flags) of a filter. Flags include <code>nomention</code>, <code>casesensitive</code>, <code>wholeword</code>, and <code>chance</code>.</td>
     </tr>
     <tr>
       <td>lmao filter remove</td>
       <td>Removes a custom filter.</td>
     </tr>
   </table>
+
+  <hr />
+
+  <h3>Taco-bot</h3>
+
+  <p>Want a taco-themed economy and utility bot that can do it all? <a href="https://discordbots.org/bot/511400985596395521">Look no further than Taco-bot</a>, lmao-bot's official partner!</p>
 
   </body>
 </html>

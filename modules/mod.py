@@ -67,6 +67,19 @@ class Mod:
         usage.update(ctx)
         return ctx.command.name
 
+    # @commands.command(name="disable")
+    # async def cmd_disable(self, ctx, *, arg=""):
+    #     cmd = arg.strip()
+    #     if cmd == "":
+    #         #TODO: Instead of error message, prompt the user
+    #         await ctx.send(f"To disable a command, use `{ctx.prefix}disable command_name`, where `command_name` is the name of the command you want to disable. e.g. `{ctx.prefix}disable someone`\n\n" \
+    #             "Not that not all commands can be disabled and that only lmao administrators and server administrators can enable/disable commands.")
+    #         usage.update(ctx)
+    #         return ctx.command.name
+    #     #disable here
+    #     usage.update(ctx)
+    #     return ctx.command.name
+
     @commands.command(name="purge", aliases=["clear", "clean", "prune"])
     async def cmd_purge(self, ctx, *, arg=""):  # Allows the deletion of messages
         if perms.get_perms(ctx.message).manage_messages or perms.is_lmao_admin(ctx.message):

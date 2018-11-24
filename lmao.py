@@ -138,27 +138,30 @@ async def check_dc():
     for key in keys_to_delete:
         del lbvars.dc_time[key]
 
+LOGGER.info("Importing settings...")
+lbvars.import_settings()
+LOGGER.info("All settings successfully imported.")
+
 @BOT.event
 async def on_ready():
     """Prints ready message in terminal"""
-    voted = await dblpy.get_upvote_info()
-    LOGGER.info(voted)
     lbvars.reset_guild_count()
-    LOGGER.info("Importing settings...")
-    lbvars.import_settings()
-    LOGGER.info("All settings successfully imported.")
     for guild in BOT.guilds:
-        lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
+        # lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
+        new_guild = lbvars.init_settings(guild.id)
         guild_count = lbvars.increment_guild_count()
-        LOGGER.info(str("{} initialized. Guild count: {}.".format(guild.name, guild_count)))
-
+        keyword = "OLD: "
+        if new_guild:
+            "NEW: "
+        LOGGER.info(str("#{}. {}{}.".format(guild_count, keyword, guild.name)))
+    voted = await dblpy.get_upvote_info()
+    LOGGER.info(f"{len(voted)} users have voted.")
     async def owner_has_voted():
         if await dbl.has_voted(210220782012334081):
             return "YES"
         return "NO"
     owner_voted = await owner_has_voted()
     LOGGER.info("Have you voted yet? %s", owner_voted)
-
     LOGGER.info("Logged in as")
     LOGGER.info(BOT.user.name)
     LOGGER.info(str(BOT.user.id))
@@ -207,7 +210,6 @@ async def on_voice_state_update(member, before, after):
     if not active:
         now = datetime.now()
         later = now + timedelta(minutes=15)
-        # later = now + timedelta(minutes=0) # Testing
         if member.guild.id not in lbvars.dc_time:
             lbvars.dc_time[member.guild.id] = later
 
@@ -217,8 +219,8 @@ async def on_guild_join(guild):
     # lbvars.import_settings()
     lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
     guild_count = lbvars.increment_guild_count()
-    LOGGER.info("%s initialized. Guild count: %s.", guild.name, guild_count)
-    LOGGER.info("%s just ADDED lmao-bot ^_^", guild_count)
+    LOGGER.info("#%s. %s initialized.", guild_count, guild.name)
+    LOGGER.info("%s just ADDED lmao-bot ^_^", guild.name)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
     payload = {"server_count"  : len(BOT.guilds), "shard_count": len(BOT.shards)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
@@ -229,6 +231,7 @@ async def on_guild_join(guild):
 @BOT.event
 async def on_guild_remove(guild):
     """Runs whenver lmao-bot is removed from the server"""
+    guild_count = lbvars.decrement_guild_count()
     LOGGER.info("%s just REMOVED lmao-bot ;_;", guild.name)
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
     payload = {"server_count"  : len(BOT.guilds), "shard_count": len(BOT.shards)}
