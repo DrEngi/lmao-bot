@@ -6,11 +6,12 @@ import json
 import math
 import asyncio
 from utils import lbvars, usage, perms, lbutil
+from modules import music
 import time
 import pandas as pd
 
 class Dev:
-    "Developer Commands"
+    """Developer Commands"""
     __slots__ = ('bot')
 
     def __init__(self, bot):
@@ -104,8 +105,38 @@ class Dev:
         usage.update(ctx)
         return ctx.command.name
 
-    @commands.command(name="showusage", hidden=True)
-    async def cmd_show_usage(self, ctx, bars=15, width=6.4, height=4.8):
+    # @commands.command(name="showusage", hidden=True)
+    # async def cmd_show_usage(self, ctx, command="", width=6.4, height=4.8):
+    #     with io.open("data/cmd_usage.json") as f:
+    #         usage_data = json.load(f).get(command)
+    #     if usage_data is None:
+    #         await ctx.send(f"Command {command} not found.")
+    #         usage.update(ctx)
+    #         return ctx.command.name
+    #
+
+    @commands.command(name="disconnectguild", hidden=True)
+    async def cmd_disconnect_guild(self, ctx, id: int=0, *, message: str=""):
+        music_cog = self.bot.get_cog("Music")
+        player = music_cog.players.get(id)
+        if player is None:
+            await ctx.send(f"Music player for {id} does not exist.")
+            usage.update(ctx)
+            return ctx.command.name
+        channel = player._channel
+        title = "❌ Disconnecting from the voice channel"
+        desc = "lmao-bot is being manually disconnected from your voice channel.\n\nSorry for the inconvenience."
+        e = discord.Embed(title=title, description=desc)
+        if message.strip() != "":
+            e.add_field(name="Reason", value=message.strip())
+        await channel.send(embed=e)
+        music_cog.players.pop(id, 0)
+        await self.bot.get_guild(id).voice_client.disconnect()
+        usage.update(ctx)
+        return ctx.command.name
+
+    @commands.command(name="showallusage", hidden=True)
+    async def cmd_show_all_usage(self, ctx, bars=15, width=6.4, height=4.8):
         with io.open("data/cmd_usage.json") as f:
             usage_data = json.load(f)
         commands = []

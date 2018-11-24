@@ -44,6 +44,12 @@ def export_settings(guild_id):
         new_admins_data = json.dumps(admins_data, indent=4)
         with io.open("data/admins.json", "w+", encoding="utf-8") as fo:
             fo.write(new_admins_data)
+    # with io.open("data/disabled.json") as f:
+    #     disabled_data = json.load(f)
+    #     disabled_data[guild_id] = get_lmao_admin_list(guild_id)
+    #     new_disabled_data = json.dumps(disabled_data, indent=4)
+    #     with io.open("data/disabled.json", "w+", encoding="utf-8") as fo:
+    #         fo.write(new_disabled_data)
     with io.open("data/filters.json") as f:
         filters_data = json.load(f)
         filters_data[guild_id] = get_filter_list(guild_id)
@@ -58,6 +64,11 @@ def export_settings(guild_id):
             fo.write(new_customs_data)
 def update_settings(guild_id, guild_settings):
     settings[guild_id] = guild_settings
+def init_settings(guild_id):
+    if guild_id not in settings:
+        settings[guild_id] = GuildSettings(guild_id)
+        return True
+    return False
 
 def set_no_command_invoked(invoked):
     global no_command_invoked
@@ -77,15 +88,19 @@ class GuildSettings:
         self.init_prefix()
 
         # List for storing lmao admins
-        self.lmao_admin_list = "[]"
+        self.lmao_admin_list = []
         self.init_lmao_admin_list()
 
+        # List for storing disabled commands
+        # self.disabled_cmd_list = []
+        # self.init_disabled_cmd_list()
+
         # Dictionary for storing custom filters
-        self.filter_list = "{}"
+        self.filter_list = {}
         self.init_filter_list()
 
         # Dictionary for storing custom commands.
-        self.custom_cmd_list = "{}"
+        self.custom_cmd_list = {}
         self.init_custom_cmd_list()
 
         # Chance of ass replacement
@@ -181,6 +196,26 @@ class GuildSettings:
     def get_lmao_admin_list(self):
         return self.lmao_admin_list
 
+    #TODO
+    # def init_disabled_cmd_list(self):
+    #     with io.open("data/admins.json") as f:
+    #         admins_data = json.load(f)
+    #         try:
+    #             self.lmao_admin_list = admins_data[self.guild_id]
+    #         except KeyError:
+    #             self.lmao_admin_list = []
+    # def add_lmao_admin(self, member_id):
+    #     self.lmao_admin_list.append(str(member_id))
+    #     return self.lmao_admin_list
+    # def remove_lmao_admin(self, member_id):
+    #     self.lmao_admin_list = [admin for admin in self.lmao_admin_list[self.guild_id] if admin != str(member_id)]
+    #     return self.lmao_admin_list
+    # def set_lmao_admin_list(self, lmao_admin_list):
+    #     self.lmao_admin_list = lmao_admin_list
+    #     return self.lmao_admin_list
+    # def get_lmao_admin_list(self):
+    #     return self.lmao_admin_list
+
     def init_filter_list(self):
         with io.open("data/filters.json") as f:
             full_filter_list = json.load(f)
@@ -246,6 +281,10 @@ def get_maintenance_time():
 def increment_guild_count():
     global guild_count
     guild_count += 1
+    return guild_count
+def decrement_guild_count():
+    global guild_count
+    guild_count -= 1
     return guild_count
 def reset_guild_count():
     global guild_count
