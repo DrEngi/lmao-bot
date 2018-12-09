@@ -161,7 +161,7 @@ class Utility:
         skin_tones = ["👏", "👏🏻", "👏🏼", "👏🏽", "👏🏾", "👏🏿"]
         # Sets a random skin tone for the emoji
         emoji = rng.choice(skin_tones)
-        await ctx.send(f"{emoji} {f' {emoji} '.join(args)} {emoji}"[:2000])
+        await ctx.send(perms.clean_everyone(ctx, f"{emoji} {f' {emoji} '.join(args)} {emoji}"[:2000]))
 
     @commands.command(name="remind", aliases=["remindme"])
     async def cmd_remind(self, ctx, *, arg=""):
