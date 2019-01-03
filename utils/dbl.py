@@ -15,7 +15,4 @@ async def has_voted(user_id):
             vote_data = await r.json()
             if vote_data["voted"] == 0:
                 return False
-            else:
-                return True
-            dbl_connector.close()
-            await aioclient.close()
+            return True
