@@ -21,11 +21,17 @@ import aiohttp
 from modules import dblpy, fun
 from utils import lbvars, lbutil, dbl, perms
 
+# Renames the previous log file so there is a continuous record of log files
+try:
+    os.rename("logs/lmao.log", f"logs/lmao-{time.time()}.log")
+except FileNotFoundError:
+    pass
+
 #Sets up logging here so we don't have to shoot ourselves
 LOGGER = logging.getLogger('discord')
 LOGGER.setLevel(logging.INFO)
 FORMATTER = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
-FILEHANDLER = logging.FileHandler(filename='lmao.log', encoding='utf-8', mode='w')
+FILEHANDLER = logging.FileHandler(filename='logs/lmao.log', encoding='utf-8', mode='w')
 FILEHANDLER.setFormatter(FORMATTER)
 STREAMHANDLER = logging.StreamHandler()
 STREAMHANDLER.setFormatter(FORMATTER)

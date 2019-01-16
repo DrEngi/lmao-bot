@@ -8,7 +8,7 @@
 
 """
 Please understand Music bots are complex, and that even this basic example can be daunting to a beginner.
-For this reason it's highly advised you familiarize yourself with discord.py, python and asyncio, BEFORE
+For this reason it's highly advised you familiarize yourself with discord.py, python and asyncio,
 you attempt to write a music bot.
 This example makes use of: Python 3.6
 For a more basic voice example please read:
@@ -60,7 +60,7 @@ def get_ytdlopts(guild_id):
     return ytdlopts
 
 ffmpegopts = {
-    "before_options": "-nostdin",
+    "before_options": "-nostdin -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
     "options": "-vn"
 }
 
