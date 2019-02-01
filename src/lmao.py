@@ -4,6 +4,7 @@
 # Standard Python imports
 import logging
 import io
+import inspect
 import time
 from datetime import datetime, timedelta
 import socket
@@ -68,7 +69,7 @@ def starts_with_prefix(message):
 
 def load_extensions(bot):
     """Loads all extensions found in the modules folder."""
-    os.chdir("modules")
+    os.chdir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) + "/modules")
     if __name__ == "__main__":
         for path in os.listdir():
             if os.path.isfile(path):
@@ -96,9 +97,9 @@ LOGGER.info("All extensions loaded.")
 
 dblpy = BOT.cogs.get("DBL")
 
-with io.open("tokens/token.txt", "r") as token:
+with io.open(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) + "/../tokens/token.txt", "r") as token:
     bot_token = (token.read()).strip()
-with io.open("tokens/dbl.txt", "r") as token:
+with io.open(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) + "/../tokens/dbl.txt", "r") as token:
     dbl_token = (token.read()).strip()
 dbl_url = "https://discordbots.org/api/bots/459432854821142529/stats"
 dbl_headers = {"Authorization" : dbl_token}
