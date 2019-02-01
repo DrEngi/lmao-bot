@@ -24,7 +24,7 @@ For more information on setting up Git on your machine, [read this article](http
 
 With the above dependencies satisfied, [create your new account on Github](https://github.com/join).
 
-You'll need to [install Python 3.6.5 for your operating system]https://www.python.org/downloads/release/python-365/).
+You'll need to [install Python 3.6.5 or later for your operating system](https://www.python.org/downloads/release/python-365/).
 
 ### Fork and clone
 
@@ -36,7 +36,9 @@ Finally, change into the new directory created by the clone and run the followin
 pip install -r requirements.txt
 ```
 
-This will ensure that you have all the required development modules installed to build your contributions. You are now ready to contribute.
+Please ensure that all dependencies in this folder were installed correctly. We recommend you use `virtualenv` or Anaconda (if on windows) to manage python envrionments. This will ensure that you have all the required development modules installed to build your contributions. You are now ready to contribute.
+
+To test the bot, you'll need to create a token.txt and place it within a tokens folder. To get a token, create an account on the discord developer portal and create a bot user.
 
 Once you're satisfied, [submit your pull request](https://help.github.com/articles/creating-a-pull-request/). Please be sure you create a pull request to the DEVELOP branch, not Master. Direct PRs to Master will be denied.
 
