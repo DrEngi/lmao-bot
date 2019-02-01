@@ -109,7 +109,7 @@ venv.bak/
 ### Python Patch ###
 .venv/
 
-# extra stuff
+# lmao specific files
 admins/
 settings/
 tokens/
@@ -122,7 +122,8 @@ async/
 data_dev/
 data/
 management/
-
+.vs/
+.vscode/
 lmao_count.txt
 
 
