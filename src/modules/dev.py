@@ -79,7 +79,7 @@ class Dev:
     @commands.command(name="changemaintenance", hidden=True)
     async def cmd_change_maintenance(self, ctx, *, arg=""):
         lbvars.set_maintenance_time(arg)
-        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time} | Firestar493#6963"))
+        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time}"))
         lbvars.custom_game = True
         usage.update(ctx)
         return ctx.command.name
@@ -93,14 +93,14 @@ class Dev:
 
     @commands.command(name="displaymaintenance", hidden=True)
     async def cmd_display_maintenance(self, ctx):
-        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time} | Firestar493#6963"))
+        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time}"))
         lbvars.custom_game = True
         usage.update(ctx)
         return ctx.command.name
 
     @commands.command(name="displayguildcount", aliases=["displayservercount"], hidden=True)
     async def cmd_display_guild_count(self, ctx):
-        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | {len(self.bot.guilds)} servers | Firestar493#6963"))
+        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | {len(self.bot.guilds)} servers"))
         lbvars.custom_game = False
         usage.update(ctx)
         return ctx.command.name

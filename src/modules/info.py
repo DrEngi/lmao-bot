@@ -205,7 +205,7 @@ class Info:
 
     @commands.command(name="info", aliases=["about", "botinfo"])
     async def cmd_info(self, ctx):  # Returns about lmao-bot message
-        desc = """I am a fun utility bot created by Firestar493#6963 and DrEngineer#0001 with discord.py in June 2018. I replace people's asses after they \"lmao\" or \"lmfao\". Try it out!\n
+        desc = """I am a fun utility bot created by Firestar493#6963 and DrEngineer#8214 with discord.py in June 2018. I replace people's asses after they \"lmao\" or \"lmfao\". Try it out!\n
         I do all sorts of other things too, such as play music, provide moderation commands, and give answers from the almighty magic 8-ball. Invite me to one of your servers to see for yourself!"""
         e = discord.Embed(title="Hello from lmao-bot! 👋", color=lbvars.LMAO_ORANGE, description=desc)
         e.set_thumbnail(url=self.bot.user.avatar_url)
