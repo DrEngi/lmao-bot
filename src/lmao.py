@@ -83,6 +83,7 @@ def load_extensions(bot):
     os.chdir("..")
 
 load_extensions(BOT)
+BOT.load_extension(f"events.onmemberjoin")
 
 def get_all_commands():
     """Returns all commands in the bot set by Discord.ext"""
@@ -97,9 +98,9 @@ LOGGER.info("All extensions loaded.")
 
 dblpy = BOT.cogs.get("DBL")
 
-with io.open(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) + "/../tokens/token.txt", "r") as token:
+with io.open("../tokens/token.txt", "r") as token:
     bot_token = (token.read()).strip()
-with io.open(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))) + "/../tokens/dbl.txt", "r") as token:
+with io.open("../tokens/dbl.txt", "r") as token:
     dbl_token = (token.read()).strip()
 dbl_url = "https://discordbots.org/api/bots/459432854821142529/stats"
 dbl_headers = {"Authorization" : dbl_token}
@@ -108,7 +109,7 @@ bot_is_ready = False        # If bot is not ready, on_message event will not fir
 
 async def check_reminders(late=False):
     """Check all reminders"""
-    with io.open("data/reminders.json") as f:
+    with io.open("../data/reminders.json") as f:
         reminders = json.load(f)
         for i in range(len(reminders["reminders"]) - 1, -1, -1):
             reminder = reminders["reminders"][i]
@@ -124,7 +125,7 @@ async def check_reminders(late=False):
                     print(f"Error in getting user {reminder['author']}")
                 reminders["reminders"].pop(i)
         new_reminders = json.dumps(reminders, indent=4)
-        with io.open("data/reminders.json", "w+", encoding="utf-8") as fo:
+        with io.open("../data/reminders.json", "w+", encoding="utf-8") as fo:
             fo.write(new_reminders)
 
 async def check_dc():
@@ -163,12 +164,6 @@ async def on_ready():
         LOGGER.info(str("#{}. {}{}.".format(guild_count, keyword, guild.name)))
     voted = await dblpy.get_upvote_info()
     LOGGER.info(f"{len(voted)} users have voted.")
-    async def owner_has_voted():
-        if await dbl.has_voted(210220782012334081):
-            return "YES"
-        return "NO"
-    owner_voted = await owner_has_voted()
-    LOGGER.info("Have you voted yet? %s", owner_voted)
     LOGGER.info("Logged in as")
     LOGGER.info(BOT.user.name)
     LOGGER.info(str(BOT.user.id))
@@ -252,19 +247,6 @@ welcome = {
     407274897350328345: 472965450045718528, # Bot Testing Environment
     264445053596991498: 265156361791209475  # Discord Bot List
 }
-
-@BOT.event
-async def on_member_join(member):
-    """Runs welcome message whenever a member joins"""
-    channel_id = welcome.get(member.guild.id, 0)
-    if channel_id == 0:
-        return
-    mention = True
-    if channel_id == 265156361791209475:
-        mention = False
-    channel = member.guild.get_channel(channel_id)
-    await channel.trigger_typing()
-    await fun.beautiful_welcome(member, channel, mention=mention)
 
 @BOT.event
 async def on_member_remove(member):

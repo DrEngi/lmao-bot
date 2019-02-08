@@ -106,7 +106,7 @@ class Utility:
         member = ctx.author
         if len(ctx.message.mentions) > 0:
             member = ctx.message.mentions[0]
-        path = f"img/avatar_{member.id}"
+        path = f"../img/avatar_{member.id}"
         path = fun.save_avatar(member, path)
         await ctx.send(file=discord.File(path))
         os.remove(path)
