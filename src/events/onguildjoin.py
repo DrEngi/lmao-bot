@@ -24,3 +24,6 @@ class OnGuildJoin:
             async with aioclient.post(lbvars.dbl_url, data=payload, headers=lbvars.dbl_headers):
                 dbl_connector.close()
                 await aioclient.close()
+
+def setup(bot):
+    bot.add_cog(OnGuildJoin(bot))

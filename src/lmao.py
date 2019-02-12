@@ -84,6 +84,7 @@ def load_extensions(bot):
 
 load_extensions(BOT)
 BOT.load_extension(f"events.onmemberjoin")
+BOT.load_extension(f"events.onguildjoin")
 
 def get_all_commands():
     """Returns all commands in the bot set by Discord.ext"""
