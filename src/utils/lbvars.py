@@ -26,6 +26,12 @@ LOGGER = None # Global logger for all classes, initialized by lmao.py
 dbl_url = None
 dbl_headers = None
 
+welcome = {
+    463758816270483476: 469491274219782144, # lmao-bot Support
+    407274897350328345: 472965450045718528, # Bot Testing Environment
+    264445053596991498: 265156361791209475  # Discord Bot List
+}
+
 settings = {}
 def import_settings():
     with io.open("../data/settings.json") as f:

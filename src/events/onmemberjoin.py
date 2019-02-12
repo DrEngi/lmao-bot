@@ -3,6 +3,7 @@ from discord.ext import commands
 import asyncio
 
 from modules import fun
+from utils import lbvars
 class OnMemberJoin:
     slots = ("bot")
 
@@ -11,13 +12,7 @@ class OnMemberJoin:
     
     async def on_member_join(self, member):
         """Runs welcome message whenever a member joins"""
-        welcome = {
-            463758816270483476: 469491274219782144, # lmao-bot Support
-            407274897350328345: 472965450045718528, # Bot Testing Environment
-            264445053596991498: 265156361791209475  # Discord Bot List
-            }
-        
-        channel_id = welcome.get(member.guild.id, 0)
+        channel_id = lbvars.welcome.get(member.guild.id, 0)
         if channel_id == 0:
             return
         mention = True

@@ -83,8 +83,9 @@ def load_extensions(bot):
     os.chdir("..")
 
 load_extensions(BOT)
-BOT.load_extension(f"events.onmemberjoin")
-BOT.load_extension(f"events.onguildjoin")
+BOT.load_extension("events.onmemberjoin")
+BOT.load_extension("events.onguildjoin")
+BOT.load_extension("events.onmemberremove")
 
 def get_all_commands():
     """Returns all commands in the bot set by Discord.ext"""
@@ -215,21 +216,6 @@ async def on_voice_state_update(member, before, after):
         later = now + timedelta(minutes=15)
         if member.guild.id not in lbvars.dc_time:
             lbvars.dc_time[member.guild.id] = later
-
-welcome = {
-    463758816270483476: 469491274219782144, # lmao-bot Support
-    407274897350328345: 472965450045718528, # Bot Testing Environment
-    264445053596991498: 265156361791209475  # Discord Bot List
-}
-
-@BOT.event
-async def on_member_remove(member):
-    """Bids people farewell in the lmao-bot support server"""
-    channel_id = welcome.get(member.guild.id, 0)
-    if channel_id == 0:
-        return
-    channel = member.guild.get_channel(channel_id)
-    await channel.send(f"Goodbye, {member}. You will be missed. :pensive:")
 
 @BOT.event
 async def on_message(message):  # Event triggers when message is sent
