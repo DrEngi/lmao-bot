@@ -29,17 +29,17 @@ except FileNotFoundError:
     pass
 
 #Sets up logging here so we don't have to shoot ourselves
-LOGGER = logging.getLogger('discord')
-LOGGER.setLevel(logging.INFO)
+lbvars.LOGGER = logging.getLogger('discord')
+lbvars.LOGGER.setLevel(logging.INFO)
 FORMATTER = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
 FILEHANDLER = logging.FileHandler(filename='logs/lmao.log', encoding='utf-8', mode='w')
 FILEHANDLER.setFormatter(FORMATTER)
 STREAMHANDLER = logging.StreamHandler()
 STREAMHANDLER.setFormatter(FORMATTER)
-LOGGER.addHandler(STREAMHANDLER)
-LOGGER.addHandler(FILEHANDLER)
+lbvars.LOGGER.addHandler(STREAMHANDLER)
+lbvars.LOGGER.addHandler(FILEHANDLER)
 
-LOGGER.info("lmao-bot is loading...")
+lbvars.LOGGER.info("lmao-bot is loading...")
 
 def get_pre(bot, message):
     "Gets the prefix for the guild the message was sent it, otherwise returns lmao"
@@ -77,9 +77,9 @@ def load_extensions(bot):
                 if module != "__init__":
                     try:
                         bot.load_extension(f"modules.{module}")
-                        LOGGER.info("%s sucessfully loaded.", module)
+                        lbvars.LOGGER.info("%s sucessfully loaded.", module)
                     except Exception as Ex:
-                        LOGGER.info("%s could not be loaded because %s.", module, Ex)
+                        lbvars.LOGGER.info("%s could not be loaded because %s.", module, Ex)
     os.chdir("..")
 
 load_extensions(BOT)
@@ -94,7 +94,7 @@ def get_all_commands():
             commands.append(alias)
     return commands
 
-LOGGER.info("All extensions loaded.")
+lbvars.LOGGER.info("All extensions loaded.")
 
 dblpy = BOT.cogs.get("DBL")
 
@@ -102,8 +102,8 @@ with io.open("../tokens/token.txt", "r") as token:
     bot_token = (token.read()).strip()
 with io.open("../tokens/dbl.txt", "r") as token:
     dbl_token = (token.read()).strip()
-dbl_url = "https://discordbots.org/api/bots/459432854821142529/stats"
-dbl_headers = {"Authorization" : dbl_token}
+lbvars.dbl_url = "https://discordbots.org/api/bots/459432854821142529/stats"
+lbvars.dbl_headers = {"Authorization" : dbl_token}
 
 bot_is_ready = False        # If bot is not ready, on_message event will not fire
 
@@ -146,9 +146,9 @@ async def check_dc():
     for key in keys_to_delete:
         del lbvars.dc_time[key]
 
-LOGGER.info("Importing settings...")
+lbvars.LOGGER.info("Importing settings...")
 lbvars.import_settings()
-LOGGER.info("All settings successfully imported.")
+lbvars.LOGGER.info("All settings successfully imported.")
 
 @BOT.event
 async def on_ready():
@@ -161,14 +161,14 @@ async def on_ready():
         keyword = "OLD: "
         if new_guild:
             "NEW: "
-        LOGGER.info(str("#{}. {}{}.".format(guild_count, keyword, guild.name)))
+        lbvars.LOGGER.info(str("#{}. {}{}.".format(guild_count, keyword, guild.name)))
     voted = await dblpy.get_upvote_info()
-    LOGGER.info(f"{len(voted)} users have voted.")
-    LOGGER.info("Logged in as")
-    LOGGER.info(BOT.user.name)
-    LOGGER.info(str(BOT.user.id))
-    LOGGER.info(str(datetime.now()))
-    LOGGER.info("------")
+    lbvars.LOGGER.info(f"{len(voted)} users have voted.")
+    lbvars.LOGGER.info("Logged in as")
+    lbvars.LOGGER.info(BOT.user.name)
+    lbvars.LOGGER.info(str(BOT.user.id))
+    lbvars.LOGGER.info(str(datetime.now()))
+    lbvars.LOGGER.info("------")
     await BOT.change_presence(activity=discord.Game(name=f"lmao help | {len(BOT.guilds)} servers"))
     lbvars.set_start_time(time.time())
     global bot_is_ready
@@ -176,23 +176,23 @@ async def on_ready():
     dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
     payload = {"server_count"  : len(BOT.guilds), "shard_count": len(BOT.shards)}
     async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
+        async with aioclient.post(lbvars.dbl_url, data=payload, headers=lbvars.dbl_headers):
             dbl_connector.close()
             await aioclient.close()
     try:
         await check_reminders(late=True)
     except Exception as Ex:
-        LOGGER.warning("Error: %s", Ex)
+        lbvars.LOGGER.warning("Error: %s", Ex)
     await asyncio.sleep(60 - round(time.time()) % 60)
     while(True):
         try:
             await check_reminders()
         except Exception as Ex:
-            LOGGER.warning("Reminder check error: %s", Ex)
+            lbvars.LOGGER.warning("Reminder check error: %s", Ex)
         try:
             await check_dc()
         except Exception as Ex:
-            LOGGER.warning("Disconnection check error: %s", Ex)
+            lbvars.LOGGER.warning("Disconnection check error: %s", Ex)
         if not lbvars.custom_game:
             await BOT.change_presence(activity=discord.Game(name=f"lmao help | {len(BOT.guilds)} servers"))
         await asyncio.sleep(60)
@@ -214,33 +214,6 @@ async def on_voice_state_update(member, before, after):
         later = now + timedelta(minutes=15)
         if member.guild.id not in lbvars.dc_time:
             lbvars.dc_time[member.guild.id] = later
-
-@BOT.event
-async def on_guild_join(guild):
-    """Runs whenever lmao-bot joins a new server"""
-    # lbvars.import_settings()
-    lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
-    guild_count = lbvars.increment_guild_count()
-    LOGGER.info("#%s. %s initialized.", guild_count, guild.name)
-    LOGGER.info("%s just ADDED lmao-bot ^_^", guild.name)
-    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"server_count"  : len(BOT.guilds), "shard_count": len(BOT.shards)}
-    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
-            dbl_connector.close()
-            await aioclient.close()
-
-@BOT.event
-async def on_guild_remove(guild):
-    """Runs whenver lmao-bot is removed from the server"""
-    guild_count = lbvars.decrement_guild_count()
-    LOGGER.info("%s just REMOVED lmao-bot ;_;", guild.name)
-    dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
-    payload = {"server_count"  : len(BOT.guilds), "shard_count": len(BOT.shards)}
-    async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
-        async with aioclient.post(dbl_url, data=payload, headers=dbl_headers):
-            dbl_connector.close()
-            await aioclient.close()
 
 welcome = {
     463758816270483476: 469491274219782144, # lmao-bot Support
@@ -283,7 +256,7 @@ async def on_message(message):  # Event triggers when message is sent
         lbvars.set_last_use_time(time.time())
 
     if message.guild is None:
-        LOGGER.info("DM from %s: %s", message.author, message.content)
+        lbvars.LOGGER.info("DM from %s: %s", message.author, message.content)
         if message.author.id == 309480972707954688:
             await message.channel.send("Hey, babe, what's up? :smirk:")
         if "help" in message.content:

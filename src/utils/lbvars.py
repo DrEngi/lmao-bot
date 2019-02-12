@@ -1,6 +1,7 @@
 import time
 import json
 import io
+import logging
 from datetime import datetime
 
 replace_ass_msg = "You appear to have misplaced your ass while laughing. Here is a replacement: :peach:"
@@ -20,12 +21,18 @@ no_command_invoked = False
 
 LMAO_ORANGE = 0xFF2500 # Color of lmao-bot
 
+LOGGER = None # Global logger for all classes, initialized by lmao.py
+
+dbl_url = None
+dbl_headers = None
+
 settings = {}
 def import_settings():
     with io.open("../data/settings.json") as f:
         settings_data = json.load(f)
         for guild_id in settings_data.keys():
             settings[guild_id] = GuildSettings(guild_id)
+
 def export_settings(guild_id):
     with io.open("../data/settings.json") as f:
         settings_data = json.load(f)
@@ -62,8 +69,10 @@ def export_settings(guild_id):
         new_customs_data = json.dumps(customs_data, indent=4)
         with io.open("../data/customs.json", "w+", encoding="utf-8") as fo:
             fo.write(new_customs_data)
+
 def update_settings(guild_id, guild_settings):
     settings[guild_id] = guild_settings
+
 def init_settings(guild_id):
     if guild_id not in settings:
         settings[guild_id] = GuildSettings(guild_id)
@@ -73,6 +82,7 @@ def init_settings(guild_id):
 def set_no_command_invoked(invoked):
     global no_command_invoked
     custom_invoked = invoked
+
 def get_no_command_invoked():
     return no_command_invoked
 
