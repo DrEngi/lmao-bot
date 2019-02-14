@@ -19,6 +19,8 @@ last_use_time = time.time()
 maintenance_time = "TBD"
 no_command_invoked = False
 
+bot_is_ready = False
+
 LMAO_ORANGE = 0xFF2500 # Color of lmao-bot
 
 LOGGER = None # Global logger for all classes, initialized by lmao.py

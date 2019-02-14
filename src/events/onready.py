@@ -77,8 +77,7 @@ class OnReady:
         lbvars.LOGGER.info("------")
         await self.bot.change_presence(activity=discord.Game(name=f"lmao help | {len(self.bot.guilds)} servers"))
         lbvars.set_start_time(time.time())
-        global bot_is_ready
-        bot_is_ready = True
+        lbvars.bot_is_ready = True
         dbl_connector = aiohttp.TCPConnector(family=socket.AF_INET,verify_ssl=False,force_close=True)
         payload = {"server_count"  : len(self.bot.guilds), "shard_count": len(self.bot.shards)}
         async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
