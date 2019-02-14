@@ -12,12 +12,8 @@ import asyncio
 import random as rng
 from datetime import datetime
 import urllib.parse
-if sys.version < '3':
-    from urllib2 import urlopen
-    from urllib import quote as urlquote
-else:
-    from urllib.request import urlopen
-    from urllib.parse import quote as urlquote
+from urllib.request import urlopen
+from urllib.parse import quote as urlquote
 
 UD_DEFID_URL = 'http://api.urbandictionary.com/v0/define?defid='
 UD_DEFINE_URL = 'http://api.urbandictionary.com/v0/define?term='
@@ -212,7 +208,7 @@ class Utility:
         timestamp = math.floor(time.time() / 60) + elapsed_time
         set_on = f"{datetime.now().replace(microsecond=0)} {time.tzname[0]}"
         set_for = f"{datetime.fromtimestamp(timestamp * 60).strftime('%Y-%m-%d %H:%M')} {time.tzname[0]}"
-        with io.open("data/reminders.json") as f:
+        with io.open("../data/reminders.json") as f:
             reminders = json.load(f)
             reminders["reminders"].append(
                 {
@@ -225,7 +221,7 @@ class Utility:
                 }
             )
             new_reminders = json.dumps(reminders, indent=4)
-            with io.open("data/reminders.json", "w+", encoding="utf-8") as fo:
+            with io.open("../data/reminders.json", "w+", encoding="utf-8") as fo:
                 fo.write(new_reminders)
         await ctx.send(f":reminder_ribbon: {ctx.author.mention} A reminder has been set for {print_time} from now ({set_for})!")
         usage.update(ctx)
@@ -233,7 +229,7 @@ class Utility:
 
     @commands.command(name="reminders")
     async def cmd_reminders(self, ctx):
-        with io.open("data/reminders.json") as f:
+        with io.open("../data/reminders.json") as f:
             reminders = json.load(f)["reminders"]
             my_reminders = []
             for reminder in reminders:

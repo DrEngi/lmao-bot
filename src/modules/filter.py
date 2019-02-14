@@ -12,7 +12,8 @@ class Filter:
     def __init__(self, bot):
         self.bot = bot
 
-    async def can_edit_filters(ctx):
+    #TODO: This should be a check
+    async def can_edit_filters(self, ctx):
         can_edit = perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages
         if not can_edit:
             await ctx.send(f"{ctx.author.mention} You do not have the permission to edit custom filters. Ask a guild administrator, lmao administrator, or user with the `Manage Messages` permission to do so.")
@@ -30,7 +31,7 @@ class Filter:
         # Add a command to view all filters.
         # Potentially add configurations? e.g. mentions user, case sensitivity, chance, etc.
 
-        with io.open("data/filters.json") as f:
+        with io.open("../data/filters.json") as f:
             filter_data = json.load(f)
             if str(ctx.guild.id) not in filter_data or len(filter_data[str(ctx.guild.id)]) == 0:
                 await ctx.send(f"{ctx.author.mention} Your guild currently has no custom filters set. Add some with `{ctx.prefix}filter add`!")

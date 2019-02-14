@@ -113,7 +113,7 @@ def get_seconds_from_dict(time: dict):
 
 def get_emoji(name):
     """Gets an emoji's code listed in emojis.json by its name."""
-    with io.open("data/emojis.json") as f:
+    with io.open("../data/emojis.json") as f:
         emojis = json.load(f)
     return emojis.get(name)
 

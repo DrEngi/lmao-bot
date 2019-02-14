@@ -43,7 +43,7 @@ class Dev:
 
     @commands.command(name="addemoji", hidden=True)
     async def cmd_add_emoji(self, ctx, *, arg=""):
-        with io.open("data/emojis.json") as f:
+        with io.open("../data/emojis.json") as f:
             emojis = json.load(f)
         colon1 = arg.find(":")
         colon2 = colon1 + arg[colon1 + 1:].find(":") + 1
@@ -54,7 +54,7 @@ class Dev:
         name = arg[colon1 + 1:colon2].strip()
         emojis[name] = arg
         new_emojis = json.dumps(emojis, indent=4)
-        with io.open("data/emojis.json", "w+") as f:
+        with io.open("../data/emojis.json", "w+") as f:
             f.write(new_emojis)
         await ctx.send(f":white_check_mark: `{name}` added as an emoji. {arg}")
 
@@ -137,7 +137,7 @@ class Dev:
 
     @commands.command(name="showallusage", hidden=True)
     async def cmd_show_all_usage(self, ctx, bars=15, width=6.4, height=4.8):
-        with io.open("data/cmd_usage.json") as f:
+        with io.open("../data/cmd_usage.json") as f:
             usage_data = json.load(f)
         commands = []
         uses = []

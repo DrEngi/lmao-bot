@@ -83,7 +83,7 @@ class NSFW:
                 await aioclient.close()
 
     async def send_rand_img(self, ctx, category):
-        with io.open("data/nsfw_urls.json") as f:
+        with io.open("../data/nsfw_urls.json") as f:
             urls = json.load(f)
         url = ""
         while not url_exists(url):
