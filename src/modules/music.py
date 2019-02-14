@@ -12,12 +12,8 @@ This example is only compatible with the discord.py rewrite branch.
 Because of the F-Strings, you also must have Python 3.6 or higher installed.
 """
 
-import logging
-import math
-import re
+import logging, math, re, discord, lavalink
 
-import discord
-import lavalink
 from discord.ext import commands
 from utils import lbvars
 
