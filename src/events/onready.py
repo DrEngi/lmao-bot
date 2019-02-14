@@ -58,7 +58,7 @@ class OnReady:
             del lbvars.dc_time[key]
     
     async def on_ready(self):
-        """Prints ready message in terminal"""
+        """Prints ready message in terminal""" 
         lbvars.reset_guild_count()
         for guild in self.bot.guilds:
             # lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
