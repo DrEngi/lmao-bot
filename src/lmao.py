@@ -42,6 +42,9 @@ try:
 except FileNotFoundError:
     pass
 
+with io.open("../tokens/lavalink.txt", "r") as lavalink:
+    lbvars.lavalinkpass = (lavalink.read()).strip()
+
 #Sets up logging here so we don't have to shoot ourselves
 lbvars.LOGGER = logging.getLogger('discord')
 lbvars.LOGGER.setLevel(logging.INFO)
