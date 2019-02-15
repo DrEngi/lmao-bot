@@ -10,6 +10,7 @@ import lavalink
 from discord.ext import commands
 
 from utils import lbvars
+from preconditions import voice
 
 time_rx = re.compile('[0-9]+')
 url_rx = re.compile('https?:\\/\\/(?:www\\.)?.+')
@@ -35,26 +36,29 @@ class Music:
         if isinstance(event, lavalink.events.TrackEndEvent):
             pass  # Send track ended message to channel.
 
-    async def __before_invoke(self, ctx):
-        guild_check = ctx.guild is not None
-        #  This is essentially the same as `@commands.guild_only()`
-        #  except it saves us repeating ourselves (and also a few lines).
-
-        if guild_check:
-            await self.ensure_voice(ctx)
-            #  Ensure that the bot and command author share a mutual voicechannel.
-
-        return guild_check
-
     async def connect_to(self, guild_id: int, channel_id: str):
         """ Connects to the given voicechannel ID. A channel_id of `None` means disconnect. """
         ws = self.bot._connection._get_websocket(guild_id)
         await ws.voice_state(str(guild_id), channel_id)
 
     @commands.command(aliases=['p'])
+    @voice.isInVoiceChannel()
+    @commands.guild_only()
+    @commands.bot_has_permissions(connect=True, speak=True)
     async def play(self, ctx, *, query: str):
         """ Searches and plays a song from a given query. """
         player = self.bot.lavalink.players.get(ctx.guild.id)
+
+        should_connect = ctx.command.name in ('play')  # Add commands that require joining voice to work.
+
+        if not player.is_connected:
+            if not should_connect:
+                raise commands.CommandInvokeError('Not connected.')
+            player.store('channel', ctx.channel.id)
+            await self.connect_to(ctx.guild.id, str(ctx.author.voice.channel.id))
+        else:
+            if int(player.channel_id) != ctx.author.voice.channel.id:
+                raise ctx.send('You need to be in my voicechannel.')
 
         query = query.strip('<>')
 
@@ -86,6 +90,18 @@ class Music:
 
         if not player.is_playing:
             await player.play()
+
+    @play.error
+    async def play_error(self, ctx, error):
+        if isinstance(error, voice.NotInVoiceChannel):
+            e = discord.Embed(title="Command Error", description=error)
+            await ctx.send(embed=e)
+        elif isinstance(error, commands.BotMissingPermissions):
+            e = discord.Embed(title="Command Error", description="The bot requires `speak` and `connect` permissions to play music.")
+            await ctx.send(embed=e)
+        elif isinstance(error, commands.NoPrivateMessage):
+            e = discord.Embed(title="Command Error", description="Music is not supported in private messages")
+            await ctx.send(embed=e)
 
     @commands.command()
     async def seek(self, ctx, *, time: str):
@@ -272,32 +288,6 @@ class Music:
         await player.stop()
         await self.connect_to(ctx.guild.id, None)
         await ctx.send('*⃣ | Disconnected.')
-
-    async def ensure_voice(self, ctx):
-        """ This check ensures that the bot and command author are in the same voicechannel. """
-        player = self.bot.lavalink.players.create(ctx.guild.id, endpoint=ctx.guild.region.value)
-        # Create returns a player if one exists, otherwise creates.
-
-        should_connect = ctx.command.name in ('play')  # Add commands that require joining voice to work.
-
-        if not ctx.author.voice or not ctx.author.voice.channel:
-            raise commands.CommandInvokeError('Join a voicechannel first.')
-
-        if not player.is_connected:
-            if not should_connect:
-                raise commands.CommandInvokeError('Not connected.')
-
-            permissions = ctx.author.voice.channel.permissions_for(ctx.me)
-
-            if not permissions.connect or not permissions.speak:  # Check user limit too?
-                raise commands.CommandInvokeError('I need the `CONNECT` and `SPEAK` permissions.')
-
-            player.store('channel', ctx.channel.id)
-            await self.connect_to(ctx.guild.id, str(ctx.author.voice.channel.id))
-        else:
-            if int(player.channel_id) != ctx.author.voice.channel.id:
-                raise commands.CommandInvokeError('You need to be in my voicechannel.')
-
 
 def setup(bot):
     bot.add_cog(Music(bot))

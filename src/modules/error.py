@@ -20,7 +20,7 @@ class Error:
         if hasattr(ctx.command, 'on_error'):
             return
 
-        ignored = (commands.CommandNotFound, commands.UserInputError, commands.CheckFailure, discord.Forbidden, discord.errors.Forbidden, websockets.exceptions.ConnectionClosed)
+        ignored = (commands.CommandNotFound, commands.UserInputError, commands.CheckFailure, discord.Forbidden, discord.errors.Forbidden, websockets.exceptions.ConnectionClosed, commands.UserInputError)
 
         # Allows us to check for original exceptions raised and sent to CommandInvokeError.
         # If nothing is found. We keep the exception passed to on_command_error.
@@ -39,11 +39,13 @@ class Error:
             except:
                 pass
 
-        # For this error example we check to see where it came from...
-        elif isinstance(error, commands.BadArgument):
-            if ctx.command.qualified_name == 'tag list':  # Check if the command being invoked is 'tag list'
-                return await ctx.send('I could not find that member. Please try again.')
-
+        elif isinstance(error, commands.UserInputError):
+            print (error.args[1])
+            if (error.args[1] is True):
+                e = discord.Embed(title=f"Command Execution Error", descriptipn=error.args[0])
+                #TODO: This doesn't work, we'll need another way to test if it's natural or not.
+                return await ctx.send(embed=e)
+        
         # All other Errors not returned come here... And we can just print the default TraceBack.
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
