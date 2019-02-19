@@ -165,5 +165,15 @@ class Dev:
         usage.update(ctx)
         return ctx.command.name
 
+    @commands.command(name="leaveguild", hidden=True)
+    async def cmd_leaveguild(self, ctx, id: int=0):
+        await self.bot.get_guild(id).leave()
+
+    @commands.command(name="listallguilds", hidden=True)
+    async def cmd_listallguilds(self, ctx, limit: int=5):
+        for guild in self.bot.guilds:
+            await ctx.send(guild.id)
+        
+
 def setup(bot):
     bot.add_cog(Dev(bot))
