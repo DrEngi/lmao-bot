@@ -6,7 +6,7 @@ class NotInVoiceChannel(commands.CheckFailure):
 
 def isInVoiceChannel():
     def predicate(ctx):
-        if (not ctx.author.voice or not ctx.author.voice.channel):
+        if ctx.author.voice is not None and ctx.author.voice.channel is not None:
             return True
         else:
             raise NotInVoiceChannel("You must be in a voice channel to use this command.")

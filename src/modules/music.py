@@ -44,17 +44,18 @@ class Music:
     @commands.command(aliases=['p'])
     @voice.isInVoiceChannel()
     @commands.guild_only()
-    @commands.bot_has_permissions(connect=True, speak=True)
     async def play(self, ctx, *, query: str):
         """ Searches and plays a song from a given query. """
+        await ctx.send("Valid")
         player = self.bot.lavalink.players.get(ctx.guild.id)
-
+        await ctx.send("Gotten player...")
         should_connect = ctx.command.name in ('play')  # Add commands that require joining voice to work.
 
         if not player.is_connected:
             if not should_connect:
                 raise commands.CommandInvokeError('Not connected.')
             player.store('channel', ctx.channel.id)
+            await ctx.send("Connecting...")
             await self.connect_to(ctx.guild.id, str(ctx.author.voice.channel.id))
         else:
             if int(player.channel_id) != ctx.author.voice.channel.id:
@@ -94,14 +95,16 @@ class Music:
     @play.error
     async def play_error(self, ctx, error):
         if isinstance(error, voice.NotInVoiceChannel):
-            e = discord.Embed(title="Command Error", description=error)
+            e = discord.Embed(title="Command Error", description="You need to be in a voice channel to use this command")
             await ctx.send(embed=e)
         elif isinstance(error, commands.BotMissingPermissions):
-            e = discord.Embed(title="Command Error", description="The bot requires `speak` and `connect` permissions to play music.")
+            e = discord.Embed(title="Command Error", description="The bot requires `speak` and `connect` permissions in the voice channel you are in to play music. Missing: " + str(error.missing_perms))
             await ctx.send(embed=e)
         elif isinstance(error, commands.NoPrivateMessage):
             e = discord.Embed(title="Command Error", description="Music is not supported in private messages")
             await ctx.send(embed=e)
+        else:
+            print("Unhandled error:" + str(error))
 
     @commands.command()
     async def seek(self, ctx, *, time: str):
