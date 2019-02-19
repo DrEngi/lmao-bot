@@ -107,5 +107,6 @@ async def on_message(message):
 async def on_ready():
     "loads only music. everything else handled elsewhere"
     BOT.load_extension("modules.music")
+    BOT.load_extension("modules.playlists")
 
 BOT.run(bot_token)
