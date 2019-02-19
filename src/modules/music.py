@@ -2,14 +2,13 @@
 This is an example cog that shows how you would make use of Lavalink.py.
 This example cog requires that you have python 3.6 or higher due to the f-strings.
 """
-import math
-import re
+import math, re, io, json
 
 import discord
 import lavalink
 from discord.ext import commands
 
-from utils import lbvars
+from utils import lbvars, usage, lbutil
 from preconditions import voice
 
 time_rx = re.compile('[0-9]+')
@@ -260,6 +259,63 @@ class Music:
 
         embed = discord.Embed(color=discord.Color.blurple(), description=o)
         await ctx.send(embed=embed)
+
+    @commands.group(name="playlist", aliases=['pl', 'playlists'])
+    async def cmd_playlist(self, ctx, name=""):
+        player = self.bot.lavalink.players.get(ctx.guild.id)
+
+        with io.open("data/playlists.json") as f:
+            playlist_data = json.load(f)
+            if str(ctx.guild.id) not in playlist_data:
+                await ctx.send(f"No playlists were found for {ctx.guild.name}. Try queuing some songs and using `{ctx.prefix}save` to add some!")
+                usage.update(ctx)
+                return ctx.command.name
+            guild_pl = playlist_data[str(ctx.guild.id)]
+
+            if name in guild_pl:
+                playlist = guild_pl[name]
+                desc = []
+                full_duration = 0
+                for i in range(0, math.ceil(len(playlist) / 20)):
+                    desc.append("")
+                for i in range(0, len(playlist)):
+                    full_duration += playlist[i]["duration"]
+                    line = f"{i + 1}. **{playlist[i]['title']}"
+                    if len(line) > 100:
+                        line = line[:97] + "..."
+                    line += f"** {lbutil.print_duration(playlist[i]['duration'])}\n"
+                    desc[math.floor(i / 20)] += line
+                for i in range(0, len(desc)):
+                    e = discord.Embed(title=f"{name} Playlist for {ctx.guild.name} {lbutil.print_duration(full_duration)}", description=desc[i])
+                    e.set_footer(text=f"Page {i + 1}")
+                    await ctx.send(embed=e)
+                usage.update(ctx)
+                return ctx.command.name
+
+            title = f"**Playlists for {ctx.guild.name}**"
+            desc = f"""
+                Use `{ctx.prefix}playlist_name` to view `playlist_name`.\n
+                Use `{ctx.prefix}load playlist_name` to load `playlist_name` onto the queue.\n
+                Use `{ctx.prefix}save` to save up to the first 20 songs of the current queue as a playlist.\n
+                Use `{ctx.prefix}pl remove` to remove a playlist.\n
+                """
+            playlists = []
+            for name, queue in guild_pl.items():
+                playlists.append((name[:100], len(queue)))
+
+            for i in range(math.ceil(len(playlists) / 25)):
+                e = discord.Embed(title=title, description=desc)
+                e.set_footer(text=f"Page {i + 1}")
+                for j in range(25):
+                    try:
+                        playlist = playlists[i + j]
+                        e.add_field(name=playlist[0], value=f"{playlist[1]} song(s)")
+                    except IndexError:
+                        break
+                await ctx.send(embed=e)
+
+        usage.update(ctx)
+        return ctx.command.name
 
 def setup(bot):
     bot.add_cog(Music(bot))

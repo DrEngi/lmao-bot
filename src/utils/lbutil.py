@@ -138,6 +138,27 @@ def parse_chance(string):
         chance = 50
     return chance
 
+def print_duration(time, brackets=True):
+    t = dhms_time(time)
+    h = t["h"] + 24 * t["d"]
+    m = str(t["m"])
+    s = str(t["s"])
+    if len(s) < 2:
+        s = "0" + s
+    m = str(m)
+    if len(m) < 2:
+        m = "0" + m
+    if h > 0:
+        out = f"{h}:{m}:{s}"
+    else:
+        out = f"{m}:{s}"
+    if brackets:
+        out = f"[{out}]"
+    return out
+
+def print_date(yyyymmdd):
+    return f"{yyyymmdd[:4]}-{yyyymmdd[4:6]}-{yyyymmdd[6:]}"
+
 # Utility function for determining if an object is an integer
 #def is_int(s):
 #    try:
