@@ -24,7 +24,7 @@ class Music:
 
         if not hasattr(bot, 'lavalink'):  # This ensures the client isn't overwritten during cog reloads.
             bot.lavalink = lavalink.Client(bot.user.id)
-            bot.lavalink.add_node('159.89.233.140', 2333, lbvars.lavalinkpass, 'eu', 'default-node')  # Host, Port, Password, Region, Name
+            bot.lavalink.add_node('159.89.233.140', 2333, lbvars.lavalinkpass, 'us', 'default-node')  # Host, Port, Password, Region, Name
             bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
 
         bot.lavalink.add_event_hook(self.track_hook)
@@ -44,10 +44,11 @@ class Music:
     @commands.command(aliases=['p'])
     @voice.isInVoiceChannel()
     @commands.guild_only()
+    @voice.hasValidVoicePermissions()
     async def play(self, ctx, *, query: str):
         """ Searches and plays a song from a given query. """
         await ctx.send("Valid")
-        player = self.bot.lavalink.players.get(ctx.guild.id)
+        player = self.bot.lavalink.players.create(ctx.guild.id)
         await ctx.send("Gotten player...")
         should_connect = ctx.command.name in ('play')  # Add commands that require joining voice to work.
 
@@ -97,8 +98,8 @@ class Music:
         if isinstance(error, voice.NotInVoiceChannel):
             e = discord.Embed(title="Command Error", description="You need to be in a voice channel to use this command")
             await ctx.send(embed=e)
-        elif isinstance(error, commands.BotMissingPermissions):
-            e = discord.Embed(title="Command Error", description="The bot requires `speak` and `connect` permissions in the voice channel you are in to play music. Missing: " + str(error.missing_perms))
+        elif isinstance(error, voice.InvalidVoicePermissions):
+            e = discord.Embed(title="Command Error", description="The bot requires `speak` and `connect` permissions in the voice channel you are in to play music.")
             await ctx.send(embed=e)
         elif isinstance(error, commands.NoPrivateMessage):
             e = discord.Embed(title="Command Error", description="Music is not supported in private messages")
