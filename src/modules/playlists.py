@@ -21,9 +21,8 @@ class Playlists:
             bot.lavalink.add_node('159.89.233.140', 2333, lbvars.lavalinkpass, 'us', 'default-node')  # Host, Port, Password, Region, Name
             bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
 
-    @commands.group(name="playlist", aliases=['pl', 'playlists'])
+    @commands.group(name="playlist", aliases=['pl', 'playlists'], invoke_without_command=True)
     async def cmd_playlist(self, ctx):
-
         with io.open("../data/playlists.json") as f:
             playlist_data = json.load(f)
             if str(ctx.guild.id) not in playlist_data:
@@ -34,9 +33,9 @@ class Playlists:
 
             title = f"**Playlists for {ctx.guild.name}**"
             desc = f"""
-                Use `{ctx.prefix}playlist_name` to view `playlist_name`.\n
-                Use `{ctx.prefix}load playlist_name` to load `playlist_name` onto the queue.\n
-                Use `{ctx.prefix}save` to save up to the first 20 songs of the current queue as a playlist.\n
+                Use `{ctx.prefix}pl info playlist_name` to view `playlist_name`.\n
+                Use `{ctx.prefix}pl load playlist_name` to load `playlist_name` onto the queue.\n
+                Use `{ctx.prefix}pl save` to save up to the first 20 songs of the current queue as a playlist.\n
                 Use `{ctx.prefix}pl remove` to remove a playlist.\n
                 """
             playlists = []
@@ -58,7 +57,15 @@ class Playlists:
         return ctx.command.name
 
     @cmd_playlist.command(name="info", alises=['information'])
-    async def cmd_playlist_info(self, ctx, arg=""):
+    async def cmd_playlist_info(self, ctx, name=""):
+        with io.open("../data/playlists.json") as f:
+            playlist_data = json.load(f)
+            if str(ctx.guild.id) not in playlist_data:
+                await ctx.send(f"No playlists were found for {ctx.guild.name}. Try queuing some songs and using `{ctx.prefix}save` to add some!")
+                usage.update(ctx)
+                return ctx.command.name
+            guild_pl = playlist_data[str(ctx.guild.id)]
+        
         if name in guild_pl:
             playlist = guild_pl[name]
             desc = []
@@ -143,14 +150,14 @@ class Playlists:
         player = self.bot.lavalink.players.get(ctx.guild.id)
         
         if player is None:
-            e = discord.Embed(title="Command Error", description=f"There is currently no queue to save. Try queuing some songs with `{ctx.prefix}`play`.")
-            await ctx.send(Embed=e)
+            e = discord.Embed(title="Command Error", description=f"There is currently no queue to save. Try queuing some songs with `{ctx.prefix} play`.")
+            await ctx.send(embed=e)
             usage.update(ctx)
             return ctx.command.name
 
         if not player.queue:
-            e = discord.Embed(title="Command Error", description=f"There is currently no queue to save. Try queuing some songs with `{ctx.prefix}`play`.")
-            await ctx.send(Embed=e)
+            e = discord.Embed(title="Command Error", description=f"There is currently no queue to save. Try queuing some songs with `{ctx.prefix} play`.")
+            await ctx.send(embed=e)
             usage.update(ctx)
             return ctx.command.name
 
@@ -159,7 +166,7 @@ class Playlists:
         name = arg
 
         if name == "":
-            await ctx.send(f"{ctx.author.mention} What should the playlist name be?\n\n(Note: the playlist name may not contain spaces or line breaks. Type `cancel` to cancel the new playlist.)")
+            await ctx.send(f"{ctx.author.mention}, What should the playlist name be?\n\n(Note: the playlist name may not contain spaces or line breaks. Type `cancel` to cancel the new playlist.)")
             try:
                 message = await self.bot.wait_for("message", timeout=30.0, check=check)
                 if message.content.lower() == "cancel":
