@@ -211,6 +211,8 @@ class Mod:
                     await ctx.send(f"Silly {ctx.author.mention}, I can't ban myself!")
                 elif to_ban.id == 210220782012334081:
                     await ctx.send(f"Please, {ctx.author.mention}, you can't ban my creator.")
+                elif to_ban.id == ctx.author.id:
+                    await ctx.send(f"{ctx.author.mention}, you can't ban yourself.")
                 else:
                     reason = arg.replace(to_ban.mention, "").strip()
                     reason_message = f"Reason: {reason}"

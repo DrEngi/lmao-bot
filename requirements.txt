@@ -1,7 +1,9 @@
 Pillow
 git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]
+git+https://github.com/Devoxin/Lavalink.py@dev#egg=lavalink
 dblpy
 Youtube-dl
 rule34
-urlib2
+Requests
 pandas
+deprecated

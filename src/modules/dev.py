@@ -43,7 +43,7 @@ class Dev:
 
     @commands.command(name="addemoji", hidden=True)
     async def cmd_add_emoji(self, ctx, *, arg=""):
-        with io.open("data/emojis.json") as f:
+        with io.open("../data/emojis.json") as f:
             emojis = json.load(f)
         colon1 = arg.find(":")
         colon2 = colon1 + arg[colon1 + 1:].find(":") + 1
@@ -54,7 +54,7 @@ class Dev:
         name = arg[colon1 + 1:colon2].strip()
         emojis[name] = arg
         new_emojis = json.dumps(emojis, indent=4)
-        with io.open("data/emojis.json", "w+") as f:
+        with io.open("../data/emojis.json", "w+") as f:
             f.write(new_emojis)
         await ctx.send(f":white_check_mark: `{name}` added as an emoji. {arg}")
 
@@ -79,7 +79,7 @@ class Dev:
     @commands.command(name="changemaintenance", hidden=True)
     async def cmd_change_maintenance(self, ctx, *, arg=""):
         lbvars.set_maintenance_time(arg)
-        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time} | Firestar493#6963"))
+        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time}"))
         lbvars.custom_game = True
         usage.update(ctx)
         return ctx.command.name
@@ -93,14 +93,14 @@ class Dev:
 
     @commands.command(name="displaymaintenance", hidden=True)
     async def cmd_display_maintenance(self, ctx):
-        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time} | Firestar493#6963"))
+        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | Maint.: {lbvars.maintenance_time}"))
         lbvars.custom_game = True
         usage.update(ctx)
         return ctx.command.name
 
     @commands.command(name="displayguildcount", aliases=["displayservercount"], hidden=True)
     async def cmd_display_guild_count(self, ctx):
-        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | {len(self.bot.guilds)} servers | Firestar493#6963"))
+        await self.bot.change_presence(activity=discord.Game(name=f"lmao help | {len(self.bot.guilds)} servers"))
         lbvars.custom_game = False
         usage.update(ctx)
         return ctx.command.name
@@ -137,7 +137,7 @@ class Dev:
 
     @commands.command(name="showallusage", hidden=True)
     async def cmd_show_all_usage(self, ctx, bars=15, width=6.4, height=4.8):
-        with io.open("data/cmd_usage.json") as f:
+        with io.open("../data/cmd_usage.json") as f:
             usage_data = json.load(f)
         commands = []
         uses = []
@@ -164,6 +164,16 @@ class Dev:
             await ctx.send(file=discord.File(fp))
         usage.update(ctx)
         return ctx.command.name
+
+    @commands.command(name="leaveguild", hidden=True)
+    async def cmd_leaveguild(self, ctx, id: int=0):
+        await self.bot.get_guild(id).leave()
+
+    @commands.command(name="listallguilds", hidden=True)
+    async def cmd_listallguilds(self, ctx, limit: int=5):
+        for guild in self.bot.guilds:
+            await ctx.send(guild.id)
+        
 
 def setup(bot):
     bot.add_cog(Dev(bot))

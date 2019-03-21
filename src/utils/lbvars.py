@@ -1,6 +1,7 @@
 import time
 import json
 import io
+import logging
 from datetime import datetime
 
 replace_ass_msg = "You appear to have misplaced your ass while laughing. Here is a replacement: :peach:"
@@ -18,16 +19,32 @@ last_use_time = time.time()
 maintenance_time = "TBD"
 no_command_invoked = False
 
+bot_is_ready = False
+
 LMAO_ORANGE = 0xFF2500 # Color of lmao-bot
+
+LOGGER = None # Global logger for all classes, initialized by lmao.py
+
+dbl_url = None
+dbl_headers = None
+
+lavalinkpass = None
+
+welcome = {
+    463758816270483476: 469491274219782144, # lmao-bot Support
+    407274897350328345: 472965450045718528, # Bot Testing Environment
+    264445053596991498: 265156361791209475  # Discord Bot List
+}
 
 settings = {}
 def import_settings():
-    with io.open("data/settings.json") as f:
+    with io.open("../data/settings.json") as f:
         settings_data = json.load(f)
         for guild_id in settings_data.keys():
             settings[guild_id] = GuildSettings(guild_id)
+
 def export_settings(guild_id):
-    with io.open("data/settings.json") as f:
+    with io.open("../data/settings.json") as f:
         settings_data = json.load(f)
         settings_data[guild_id] = {
             "cmd_prefix": get_prefix(guild_id),
@@ -36,34 +53,36 @@ def export_settings(guild_id):
             "allow_nsfw": get_allow_nsfw(guild_id)
         }
         new_settings_data = json.dumps(settings_data, indent=4)
-        with io.open("data/settings.json", "w+", encoding="utf-8") as fo:
+        with io.open("../data/settings.json", "w+", encoding="utf-8") as fo:
             fo.write(new_settings_data)
-    with io.open("data/admins.json") as f:
+    with io.open("../data/admins.json") as f:
         admins_data = json.load(f)
         admins_data[guild_id] = get_lmao_admin_list(guild_id)
         new_admins_data = json.dumps(admins_data, indent=4)
-        with io.open("data/admins.json", "w+", encoding="utf-8") as fo:
+        with io.open("../data/admins.json", "w+", encoding="utf-8") as fo:
             fo.write(new_admins_data)
-    # with io.open("data/disabled.json") as f:
+    # with io.open("../data/disabled.json") as f:
     #     disabled_data = json.load(f)
     #     disabled_data[guild_id] = get_lmao_admin_list(guild_id)
     #     new_disabled_data = json.dumps(disabled_data, indent=4)
-    #     with io.open("data/disabled.json", "w+", encoding="utf-8") as fo:
+    #     with io.open("../data/disabled.json", "w+", encoding="utf-8") as fo:
     #         fo.write(new_disabled_data)
-    with io.open("data/filters.json") as f:
+    with io.open("../data/filters.json") as f:
         filters_data = json.load(f)
         filters_data[guild_id] = get_filter_list(guild_id)
         new_filters_data = json.dumps(filters_data, indent=4)
-        with io.open("data/filters.json", "w+", encoding="utf-8") as fo:
+        with io.open("../data/filters.json", "w+", encoding="utf-8") as fo:
             fo.write(new_filters_data)
-    with io.open("data/customs.json") as f:
+    with io.open("../data/customs.json") as f:
         customs_data = json.load(f)
         customs_data[guild_id] = get_custom_cmd_list(guild_id)
         new_customs_data = json.dumps(customs_data, indent=4)
-        with io.open("data/customs.json", "w+", encoding="utf-8") as fo:
+        with io.open("../data/customs.json", "w+", encoding="utf-8") as fo:
             fo.write(new_customs_data)
+
 def update_settings(guild_id, guild_settings):
     settings[guild_id] = guild_settings
+
 def init_settings(guild_id):
     if guild_id not in settings:
         settings[guild_id] = GuildSettings(guild_id)
@@ -73,6 +92,7 @@ def init_settings(guild_id):
 def set_no_command_invoked(invoked):
     global no_command_invoked
     custom_invoked = invoked
+
 def get_no_command_invoked():
     return no_command_invoked
 
@@ -119,7 +139,7 @@ class GuildSettings:
         return self.guild_id
 
     def init_prefix(self):
-        with io.open("data/settings.json") as f:
+        with io.open("../data/settings.json") as f:
             settings_data = json.load(f)
             try:
                 self.prefix = settings_data[self.guild_id]["cmd_prefix"].strip()
@@ -133,7 +153,7 @@ class GuildSettings:
         return self.prefix
 
     def init_replace_ass_chance(self):
-        with io.open("data/settings.json") as f:
+        with io.open("../data/settings.json") as f:
             settings_data = json.load(f)
             try:
                 self.replace_ass_chance = settings_data[self.guild_id]["replace_ass_chance"]
@@ -147,7 +167,7 @@ class GuildSettings:
         return self.replace_ass_chance
 
     def init_react_chance(self):
-        with io.open("data/settings.json") as f:
+        with io.open("../data/settings.json") as f:
             settings_data = json.load(f)
             try:
                 self.react_chance = settings_data[self.guild_id]["react_chance"]
@@ -161,7 +181,7 @@ class GuildSettings:
         return self.react_chance
 
     def init_allow_nsfw(self):
-        with io.open("data/settings.json") as f:
+        with io.open("../data/settings.json") as f:
             settings_data = json.load(f)
             try:
                 self.allow_nsfw = settings_data[self.guild_id]["allow_nsfw"]
@@ -178,7 +198,7 @@ class GuildSettings:
         return self.allow_nsfw
 
     def init_lmao_admin_list(self):
-        with io.open("data/admins.json") as f:
+        with io.open("../data/admins.json") as f:
             admins_data = json.load(f)
             try:
                 self.lmao_admin_list = admins_data[self.guild_id]
@@ -198,7 +218,7 @@ class GuildSettings:
 
     #TODO
     # def init_disabled_cmd_list(self):
-    #     with io.open("data/admins.json") as f:
+    #     with io.open("../data/admins.json") as f:
     #         admins_data = json.load(f)
     #         try:
     #             self.lmao_admin_list = admins_data[self.guild_id]
@@ -217,7 +237,7 @@ class GuildSettings:
     #     return self.lmao_admin_list
 
     def init_filter_list(self):
-        with io.open("data/filters.json") as f:
+        with io.open("../data/filters.json") as f:
             full_filter_list = json.load(f)
             try:
                 self.filter_list = full_filter_list[self.guild_id]
@@ -239,7 +259,7 @@ class GuildSettings:
         return self.filter_list
 
     def init_custom_cmd_list(self):
-        with io.open("data/customs.json") as f:
+        with io.open("../data/customs.json") as f:
             full_custom_cmd_list = json.load(f)
             try:
                 self.custom_cmd_list = full_custom_cmd_list[self.guild_id]

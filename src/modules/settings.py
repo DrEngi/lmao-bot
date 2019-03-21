@@ -131,7 +131,7 @@ class Settings:
             user = ctx.author
             message_laughed = f"{ctx.author.mention} You have laughed your ass off"
             message_not_laughed = f"{ctx.author.mention} You have yet to laugh your ass off."
-        with io.open("data/user_data.json") as f:
+        with io.open("../data/user_data.json") as f:
             lmao_count_data = json.load(f)
             try:
                 count = lmao_count_data[str(user.id)]['lmao_count']
