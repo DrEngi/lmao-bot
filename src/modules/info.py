@@ -186,7 +186,7 @@ class Info:
     @commands.command(name="uptime", aliases=["up"])
     async def cmd_uptime(self, ctx):
         current_time = time.time()
-        with io.open("management/next_maintenance.txt") as f:
+        with io.open("../management/next_maintenance.txt") as f:
             next_maintenance = f.read().strip()
         e = discord.Embed(color=lbvars.LMAO_ORANGE)
         e.add_field(name="lmao-bot Uptime", value=lbutil.eng_time(current_time - lbvars.start_time))
