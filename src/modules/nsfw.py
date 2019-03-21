@@ -79,7 +79,7 @@ class NSFW:
             async with aioclient.get(url, headers=headers) as r:
                 data = await r.json()
                 self.reddit_posts[sub.lower()] = data["data"]["children"]
-                dbl_connector.close()
+                await dbl_connector.close()
                 await aioclient.close()
 
     async def send_rand_img(self, ctx, category):
