@@ -14,7 +14,6 @@ from preconditions import voice
 time_rx = re.compile('[0-9]+')
 url_rx = re.compile('https?:\\/\\/(?:www\\.)?.+')
 
-
 class Music:
     slots = ("bot")
     
@@ -34,6 +33,10 @@ class Music:
     async def track_hook(self, event):
         if isinstance(event, lavalink.events.TrackEndEvent):
             pass  # Send track ended message to channel.
+        if isinstance(event, lavalink.events.TrackStartEvent):
+            pass
+            #TODO: Find a way to somehow record in what channel a player was started from and then use those events here.
+
 
     async def connect_to(self, guild_id: int, channel_id: str):
         """ Connects to the given voicechannel ID. A channel_id of `None` means disconnect. """
@@ -121,15 +124,14 @@ class Music:
 
         if player is None:
             await self.connect_to(ctx.guild.id, None)
-
-        if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel.id != int(player.channel_id)):
-            return await ctx.send('You\'re not in my voicechannel!')
-
-        if player.is_playing:
-            player.queue.clear()
-            await player.stop()
-        await self.connect_to(ctx.guild.id, None)
-        await ctx.send('⏹ | Stopped.')
+        else:
+            if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel.id != int(player.channel_id)):
+                return await ctx.send('You\'re not in my voicechannel!')
+            if player.is_playing:
+                player.queue.clear()
+                await player.stop()
+            await self.connect_to(ctx.guild.id, None)
+            await ctx.send('⏹ | Stopped.')
 
     @commands.command(name="now", aliases=['np', 'n', 'playing'])
     async def cmd_now(self, ctx):
@@ -146,8 +148,7 @@ class Music:
             duration = lavalink.utils.format_time(player.current.duration)
         song = f'**[{player.current.title}]({player.current.uri})**\n({position}/{duration})'
 
-        embed = discord.Embed(color=discord.Color.blurple(),
-                              title='Now Playing', description=song)
+        embed = discord.Embed(color=discord.Color.blurple(), title='Now Playing', description=song)
         await ctx.send(embed=embed)
 
     @commands.group(name="queue", aliases=['q'], invoke_without_command=True)
@@ -156,7 +157,9 @@ class Music:
         player = self.bot.lavalink.players.get(ctx.guild.id)
 
         if not player.queue:
-            return await ctx.send('Nothing queued.')
+            embed = discord.Embed(color=discord.Color.blurple(), title="Nothing in queue", description="Want to add something? Use `lmao play <song name>`.")
+            embed.set_footer(text="If you're looking to see what's currently playing, use `lmao np`")
+            return await ctx.send(embed=embed)
 
         items_per_page = 10
         pages = math.ceil(len(player.queue) / items_per_page)
@@ -168,8 +171,7 @@ class Music:
         for index, track in enumerate(player.queue[start:end], start=start):
             queue_list += f'`{index + 1}.` [**{track.title}**]({track.uri})\n'
 
-        embed = discord.Embed(colour=discord.Color.blurple(),
-                              description=f'**{len(player.queue)} tracks**\n\n{queue_list}')
+        embed = discord.Embed(colour=discord.Color.blurple(), description=f'**{len(player.queue)} tracks**\n\n{queue_list}')
         embed.set_footer(text=f'Viewing page {page}/{pages}')
         await ctx.send(embed=embed)
 

@@ -60,16 +60,17 @@ class OnReady:
     async def on_ready(self):
         """Prints ready message in terminal""" 
         lbvars.reset_guild_count()
-        for guild in self.bot.guilds:
-            # lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
-            new_guild = lbvars.init_settings(guild.id)
-            guild_count = lbvars.increment_guild_count()
-            keyword = "OLD: "
-            if new_guild:
-                "NEW: "
-            lbvars.LOGGER.info(str("#{}. {}{}.".format(guild_count, keyword, guild.name)))
+        # for guild in self.bot.guilds:
+        #     # lbvars.update_settings(guild.id, lbvars.GuildSettings(guild.id))
+        #     new_guild = lbvars.init_settings(guild.id)
+        #     guild_count = lbvars.increment_guild_count()
+        #     keyword = "OLD: "
+        #     if new_guild:
+        #         "NEW: "
+        #     lbvars.LOGGER.info(str("#{}. {}{}.".format(guild_count, keyword, guild.name)))
         voted = await self.dblpy.get_upvote_info()
         lbvars.LOGGER.info(f"{len(voted)} users have voted.")
+        lbvars.LOGGER.info(f"Bot is in {len(self.bot.guilds)} servers.")
         lbvars.LOGGER.info("Logged in as")
         lbvars.LOGGER.info(self.bot.user.name)
         lbvars.LOGGER.info(str(self.bot.user.id))
@@ -82,7 +83,7 @@ class OnReady:
         payload = {"server_count"  : len(self.bot.guilds), "shard_count": len(self.bot.shards)}
         async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
             async with aioclient.post(lbvars.dbl_url, data=payload, headers=lbvars.dbl_headers):
-                dbl_connector.close()
+                await dbl_connector.close()
                 await aioclient.close()
         try:
             await self.check_reminders(late=True)

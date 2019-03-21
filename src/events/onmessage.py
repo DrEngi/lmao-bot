@@ -53,7 +53,6 @@ class OnMessage:
         if message.author.bot:
             return
 
-        print("running onmessage")
         guild = message.guild
         if guild is None:
             guild = message.channel
@@ -82,10 +81,11 @@ class OnMessage:
             lbvars.set_last_use_time(time.time())
             return
 
-            # If used by bot's creator, displays last time a lmao-bot command was used
-        if perms.is_lmao_developer(ctx.message) and message.content.lower().strip() == "last command used":
-            current_time = time.time()
-            await message.channel.send(f"The last command was used {lbutil.eng_time(current_time - lbvars.get_last_use_time())} ago.")
+        # If used by bot's creator, displays last time a lmao-bot command was used
+        # DEV NOTE: This is expensive and there are better ways to handle this then running an if statement for every message.
+        # if perms.is_lmao_developer(ctx.message) and message.content.lower().strip() == "last command used":
+        #     current_time = time.time()
+        #     await message.channel.send(f"The last command was used {lbutil.eng_time(current_time - lbvars.get_last_use_time())} ago.")
 
         #COMMANDS
         if self.starts_with_prefix(message): # Bot reacts to command prefix call
