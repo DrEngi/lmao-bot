@@ -3,7 +3,8 @@ from discord.ext import commands
 import json
 import io
 import asyncio
-from utils import lbvars, usage, perms, lbutil
+from utils import lbvars, usage, lbutil
+from preconditions import perms
 
 class Filter:
 
@@ -11,13 +12,6 @@ class Filter:
 
     def __init__(self, bot):
         self.bot = bot
-
-    #TODO: This should be a check
-    async def can_edit_filters(self, ctx):
-        can_edit = perms.is_lmao_admin(ctx.message) or perms.get_perms(ctx.message).manage_messages
-        if not can_edit:
-            await ctx.send(f"{ctx.author.mention} You do not have the permission to edit custom filters. Ask a guild administrator, lmao administrator, or user with the `Manage Messages` permission to do so.")
-        return can_edit
 
     @commands.group(invoke_without_command=True, name="filter", aliases=["filters", "censor", "censors"])
     async def cmd_filter(self, ctx):
@@ -64,7 +58,7 @@ class Filter:
         return ctx.command.name
 
     @cmd_filter.command(name="add")
-    @commands.check(can_edit_filters)
+    @perms.canEditFilters()
     async def cmd_filter_add(self, ctx, *, arg=""):
         #TODO: Check if filter already exists
         def check(message):
@@ -105,8 +99,16 @@ class Filter:
         usage.update(ctx)
         return ctx.command.name
 
+    @cmd_filter_add.error
+    async def cmd_filter_add_error(self, ctx, error):
+        if isinstance(error, perms.NoPermissionResponse):
+            e = discord.Embed(title="Command Error", description="You do not have permission to use this command")
+            await ctx.send(embed=e)
+        else:
+            print("Unhandled error:" + str(error))
+
     @cmd_filter.command(name="edit", aliases=["change", "update"])
-    @commands.check(can_edit_filters)
+    @perms.canEditFilters()
     async def cmd_filter_edit(self, ctx, *, arg=""):
         def check(message):
             return message.author == ctx.author and message.channel == ctx.channel
@@ -148,8 +150,16 @@ class Filter:
         usage.update(ctx)
         return ctx.command.name
 
+    @cmd_filter_edit.error
+    async def filter_edit_error(self, ctx, error):
+        if isinstance(error, perms.NoPermissionResponse):
+            e = discord.Embed(title="Command Error", description="You do not have permission to use this command")
+            await ctx.send(embed=e)
+        else:
+            print("Unhandled error:" + str(error))
+
     @cmd_filter.command(name="options", aliases=["option", "flag", "flags", "config", "configure", "settings"])
-    @commands.check(can_edit_filters)
+    @perms.canEditFilters()
     async def cmd_filter_options(self, ctx, *, arg=""):
         def check(message):
             return message.author == ctx.author and message.channel == ctx.channel
@@ -206,8 +216,16 @@ class Filter:
         usage.update(ctx)
         return ctx.command.name
 
+    @cmd_filter_options.error
+    async def filter_options_error(self, ctx, error):
+        if isinstance(error, perms.NoPermissionResponse):
+            e = discord.Embed(title="Command Error", description="You do not have permission to use this command")
+            await ctx.send(embed=e)
+        else:
+            print("Unhandled error:" + str(error))
+
     @cmd_filter.command(name="remove", aliases=["rm", "delete", "del"])
-    @commands.check(can_edit_filters)
+    @perms.canEditFilters()
     async def cmd_filter_remove(self, ctx, *, arg=""):
         def check(message):
             return message.author == ctx.author and message.channel == ctx.channel
@@ -236,6 +254,14 @@ class Filter:
         await ctx.send(embed=e)
         usage.update(ctx)
         return ctx.command.name
+
+    @cmd_filter_remove.error
+    async def filter_remove_error(self, ctx, error):
+        if isinstance(error, perms.NoPermissionResponse):
+            e = discord.Embed(title="Command Error", description="You do not have permission to use this command")
+            await ctx.send(embed=e)
+        else:
+            print("Unhandled error:" + str(error))
 
 def setup(bot):
     bot.add_cog(Filter(bot))

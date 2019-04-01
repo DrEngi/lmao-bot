@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils import lbvars
+from utils import lbvars, perms as permsutil
 from deprecated.sphinx import versionadded
 
 class NoPermissionResponse(commands.CheckFailure):
@@ -36,4 +36,12 @@ def isLmaoAdmin():
             return True
         else:
             raise NoPermissionResponse("You must be a lmao admin to use this command")
+    return commands.check(predicate)
+
+def canEditFilters():
+    def predicate(ctx):
+        if (str(ctx.message.author.id) in lbvars.get_lmao_admin_list(ctx.message.guild.id)) or (permsutil.get_perms(ctx.message).manage_messages):
+            return True
+        else:
+            raise NoPermissionResponse("You must have the `manage messages` permission or be a lmao admin to use this command")
     return commands.check(predicate)
