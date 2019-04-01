@@ -156,6 +156,11 @@ class Music:
         """ Shows the player's queue. """
         player = self.bot.lavalink.players.get(ctx.guild.id)
 
+        if player is None:
+            embed = discord.Embed(color=discord.Color.blurple(), title="Nothing in queue", description="Want to add something? Use `lmao play <song name>`.")
+            embed.set_footer(text="If you're looking to see what's currently playing, use `lmao np`")
+            return await ctx.send(embed=embed)
+            
         if not player.queue:
             embed = discord.Embed(color=discord.Color.blurple(), title="Nothing in queue", description="Want to add something? Use `lmao play <song name>`.")
             embed.set_footer(text="If you're looking to see what's currently playing, use `lmao np`")

@@ -20,7 +20,7 @@ class OnGuildRemove:
         payload = {"server_count"  : len(self.bot.guilds), "shard_count": len(self.bot.shards)}
         async with aiohttp.ClientSession(connector=dbl_connector) as aioclient:
             async with aioclient.post(lbvars.dbl_url, data=payload, headers=lbvars.dbl_headers):
-                dbl_connector.close()
+                await dbl_connector.close()
                 await aioclient.close()
 
 def setup(bot):
