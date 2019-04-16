@@ -5,7 +5,7 @@ import json
 import io
 from utils import lbvars, usage
 
-class Peach:
+class Peach(commands.Cog):
 
     slots = ("bot")
 

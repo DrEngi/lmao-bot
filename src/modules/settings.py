@@ -5,7 +5,7 @@ import json
 import asyncio
 from utils import lbvars, perms, usage
 
-class Settings:
+class Settings(commands.Cog):
 
     slots = ("bot")
 

@@ -4,12 +4,14 @@ import asyncio
 
 from modules import fun
 from utils import lbvars
-class OnMemberJoin:
+
+class OnMemberJoin(commands.Cog):
     slots = ("bot")
 
     def __init__(self, bot):
         self.bot = bot
     
+    @commands.Cog.listener()
     async def on_member_join(self, member):
         """Runs welcome message whenever a member joins"""
         channel_id = lbvars.welcome.get(member.guild.id, 0)

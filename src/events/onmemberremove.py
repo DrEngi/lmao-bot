@@ -4,12 +4,13 @@ import asyncio
 
 from utils import lbvars
 
-class OnMemberRemove:
+class OnMemberRemove(commands.Cog):
     slots = ("bot")
 
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_member_remove(self, member):
         """Bids people farewell in the lmao-bot support server"""
         

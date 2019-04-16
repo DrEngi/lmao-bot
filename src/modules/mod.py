@@ -5,7 +5,7 @@ import asyncio
 import math
 from datetime import datetime
 
-class Mod:
+class Mod(commands.Cog):
 
     slots = ("bot")
 

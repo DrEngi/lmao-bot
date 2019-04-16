@@ -34,7 +34,7 @@ class Category:
         self.name = name
         self.icon = icon
 
-class NSFW:
+class NSFW(commands.Cog):
 
     slots = ("bot", "reddit_posts", "categories")
 

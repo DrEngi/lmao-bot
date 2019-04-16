@@ -9,7 +9,7 @@ import io
 
 from utils import dbl as dblutils
 
-class DBL:
+class DBL(commands.Cog):
     """Handles interactions with the discordbots.org API"""
 
     def __init__(self, bot):

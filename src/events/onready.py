@@ -11,7 +11,7 @@ from utils import lbvars, dbl
 from modules import dblpy
 import json, io
 
-class OnReady:
+class OnReady(commands.Cog):
     slots = ("bot")
 
     def __init__(self, bot):
@@ -57,6 +57,7 @@ class OnReady:
         for key in keys_to_delete:
             del lbvars.dc_time[key]
     
+    @commands.Cog.listener()
     async def on_ready(self):
         """Prints ready message in terminal""" 
         lbvars.reset_guild_count()

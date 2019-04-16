@@ -25,7 +25,7 @@ suits = [":clubs:",
          ":hearts:",
          ":spades:"]
 
-class Prob:
+class Prob(commands.Cog):
 
     slots = ('bot', 'magic_number', 'guess_count')
 

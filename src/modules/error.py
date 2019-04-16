@@ -4,7 +4,7 @@ import sys
 import traceback
 import websockets
 
-class Error:
+class Error(commands.Cog):
 
     slots = ("bot")
 

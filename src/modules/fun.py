@@ -189,7 +189,7 @@ async def beautiful_welcome(member, channel, mention=True):
     await channel.send(f"Welcome to {member.guild.name}, {user}!", file=discord.File(img_file))
     os.remove(img_file)
 
-class Fun:
+class Fun(commands.Cog):
 
     __slots__ = ('bot')
 

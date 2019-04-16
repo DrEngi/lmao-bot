@@ -10,7 +10,7 @@ from modules import music
 import time
 import pandas as pd
 
-class Dev:
+class Dev(commands.Cog):
     """Developer Commands"""
     __slots__ = ('bot')
 

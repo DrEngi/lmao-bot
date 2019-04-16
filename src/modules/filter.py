@@ -6,7 +6,7 @@ import asyncio
 from utils import lbvars, usage, lbutil
 from preconditions import perms
 
-class Filter:
+class Filter(commands.Cog):
 
     slots = ("bot")
 
