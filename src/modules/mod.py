@@ -88,7 +88,10 @@ class Mod(commands.Cog):
                     await ctx.send("You cannot delete more than 100 messages.")
                 elif int(arg) > 0:
                     deleted = await ctx.channel.purge(limit=int(arg) + 1)
-                    deleted_message = await ctx.send(f"**Successfully deleted {len(deleted) - 1} message(s).**", delete_after=3)
+                    try:
+                        await ctx.send(f"**Successfully deleted {len(deleted) - 1} message(s).**", delete_after=3)
+                    except:
+                        lbvars.LOGGER.info("Exception when purging message")
                 elif int(arg) == 0:
                     await ctx.send(f"{ctx.author.mention} I'm always deleting 0 messages. You don't need to call a command for that.")
                 else:
