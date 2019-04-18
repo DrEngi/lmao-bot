@@ -196,6 +196,20 @@ class Music(commands.Cog):
 
         await ctx.send(f'Removed **{removed.title}** from the queue.')
 
+    @cmd_queue.command(name="clear")
+    async def cmd_queue_add(self, ctx):
+        """ Clears the queue of all songs. """
+        player = self.bot.lavalink.players.get(ctx.guild.id)
+
+        if player is None:
+            await self.connect_to(ctx.guild.id, None)
+        else:
+            if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel.id != int(player.channel_id)):
+                return await ctx.send('You\'re not in my voicechannel!')
+            if player.is_playing:
+                player.queue.clear()
+            await ctx.send('Queue Cleared')
+
     @commands.command(name="pause", aliases=['resume'])
     async def cmd_pause(self, ctx):
         """ Pauses/Resumes the current track. """
