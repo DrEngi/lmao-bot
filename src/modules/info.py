@@ -5,7 +5,7 @@ import time
 import io
 import asyncio
 
-class Info:
+class Info(commands.Cog):
 
     slots = ("bot")
 

@@ -5,7 +5,7 @@ import asyncio
 import time, random
 from utils import lbvars, lbutil, perms
 
-class OnMessage:
+class OnMessage(commands.Cog):
     slots = ("bot")
 
     def __init__(self, bot):
@@ -44,6 +44,7 @@ class OnMessage:
                 commands.append(alias)
         return commands
     
+    @commands.Cog.listener()
     async def on_message(self, message):  # Event triggers when message is sent
         """Runs whenever a message is sent"""
         if not lbvars.bot_is_ready:

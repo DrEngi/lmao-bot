@@ -14,7 +14,7 @@ from preconditions import voice
 time_rx = re.compile('[0-9]+')
 url_rx = re.compile('https?:\\/\\/(?:www\\.)?.+')
 
-class Music:
+class Music(commands.Cog):
     slots = ("bot")
     
     def __init__(self, bot):
@@ -195,6 +195,20 @@ class Music:
         removed = player.queue.pop(index)
 
         await ctx.send(f'Removed **{removed.title}** from the queue.')
+
+    @cmd_queue.command(name="clear")
+    async def cmd_queue_add(self, ctx):
+        """ Clears the queue of all songs. """
+        player = self.bot.lavalink.players.get(ctx.guild.id)
+
+        if player is None:
+            await self.connect_to(ctx.guild.id, None)
+        else:
+            if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel.id != int(player.channel_id)):
+                return await ctx.send('You\'re not in my voicechannel!')
+            if player.is_playing:
+                player.queue.clear()
+            await ctx.send('Queue Cleared')
 
     @commands.command(name="pause", aliases=['resume'])
     async def cmd_pause(self, ctx):

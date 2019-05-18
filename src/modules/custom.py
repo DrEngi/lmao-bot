@@ -3,7 +3,7 @@ from discord.ext import commands
 from utils import lbvars, usage, perms
 import asyncio
 
-class Custom:
+class Custom(commands.Cog):
 
     slots = ("bot")
 

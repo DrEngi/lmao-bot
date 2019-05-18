@@ -7,12 +7,13 @@ from datetime import datetime, timedelta
 
 from utils import lbvars
 
-class OnVoiceStateUpdate:
+class OnVoiceStateUpdate(commands.Cog):
     slots = ("bot")
 
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         if member.guild.voice_client is None or not member.guild.voice_client.is_connected():
             return

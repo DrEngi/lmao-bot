@@ -169,7 +169,7 @@ async def seen_from_above(mentioned):
     canvas.paste(seen_from_above, (0,0), seen_from_above)
 
     txt = Image.new('RGBA', canvas.size, (255,255,255,0))
-    fnt = ImageFont.truetype('fonts/arial.ttf', 32)
+    fnt = ImageFont.truetype('../fonts/arial.ttf', 32)
     fill = (0,0,0,255)
     d = ImageDraw.Draw(txt)
 
@@ -189,7 +189,7 @@ async def beautiful_welcome(member, channel, mention=True):
     await channel.send(f"Welcome to {member.guild.name}, {user}!", file=discord.File(img_file))
     os.remove(img_file)
 
-class Fun:
+class Fun(commands.Cog):
 
     __slots__ = ('bot')
 

@@ -9,7 +9,7 @@ from preconditions import voice
 time_rx = re.compile('[0-9]+')
 url_rx = re.compile('https?:\\/\\/(?:www\\.)?.+')
 
-class Playlists:
+class Playlists(commands.Cog):
     slots = ("bot")
 
     def __init__(self, bot):

@@ -6,12 +6,13 @@ import socket
 
 from utils import lbvars
 
-class OnGuildRemove:
+class OnGuildRemove(commands.Cog):
     slots = ("bot")
 
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_guild_remove(self,guild):
         """Runs whenver lmao-bot is removed from the server"""
         guild_count = lbvars.decrement_guild_count()

@@ -6,12 +6,13 @@ import socket
 
 from utils import lbvars
 
-class OnGuildJoin:
+class OnGuildJoin(commands.Cog):
     slots = ("bot")
 
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
     async def on_guild_join(self, guild):
         """Runs whenever lmao-bot joins a new server"""
         # lbvars.import_settings()d
