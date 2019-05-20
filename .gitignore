@@ -351,3 +351,4 @@ MigrationBackup/
 # End of https://www.gitignore.io/api/csharp
 
 config.json
+lmao-bot/config.json
