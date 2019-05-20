@@ -5,7 +5,7 @@ using System.Text;
 
 namespace lmaocore.Models.ServerPlaylists
 {
-    class Server
+    public class Server
     {
         public ObjectId _id { get; set; }
         public Int64 ServerID { get; set; }
@@ -13,14 +13,14 @@ namespace lmaocore.Models.ServerPlaylists
 
     }
 
-    class Playlist
+    public class Playlist
     {
         public string PlaylistName { get; set; }
         public DateTime LastModified { get; set; }
         public List<Video> Videos { get; set; }
     }
 
-    class Video
+    public class Video
     {
         public string WebpageURL { get; set; }
         public string Requester { get; set; }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace lmaocore.Models.UserSettings
 {
-    class UserSettings
+    public class UserSettings
     {
         public ObjectId _id { get; set; }
         public Int64 UserID { get; set; }
@@ -13,12 +13,12 @@ namespace lmaocore.Models.UserSettings
         public List<Reminder> Reminders { get; set; }
     }
 
-    class Settings
+    public class Settings
     {
         public int LmaoCount { get; set; }
     }
 
-    class Reminder
+    public class Reminder
     {
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }

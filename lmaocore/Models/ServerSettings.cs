@@ -7,7 +7,7 @@ namespace lmaocore.Models.ServerSettings
 {
     //ServerSettings Object for Mongo
     //Also contains lmao admins
-    class Server
+    public class Server
     {
         public ObjectId _id { get; set; }
         public Int64 ServerID { get; set; }
@@ -17,7 +17,7 @@ namespace lmaocore.Models.ServerSettings
         public Dictionary<string, CustomCommand> CustomCommands { get; set; }
     }
 
-    class Settings
+    public class Settings
     {
         public string CommandPrefix { get; set; }
         public int ReplaceAssChance { get; set; }
@@ -26,14 +26,14 @@ namespace lmaocore.Models.ServerSettings
         public DateTime LastModified { get; set; }
     }
 
-    class Filter
+    public class Filter
     {
         public string Activator { get; set; }
         public string Response { get; set; }
         public string[] Flags { get; set; }
     }
 
-    class CustomCommand
+    public class CustomCommand
     {
         public string Activator { get; set; }
         public string Response { get; set; }

@@ -80,14 +80,29 @@ namespace lmao_bot.Services
             if (message.Source != MessageSource.User) return;
 
             int argPos = 0;
-            //TODO: Catch lmfao and custom prefixes for server
-            if ((message.HasMentionPrefix(Discord.CurrentUser, ref argPos) || message.HasStringPrefix("lmao", ref argPos)) && !message.HasStringPrefix("replaceass", ref argPos))
+            string prefix = null;
+
+            if (rawMessage.Channel is IGuildChannel)
+            {
+                //Message being sent in a guild
+                IGuildChannel channel = (IGuildChannel)rawMessage.Channel;
+                prefix = await Database.GetPrefix((long)channel.GuildId);
+            }
+            else if (rawMessage.Channel is IDMChannel)
+            {
+                //Message being sent in a DM
+                prefix = "lmao";
+            }
+            else Log.LogString("Unknown Channel Type");
+
+
+            if ((message.HasMentionPrefix(Discord.CurrentUser, ref argPos) || message.HasStringPrefix(prefix, ref argPos)) && !message.HasStringPrefix("replaceass", ref argPos))
             {
                 //Message is a command
                 var context = new SocketCommandContext(Discord, message);
-                var result = await Commands.ExecuteAsync(context, argPos, Provider);
+                await Commands.ExecuteAsync(context, argPos, Provider);
             }
-            else if (message.Content.Contains("lmao") || message.Content.Contains("lmfao"))
+            else if (message.Content.ToLower().Contains("lmao") || message.Content.ToLower().Contains("lmfao"))
             {
                 //Message is not a command but contains lmao so we're gonna replace some asses
                 var context = new SocketCommandContext(Discord, message);
