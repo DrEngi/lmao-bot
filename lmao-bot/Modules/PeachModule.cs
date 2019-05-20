@@ -1,5 +1,4 @@
 ﻿using Discord.Commands;
-using lmao_bot.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;

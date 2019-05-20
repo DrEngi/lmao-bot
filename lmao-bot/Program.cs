@@ -39,6 +39,12 @@ namespace lmao_bot
 
         private IServiceProvider ConfigureServices()
         {
+            /**
+             * This looks complicated but I promise it's not. We don't want to create new instances
+             * of these classes every time we run a command, so we call them Singletons (that way, they're
+             * only created once when they're needed and then maintained throughout the lifetime of the
+             * application)
+             **/        
             return new ServiceCollection()
                 .AddSingleton(Client)                       //base discord services
                 .AddSingleton<CommandService>()

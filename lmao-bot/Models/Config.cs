@@ -4,7 +4,7 @@ using System.Text;
 
 namespace lmao_bot.Models
 {
-    class Config
+    public class Config
     {
         public string Token { get; set; }
         public string Dbl { get; set; }
@@ -12,7 +12,7 @@ namespace lmao_bot.Models
         public LavalinkConfig Lavalink { get; set; }
     }
 
-    class MongoConfig
+    public class MongoConfig
     {
         public string Hostname { get; set; }
         public int Port { get; set; }
@@ -21,7 +21,7 @@ namespace lmao_bot.Models
         public string Database { get; set; }
     }
 
-    class LavalinkConfig
+    public class LavalinkConfig
     {
         public string Hostname { get; set; }
         public int Port { get; set; }

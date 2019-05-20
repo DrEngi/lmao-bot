@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using lmao_bot.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
