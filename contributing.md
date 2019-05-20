@@ -50,6 +50,7 @@ To test the bot, you'll need to create a config.json and place it within the roo
     "Hostname": "127.0.0.1",
     "Port": 2333,
     "Region": "us",
+    "Password": "exampleverylongandverysecurelavalinkpasshere",
     "Name": "default-node"
   }
 }
