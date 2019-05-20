@@ -11,7 +11,6 @@ namespace lmao_bot.Modules
     {
         [Command("replaceass")]
         [Summary("Replaces the ass you just lost")]
-        [HiddenCommand]
         public async Task ReplaceAss()
         {
             await ReplyAsync(Context.User.Mention + " You appear to have misplaced your ass while laughing. Here is a replacement: :peach:");

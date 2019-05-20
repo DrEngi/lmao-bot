@@ -32,7 +32,7 @@ namespace lmao_bot.Services
         {
             if (!string.IsNullOrEmpty(result?.ErrorReason))
             {
-                if (result?.Error == CommandError.UnknownCommand && context.Message.Content.Contains("lmao"))
+                if (result?.Error == CommandError.UnknownCommand && (context.Message.Content.Contains("lmao") || context.Message.Content.Contains("lmfao")))
                 {
                     await Commands.ExecuteAsync(context, "replaceass", Provider);
                     return;
@@ -81,7 +81,7 @@ namespace lmao_bot.Services
                 var context = new SocketCommandContext(Discord, message);
                 var result = await Commands.ExecuteAsync(context, argPos, Provider);
             }
-            else if (message.Content.Contains("lmao"))
+            else if (message.Content.Contains("lmao") || message.Content.Contains("lmfao"))
             {
                 //Message is not a command but contains lmao so we're gonna replace some asses
                 var context = new SocketCommandContext(Discord, message);

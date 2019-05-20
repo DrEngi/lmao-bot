@@ -31,7 +31,7 @@ namespace lmao_bot.Services
 
         public void LogString(string message)
         {
-            Console.WriteLine("INFO " + message);
+            Console.WriteLine("Info " + message);
         }
     }
 }

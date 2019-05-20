@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using lmao_bot.Events;
+using lmao_bot.Models;
 using lmao_bot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -20,7 +21,7 @@ namespace lmao_bot
 
         public async Task MainAsync()
         {
-            Console.WriteLine("INFO Starting up lmao-bot v2");
+            Console.WriteLine("Info Starting up lmao-bot v2");
             Client = new DiscordSocketClient();
             Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
 
@@ -29,7 +30,7 @@ namespace lmao_bot
 
             new LogEvent(services.GetRequiredService<LogService>(), Client, services.GetRequiredService<CommandService>());
 
-            await Client.LoginAsync(TokenType.Bot, Config.token);
+            await Client.LoginAsync(TokenType.Bot, Config.Token);
             await Client.StartAsync();
 
             await Task.Delay(-1);
@@ -39,22 +40,13 @@ namespace lmao_bot
         private IServiceProvider ConfigureServices()
         {
             return new ServiceCollection()
-                // Base
-                .AddSingleton(Client)
+                .AddSingleton(Client)                       //base discord services
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
-                // Logging
-                .AddSingleton<LogService>()
-                // Extra
-                .AddSingleton(Config)
-                .AddSingleton<DatabaseService>()
-                // Add additional services here...
+                .AddSingleton<LogService>()                 //logging
+                .AddSingleton(Config)                       //configuration
+                .AddSingleton<DatabaseService>()            //database
                 .BuildServiceProvider();
         }
-    }
-
-    class Config
-    {
-        public string token { get; set; }
     }
 }
