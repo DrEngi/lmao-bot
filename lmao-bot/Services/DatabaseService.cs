@@ -1,4 +1,5 @@
-﻿using lmao_bot.Models;
+﻿using Discord.Commands;
+using lmao_bot.Models;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,19 @@ namespace lmao_bot.Services
             Database = Mongo.GetDatabase(config.Mongo.Database);
 
             Log.LogString("Database Service Initialized");
+        }
+
+        /// <summary>
+        /// Increments the usage count of a command by one
+        /// </summary>
+        /// <param name="command">The command to increment</param>
+        public async void UpdateUsage(CommandInfo command)
+        {
+            var collection = Database.GetCollection<lmaocore.Models.CommandUsage>("usage");
+            var filter = Builders<lmaocore.Models.CommandUsage>.Filter.Eq("Command", command.Name);
+            var update = Builders<lmaocore.Models.CommandUsage>.Update.Inc("Uses", 1);
+
+            await collection.UpdateOneAsync(filter, update);
         }
     }
 }

@@ -14,14 +14,16 @@ namespace lmao_bot.Services
         private readonly DiscordSocketClient Discord;
         private readonly CommandService Commands;
         private readonly DatabaseService Database;
+        private readonly LogService Log;
         private IServiceProvider Provider;
 
-        public CommandHandlingService(IServiceProvider provider, DiscordSocketClient client, CommandService commands, DatabaseService database)
+        public CommandHandlingService(IServiceProvider provider, DiscordSocketClient client, CommandService commands, DatabaseService database, LogService log)
         {
             Discord = client;
             Commands = commands;
             Provider = provider;
             Database = database;
+            Log = log;
 
             Discord.MessageReceived += Discord_MessageReceived;
             Commands.CommandExecuted += Commands_CommandExecuted;
@@ -48,6 +50,11 @@ namespace lmao_bot.Services
                     }
                 }.Build();
                 await context.Channel.SendMessageAsync(embed: embed);
+            }
+            else if (result.IsSuccess)
+            {
+                if (command.IsSpecified) Database.UpdateUsage(command.Value);
+                else Log.LogString("Command result was success but CommandInfo object not included?");
             }
 
             // ...or even log the result (the method used should fit into

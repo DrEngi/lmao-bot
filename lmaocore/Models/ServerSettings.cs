@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LmaoDataConverter.NewModels.ServerSettings
+namespace lmaocore.Models.ServerSettings
 {
     //ServerSettings Object for Mongo
     //Also contains lmao admins

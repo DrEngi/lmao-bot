@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LmaoDataConverter.NewModels
+namespace lmaocore.Models
 {
-    class CommandUsage
+    public class CommandUsage
     {
         public ObjectId _id { get; set; }
         public string Command { get; set; }

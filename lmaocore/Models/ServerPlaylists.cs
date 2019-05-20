@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LmaoDataConverter.NewModels.ServerPlaylists
+namespace lmaocore.Models.ServerPlaylists
 {
     class Server
     {

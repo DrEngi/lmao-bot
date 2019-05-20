@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LmaoDataConverter.NewModels.UserSettings
+namespace lmaocore.Models.UserSettings
 {
     class UserSettings
     {
