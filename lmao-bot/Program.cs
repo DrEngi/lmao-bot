@@ -52,6 +52,7 @@ namespace lmao_bot
                 .AddSingleton<LogService>()                 //logging
                 .AddSingleton(Config)                       //configuration
                 .AddSingleton<DatabaseService>()            //database
+                .AddSingleton<DBLService>()                 //discord bot list
                 .BuildServiceProvider();
         }
     }
