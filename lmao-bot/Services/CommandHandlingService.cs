@@ -53,7 +53,7 @@ namespace lmao_bot.Services
             }
             else if (result.IsSuccess)
             {
-                if (command.IsSpecified) Database.UpdateUsage(command.Value);
+                if (command.IsSpecified) Database.UpdateUsageCount(command.Value);
                 else Log.LogString("Command result was success but CommandInfo object not included?");
             }
 
@@ -91,13 +91,14 @@ namespace lmao_bot.Services
             else if (rawMessage.Channel is IDMChannel)
             {
                 //Message being sent in a DM
-                prefix = "lmao";
+                prefix = "lmao ";
             }
             else Log.LogString("Unknown Channel Type");
 
 
-            if ((message.HasMentionPrefix(Discord.CurrentUser, ref argPos) || message.HasStringPrefix(prefix, ref argPos)) && !message.HasStringPrefix("replaceass", ref argPos))
+            if (message.HasMentionPrefix(Discord.CurrentUser, ref argPos) || message.HasStringPrefix(prefix + " ", ref argPos))
             {
+                if (message.HasStringPrefix("replaceass", ref argPos)) return;
                 //Message is a command
                 var context = new SocketCommandContext(Discord, message);
                 await Commands.ExecuteAsync(context, argPos, Provider);

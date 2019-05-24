@@ -84,7 +84,7 @@ namespace lmao_bot.Services
         /// Increments the usage count of a command by one
         /// </summary>
         /// <param name="command">The command to increment</param>
-        public async void UpdateUsage(CommandInfo command)
+        public async Task UpdateUsageCount(CommandInfo command)
         {
             var collection = Database.GetCollection<lmaocore.Models.CommandUsage>("usage");
             var filter = Builders<lmaocore.Models.CommandUsage>.Filter.Eq("Command", command.Name);
@@ -105,7 +105,11 @@ namespace lmao_bot.Services
             }
         }
 
-        public async Task UpdateLmao(long userID)
+        /// <summary>
+        /// Update the lmao count of the specified user
+        /// </summary>
+        /// <param name="userID">The ID of the user to update</param>
+        public async Task UpdateLmaoCount(long userID)
         {
             var collection = Database.GetCollection<lmaocore.Models.UserSettings.UserSettings>("users");
             var filter = Builders<lmaocore.Models.UserSettings.UserSettings>.Filter.Eq("UserID", userID);
@@ -129,6 +133,11 @@ namespace lmao_bot.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves the server settings for the specified ID
+        /// </summary>
+        /// <param name="serverID">The ID of the server</param>
+        /// <returns>The specified server settings</returns>
         public async Task<lmaocore.Models.ServerSettings.Server> GetServerSettings(long serverID)
         {
             var collection = Database.GetCollection<lmaocore.Models.ServerSettings.Server>("servers");
@@ -136,7 +145,7 @@ namespace lmao_bot.Services
 
             if (await collection.CountDocumentsAsync(filter) == 1)
             {
-                lmaocore.Models.ServerSettings.Server serverSettings = await collection.Find<lmaocore.Models.ServerSettings.Server>(filter).FirstAsync();
+                lmaocore.Models.ServerSettings.Server serverSettings = await collection.Find(filter).FirstAsync();
                 //Might as well update the prefix while we're at it
                 if (!prefixes[serverID].Equals(serverSettings.BotSettings.CommandPrefix)) prefixes[serverID] = serverSettings.BotSettings.CommandPrefix;
                 return serverSettings;
@@ -163,6 +172,36 @@ namespace lmao_bot.Services
                 await collection.InsertOneAsync(serverSettings);
                 Log.LogString("Tried to fetch server settings from database but it did not exist: " + serverID);
                 return serverSettings;
+            }
+        }
+
+        /// <summary>
+        /// Get the bot settings of the specified user
+        /// </summary>
+        /// <param name="userID">the ID of the user to get</param>
+        /// <returns>The UserSettings model of the user</returns>
+        public async Task<lmaocore.Models.UserSettings.UserSettings> GetUserSettings(long userID)
+        {
+            var collection = Database.GetCollection<lmaocore.Models.UserSettings.UserSettings>("users");
+            var filter = Builders<lmaocore.Models.UserSettings.UserSettings>.Filter.Eq("UserID", userID);
+
+            if (await collection.CountDocumentsAsync(filter) == 1)
+            {
+                lmaocore.Models.UserSettings.UserSettings settings = await collection.Find(filter).FirstAsync();
+                return settings;
+            }
+            else
+            {
+                //No settings saved, we'll make new one
+                return new lmaocore.Models.UserSettings.UserSettings()
+                {
+                    Reminders = null,
+                    UserID = userID,
+                    Settings = new lmaocore.Models.UserSettings.Settings()
+                    {
+                        LmaoCount = 0
+                    }
+                };
             }
         }
     }
