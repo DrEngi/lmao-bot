@@ -45,5 +45,12 @@ namespace lmao_bot.Modules
             else if (userSettings.Settings.LmaoCount == 1) await ReplyAsync(Context.User.Mention + " You have laughed your ass off " + userSettings.Settings.LmaoCount + " time");
             else await ReplyAsync(Context.User.Mention + " You have laughed your ass off " + userSettings.Settings.LmaoCount + " times");
         }
+
+        [Command("toggle")]
+        [Summary("Toggle lmao-bot reaction settings in this server")]
+        public async Task ToggleReaction()
+        {
+
+        }
     }
 }
