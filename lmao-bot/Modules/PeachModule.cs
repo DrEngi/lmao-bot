@@ -48,9 +48,11 @@ namespace lmao_bot.Modules
 
         [Command("toggle")]
         [Summary("Toggle lmao-bot reaction settings in this server")]
+        [RequireContext(ContextType.Guild)]
         public async Task ToggleReaction()
         {
-
+            lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+            
         }
     }
 }

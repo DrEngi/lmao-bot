@@ -204,5 +204,21 @@ namespace lmao_bot.Services
                 };
             }
         }
+
+        public async void ToggleAss(long serverID, bool enable)
+        {
+            var collection = Database.GetCollection<lmaocore.Models.ServerSettings.Server>("servers");
+            var filter = Builders<lmaocore.Models.ServerSettings.Server>.Filter.Eq("ServerID", serverID);
+            if (!enable)
+            {
+                var update = Builders<lmaocore.Models.ServerSettings.Server>.Update.Set("Settings.bla", 0);
+            }
+            else
+            {
+                var update = Builders<lmaocore.Models.ServerSettings.Server>.Update.Set("Settings.bla", 0);
+            }
+
+            //await collection.FindOneAndUpdateAsync()
+        }
     }
 }
