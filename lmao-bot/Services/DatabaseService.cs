@@ -224,9 +224,20 @@ namespace lmao_bot.Services
         {
             var collection = Database.GetCollection<lmaocore.Models.ServerSettings.Server>("servers");
             var filter = Builders<lmaocore.Models.ServerSettings.Server>.Filter.Eq("ServerID", serverID);
-            
+
             var update = Builders<lmaocore.Models.ServerSettings.Server>.Update
                         .Set("BotSettings.ReplaceAssChance", percent)
+                        .Set("BotSettings.LastModified", DateTime.Now);
+
+            await collection.FindOneAndUpdateAsync(filter, update);
+            return percent;
+        }
+
+        public async Task<int> SetReact(long serverID, int percent)
+        {
+            var collection = Database.GetCollection<lmaocore.Models.ServerSettings.Server>("servers");
+            var filter = Builders<lmaocore.Models.ServerSettings.Server>.Filter.Eq("ServerID", serverID);
+            var update = Builders<lmaocore.Models.ServerSettings.Server>.Update
                         .Set("BotSettings.ReactChance", percent)
                         .Set("BotSettings.LastModified", DateTime.Now);
 

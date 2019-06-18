@@ -100,5 +100,22 @@ namespace lmao_bot.Modules
                 return CustomResult.FromSuccess();
             }
         }
+
+        [Command("setreact")]
+        [Summary("Sets react chance to the specified percentage")]
+        [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server")]
+        public async Task<RuntimeResult> SetReact(int chance)
+        {
+            if (chance < 0 || chance > 100)
+            {
+                return CustomResult.FromError("The chance must be between 0 and 100");
+            }
+            else
+            {
+                await Database.SetReact((long)Context.Guild.Id, chance);
+                await ReplyAsync(Context.User.Mention + " You have set the react chance to  `" + chance + "%`.");
+                return CustomResult.FromSuccess();
+            }
+        }
     }
 }
