@@ -52,8 +52,28 @@ namespace lmao_bot.Modules
         public async Task ToggleReaction()
         {
             lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
-            int newChance = await Database.ToggleAss(serverSettings);
+            int newChance = await Database.SetAss(serverSettings, -1);
             await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `" + newChance + "%`.");
+        }
+
+        [Command("on")]
+        [Summary("Toggles lmao-bot reactions on in this server")]
+        [RequireContext(ContextType.Guild)]
+        public async Task On()
+        {
+            lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+            await Database.SetAss(serverSettings, 100);
+            await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `100%`.");
+        }
+
+        [Command("off")]
+        [Summary("Toggles lmao-bot reactions on in this server")]
+        [RequireContext(ContextType.Guild)]
+        public async Task Off()
+        {
+            lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+            await Database.SetAss(serverSettings, 0);
+            await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `0%`.");
         }
     }
 }
