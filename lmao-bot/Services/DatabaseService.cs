@@ -18,6 +18,7 @@ namespace lmao_bot.Services
         private IMongoDatabase Database;
 
         private Dictionary<long, string> prefixes;
+        //TODO: We need to cache local server settings until we know an update has occurred to it's not calling mongo every time
 
         public DatabaseService(LogService log, Config config)
         {
@@ -50,7 +51,7 @@ namespace lmao_bot.Services
 
         /// <summary>
         /// Get the prefix for the specified server from a cache if available,
-        /// otherwise Mongp.
+        /// otherwise Mongo.
         /// </summary>
         /// <param name="serverID">The ID of the server</param>
         /// <returns>The prefix for the specified server</returns>
@@ -205,20 +206,17 @@ namespace lmao_bot.Services
             }
         }
 
-        public async void ToggleAss(long serverID, bool enable)
+        public async Task<int> ToggleAss(lmaocore.Models.ServerSettings.Server settings)
         {
             var collection = Database.GetCollection<lmaocore.Models.ServerSettings.Server>("servers");
-            var filter = Builders<lmaocore.Models.ServerSettings.Server>.Filter.Eq("ServerID", serverID);
-            if (!enable)
-            {
-                var update = Builders<lmaocore.Models.ServerSettings.Server>.Update.Set("Settings.bla", 0);
-            }
-            else
-            {
-                var update = Builders<lmaocore.Models.ServerSettings.Server>.Update.Set("Settings.bla", 0);
-            }
+            var filter = Builders<lmaocore.Models.ServerSettings.Server>.Filter.Eq("ServerID", settings.ServerID);
+            var update = Builders<lmaocore.Models.ServerSettings.Server>.Update
+                        .Set("BotSettings.ReplaceAssChance", settings.BotSettings.ReplaceAssChance == 0 ? 100 : 0)
+                        .Set("BotSettings.ReactChance", settings.BotSettings.ReactChance == 0 ? 100 : 0)
+                        .Set("BotSettings.LastModified", DateTime.Now);
 
-            //await collection.FindOneAndUpdateAsync()
+            await collection.FindOneAndUpdateAsync(filter, update);
+            return settings.BotSettings.ReplaceAssChance == 0 ? 100 : 0;
         }
     }
 }

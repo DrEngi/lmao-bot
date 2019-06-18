@@ -52,7 +52,8 @@ namespace lmao_bot.Modules
         public async Task ToggleReaction()
         {
             lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
-            
+            int newChance = await Database.ToggleAss(serverSettings);
+            await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `" + newChance + "%`.");
         }
     }
 }
