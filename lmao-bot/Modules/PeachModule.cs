@@ -52,28 +52,53 @@ namespace lmao_bot.Modules
         public async Task ToggleReaction()
         {
             lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
-            int newChance = await Database.SetAss(serverSettings, -1);
+            int newChance = await Database.ToggleAss(serverSettings);
             await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `" + newChance + "%`.");
         }
 
         [Command("on")]
         [Summary("Toggles lmao-bot reactions on in this server")]
-        [RequireContext(ContextType.Guild)]
+        [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task On()
         {
-            lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
-            await Database.SetAss(serverSettings, 100);
+            await Database.SetAss((long)Context.Guild.Id, 100);
             await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `100%`.");
         }
 
         [Command("off")]
-        [Summary("Toggles lmao-bot reactions on in this server")]
-        [RequireContext(ContextType.Guild)]
+        [Summary("Toggles lmao-bot reactions off in this server")]
+        [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task Off()
         {
-            lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
-            await Database.SetAss(serverSettings, 0);
+            await Database.SetAss((long)Context.Guild.Id, 0);
             await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `0%`.");
+        }
+
+        [Command("lotto")]
+        [Summary("Sets reaction chance to 1%.")]
+        [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
+        public async Task Lotto()
+        {
+            await Database.SetAss((long)Context.Guild.Id, 1);
+            await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `1%`.");
+        }
+
+        [Command("setass")]
+        [Summary("Sets ass replacement chance to the specified percentage")]
+        [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
+        public async Task<RuntimeResult> SetAss(int chance)
+        {
+            if (chance < 0 || chance > 100) 
+            {
+                return CustomResult.FromError("The chance must be between 0 and 100");
+                
+            }
+            else
+            {
+                await Database.SetAss((long)Context.Guild.Id, chance);
+                await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `" + chance + "%`.");
+                return CustomResult.FromSuccess();
+            }
         }
     }
 }

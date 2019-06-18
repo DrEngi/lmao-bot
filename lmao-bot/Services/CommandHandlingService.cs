@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace lmao_bot.Services
 {
@@ -31,6 +32,33 @@ namespace lmao_bot.Services
 
         private async Task Commands_CommandExecuted(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
+            if (result is CustomResult)
+            {
+                if (!string.IsNullOrEmpty(result?.ErrorReason))
+                {
+                    //We called this error ourselves.
+                    var embed = new EmbedBuilder
+                    {
+                        Title = "Command Error",
+                        Color = Color.DarkBlue,
+                        Description = result.ErrorReason,
+                        Footer = new EmbedFooterBuilder
+                        {
+                            Text = "Unexpected? Visit lmao support for help"
+                        }
+                    }.Build();
+                    await context.Channel.SendMessageAsync(embed: embed);
+                }
+                else if (result.IsSuccess)
+                {
+                    if (command.IsSpecified) await Database.UpdateUsageCount(command.Value);
+                    else Log.LogString("Command result was success but CommandInfo object not included?");
+                }
+                
+                return;
+            }
+
+
             if (!string.IsNullOrEmpty(result?.ErrorReason))
             {
                 if (result?.Error == CommandError.UnknownCommand && (context.Message.Content.Contains("lmao") || context.Message.Content.Contains("lmfao")))
@@ -53,7 +81,7 @@ namespace lmao_bot.Services
             }
             else if (result.IsSuccess)
             {
-                if (command.IsSpecified) Database.UpdateUsageCount(command.Value);
+                if (command.IsSpecified) await Database.UpdateUsageCount(command.Value);
                 else Log.LogString("Command result was success but CommandInfo object not included?");
             }
 

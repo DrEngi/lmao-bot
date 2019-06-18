@@ -206,30 +206,32 @@ namespace lmao_bot.Services
             }
         }
 
-        public async Task<int> SetAss(lmaocore.Models.ServerSettings.Server settings, int percent)
+        public async Task<int> ToggleAss(lmaocore.Models.ServerSettings.Server settings)
         {
             var collection = Database.GetCollection<lmaocore.Models.ServerSettings.Server>("servers");
             var filter = Builders<lmaocore.Models.ServerSettings.Server>.Filter.Eq("ServerID", settings.ServerID);
-            if (percent == -1)
-            {
-                var update = Builders<lmaocore.Models.ServerSettings.Server>.Update
-                            .Set("BotSettings.ReplaceAssChance", settings.BotSettings.ReplaceAssChance == 0 ? 100 : 0)
-                            .Set("BotSettings.ReactChance", settings.BotSettings.ReactChance == 0 ? 100 : 0)
-                            .Set("BotSettings.LastModified", DateTime.Now);
 
-                await collection.FindOneAndUpdateAsync(filter, update);
-                return settings.BotSettings.ReplaceAssChance == 0 ? 100 : 0;
-            }
-            else
-            {
-                var update = Builders<lmaocore.Models.ServerSettings.Server>.Update
-                            .Set("BotSettings.ReplaceAssChance", percent)
-                            .Set("BotSettings.ReactChance", percent)
-                            .Set("BotSettings.LastModified", DateTime.Now);
+            var update = Builders<lmaocore.Models.ServerSettings.Server>.Update
+                        .Set("BotSettings.ReplaceAssChance", settings.BotSettings.ReplaceAssChance == 0 ? 100 : 0)
+                        .Set("BotSettings.ReactChance", settings.BotSettings.ReactChance == 0 ? 100 : 0)
+                        .Set("BotSettings.LastModified", DateTime.Now);
 
-                await collection.FindOneAndUpdateAsync(filter, update);
-                return percent;
-            }
+            await collection.FindOneAndUpdateAsync(filter, update);
+            return settings.BotSettings.ReplaceAssChance == 0 ? 100 : 0;
+        }
+
+        public async Task<int> SetAss(long serverID, int percent)
+        {
+            var collection = Database.GetCollection<lmaocore.Models.ServerSettings.Server>("servers");
+            var filter = Builders<lmaocore.Models.ServerSettings.Server>.Filter.Eq("ServerID", serverID);
+            
+            var update = Builders<lmaocore.Models.ServerSettings.Server>.Update
+                        .Set("BotSettings.ReplaceAssChance", percent)
+                        .Set("BotSettings.ReactChance", percent)
+                        .Set("BotSettings.LastModified", DateTime.Now);
+
+            await collection.FindOneAndUpdateAsync(filter, update);
+            return percent;
         }
     }
 }
