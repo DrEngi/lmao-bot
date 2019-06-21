@@ -2,8 +2,6 @@
 using Discord.Commands;
 using lmao_bot.Services;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace lmao_bot.Modules
@@ -48,6 +46,8 @@ namespace lmao_bot.Modules
 
         [Command("toggle")]
         [Summary("Toggle lmao-bot reaction settings in this server")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.ManageMessages, Group="Group")]
         [RequireContext(ContextType.Guild)]
         public async Task ToggleReaction()
         {
@@ -58,6 +58,8 @@ namespace lmao_bot.Modules
 
         [Command("on")]
         [Summary("Toggles lmao-bot reactions on in this server")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.ManageMessages, Group="Group")]
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task On()
         {
@@ -67,6 +69,8 @@ namespace lmao_bot.Modules
 
         [Command("off")]
         [Summary("Toggles lmao-bot reactions off in this server")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.ManageMessages, Group="Group")]
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task Off()
         {
@@ -76,6 +80,8 @@ namespace lmao_bot.Modules
 
         [Command("lotto")]
         [Summary("Sets reaction chance to 1%.")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.ManageMessages, Group="Group")]
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task Lotto()
         {
@@ -85,6 +91,8 @@ namespace lmao_bot.Modules
 
         [Command("setass")]
         [Summary("Sets ass replacement chance to the specified percentage")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.ManageMessages, Group="Group")]
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task<RuntimeResult> SetAss(int chance)
         {
@@ -103,6 +111,8 @@ namespace lmao_bot.Modules
 
         [Command("setreact")]
         [Summary("Sets react chance to the specified percentage")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.ManageMessages, Group="Group")]
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server")]
         public async Task<RuntimeResult> SetReact(int chance)
         {

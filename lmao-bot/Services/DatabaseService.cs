@@ -244,5 +244,10 @@ namespace lmao_bot.Services
             await collection.FindOneAndUpdateAsync(filter, update);
             return percent;
         }
+
+        public async Task SetPrefix(long serverID, string prefix)
+        {
+            
+        }
     }
 }
