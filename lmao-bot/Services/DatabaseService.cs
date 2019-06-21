@@ -247,7 +247,14 @@ namespace lmao_bot.Services
 
         public async Task SetPrefix(long serverID, string prefix)
         {
-            
+            var collection = Database.GetCollection<lmaocore.Models.ServerSettings.Server>("servers");
+            var filter = Builders<lmaocore.Models.ServerSettings.Server>.Filter.Eq("ServerID", serverID);
+            var update = Builders<lmaocore.Models.ServerSettings.Server>.Update
+                        .Set("BotSettings.ReactChance", percent)
+                        .Set("BotSettings.LastModified", DateTime.Now);
+
+            await collection.FindOneAndUpdateAsync(filter, update);
+            return percent;
         }
     }
 }
