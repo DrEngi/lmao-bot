@@ -1,26 +1,25 @@
 ﻿using Discord.Commands;
-using lmao_bot.Models;
+using lmaocore;
 using MongoDB.Bson;
-using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Flurl;
 
 namespace lmao_bot.Services
 {
-    public class DatabaseService
+    public class APIService
     {
         private readonly LogService Log;
         private readonly Config Config;
 
-        private MongoClient Mongo;
-        private IMongoDatabase Database;
+        private string Url;
 
         private Dictionary<long, string> prefixes;
         //TODO: We need to cache local server settings until we know an update has occurred to it's not calling mongo every time
 
-        public DatabaseService(LogService log, Config config)
+        public APIService(LogService log, Config config)
         {
             Log = log;
             Config = config;

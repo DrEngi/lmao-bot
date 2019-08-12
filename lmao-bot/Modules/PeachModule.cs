@@ -8,9 +8,9 @@ namespace lmao_bot.Modules
 {
     public class PeachModule : ModuleBase
     {
-        private DatabaseService Database;
+        private APIService Database;
 
-        public PeachModule(DatabaseService database)
+        public PeachModule(APIService database)
         {
             Database = database;
         }

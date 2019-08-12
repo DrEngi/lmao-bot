@@ -49,7 +49,7 @@ namespace lmao_bot
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<LogService>()                 //logging
                 .AddSingleton(Config)                       //configuration
-                .AddSingleton<DatabaseService>()            //database
+                .AddSingleton<APIService>()            //database
                 .AddSingleton<DBLService>()                 //discord bot list
                 .BuildServiceProvider();
         }

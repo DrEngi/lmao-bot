@@ -37,18 +37,17 @@ Finally, change into the new directory created by the clone and open the lmao-bo
 
 To test the bot, you'll need to create a config.json and place it within the root directory of your build folder (usually lmao-bot/lmao-bot/bin/Debug/netcoreapp2.2 or similar.). This configuration file will contain your bot token and Mongo connection information. If you're you're using lavalink, that information will go here as well. To get a bot token, create an account on the discord developer portal and create a bot user.
 
-I'm updating the project structure to abstract away the database access from the actual bot. While this may feel like a step backwards at first, it's so that the bot can have multiple fall-backs if the database crashes, and allows me to create other projects that connect to it.
+I'm updating the project structure to abstract away the database access from the actual bot. While this may feel like a step backwards at first, it's so that the bot can have multiple fall-backs if the database crashes, and allows me to create other projects that connect to it. There are two configurations you need, one for the bot and another for the API.
 
+Bot config:
 ```json
 {
   "Token": "token",
   "Dbl": null,
-  "Mongo": {
-    "Hostname": "127.0.0.1",
-    "Port": 27017,
-    "User": "user",
-    "Password": "password",
-    "Database": "lmao"
+  "Api": {
+    "URL": "http://your.lmao.site",
+    "Port": 8080,
+    "AuthKey": "yourverysecureauthkeyforlmaohere"
   },
   "Lavalink": {
     "Hostname": "127.0.0.1",
@@ -60,7 +59,30 @@ I'm updating the project structure to abstract away the database access from the
 }
 ```
 
+API config:
+```json
+{
+  "lmaoauthkey": "yourverysecureauthkeyforlmaohere",
+  "Lavalink": {
+    "Hostname": "127.0.0.1",
+    "Port": 2333,
+    "Region": "us",
+    "Password": "exampleverylongandverysecurelavalinkpasshere",
+    "Name": "default-node"
+  },
+  "Mongo": {
+    "Hostname": "127.0.0.1",
+    "Port": 27017,
+    "User": "user",
+    "Password": "password",
+    "Database": "lmao"
+  },
+}
+```
+
 Fill in all data as you like. The DBL field is used for the token that belongs to the public version of lmao-bot, you can leave this as null and DBL won't be initialized. If you're using lavalink, specify the connection information for your Lavalink instance. If you're not using it, setting the object to null will cause music and playlists to not be initialized.
+
+### Pull Requests
 
 Once you're satisfied, [submit your pull request](https://help.github.com/articles/creating-a-pull-request/). Please be sure you create a pull request to the REWRITE branch, not to master or develop (this is for the python version right now). Direct PRs to master/develop will be denied as they skip crucial build checks and ruin my OCD.
 

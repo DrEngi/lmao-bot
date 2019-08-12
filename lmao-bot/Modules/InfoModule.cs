@@ -8,9 +8,9 @@ namespace lmao_bot.Modules
 {
     public class InfoModule : ModuleBase
     {
-        private DatabaseService Database;
+        private APIService Database;
 
-        public InfoModule(DatabaseService service)
+        public InfoModule(APIService service)
         {
             Database = service;
         }
