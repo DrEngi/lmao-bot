@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace lmao_bot.Models
+namespace lmao_bot
 {
     public class Config
     {

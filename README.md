@@ -14,7 +14,7 @@ This message, along with the automatic 🍑 reactions the bot gives, can be disa
 
 ---
 
-The bot was created in June 2018 by Firestar493#6963 with help from DrEngineer#8214. Its prefix is "lmao", but the prefix can be changed from server to server. In May & June of 2019, the bot was rewritten in C#. Contributions are encouraged.
+The bot was created in June 2018 by Firestar493#6963 with help from DrEngineer#8214. Its prefix is "lmao", but the prefix can be changed from server to server. In the summer (and fall), the bot was rewritten in C#. Contributions are encouraged.
 
 [Invite lmao-bot to your server!](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)
 

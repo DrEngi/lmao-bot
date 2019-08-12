@@ -2,7 +2,6 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using lmao_bot.Events;
-using lmao_bot.Models;
 using lmao_bot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -34,7 +33,6 @@ namespace lmao_bot
             await Client.StartAsync();
 
             await Task.Delay(-1);
-
         }
 
         private IServiceProvider ConfigureServices()
