@@ -22,7 +22,17 @@ namespace lmao_bot.Modules
         [RequireContext(ContextType.Guild)]
         public async Task Prefix()
         {
-            await ReplyAsync(Context.User.Mention + " My current prefix for " + Context.Guild.Name + " is " + await Database.GetPrefix((long)Context.Guild.Id) + ".");
+            var embed = new EmbedBuilder()
+            {
+                Title = "Prefix Settings",
+                Description = $"Current Prefix: **{await Database.GetPrefix((long)Context.Guild.Id)}**",
+                Color = Color.Orange,
+                Footer = new EmbedFooterBuilder()
+                {
+                    Text = "Include your new prefix as an argument if you want to change it"
+                }
+            }.Build();
+            await ReplyAsync(embed: embed);
         }
 
         [Command("prefix")]
@@ -34,6 +44,7 @@ namespace lmao_bot.Modules
         public async Task SetPrefix(string prefix)
         {
             ServerSettings settings = await Database.GetServerSettings((long)Context.Guild.Id);
+            string oldPrefix = settings.BotSettings.CommandPrefix;
             settings.BotSettings.CommandPrefix = prefix;
 
             await Database.SaveServerSettings(settings, new SaveServerSettingsOptions()
@@ -43,7 +54,15 @@ namespace lmao_bot.Modules
                     UpdateCommandPrefix = true,
                 }
             });
-            await ReplyAsync(Context.User.Mention + " My command prefix for " + Context.Guild.Name + " is now " + prefix + ".");
+
+            var embed = new EmbedBuilder()
+            {
+                Title = "Prefix Settings Changed",
+                Description = $"Old Prefix: {oldPrefix}\n**New Prefix: {prefix}**",
+                Color = Color.Orange,
+                Footer = new EmbedFooterBuilder()
+            }.Build();
+            await ReplyAsync(embed: embed);
         }
 
         [Command("info")]
