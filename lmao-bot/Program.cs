@@ -16,13 +16,13 @@ namespace lmao_bot
         static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
         private DiscordSocketClient Client;
-        private Config Config;
+        private BotConfig Config;
 
         public async Task MainAsync()
         {
             Console.WriteLine("Info Starting up lmao-bot v2");
             Client = new DiscordSocketClient();
-            Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
+            Config = JsonConvert.DeserializeObject<BotConfig>(File.ReadAllText("config.json"));
 
             var services = ConfigureServices();
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync(services);
@@ -49,7 +49,7 @@ namespace lmao_bot
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<LogService>()                 //logging
                 .AddSingleton(Config)                       //configuration
-                .AddSingleton<APIService>()            //database
+                .AddSingleton<DatabaseService>()            //database
                 .AddSingleton<DBLService>()                 //discord bot list
                 .BuildServiceProvider();
         }

@@ -49,6 +49,13 @@ Bot config:
     "Port": 8080,
     "AuthKey": "yourverysecureauthkeyforlmaohere"
   },
+  "Mongo": {
+    "Hostname": "127.0.0.1",
+    "Port": 27017,
+    "User": "user",
+    "Password": "password",
+    "Database": "lmao"
+  },
   "Lavalink": {
     "Hostname": "127.0.0.1",
     "Port": 2333,

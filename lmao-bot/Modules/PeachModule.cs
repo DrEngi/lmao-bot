@@ -8,9 +8,9 @@ namespace lmao_bot.Modules
 {
     public class PeachModule : ModuleBase
     {
-        private APIService Database;
+        private DatabaseService Database;
 
-        public PeachModule(APIService database)
+        public PeachModule(DatabaseService database)
         {
             Database = database;
         }
@@ -27,7 +27,7 @@ namespace lmao_bot.Modules
             }
             else
             {
-                lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+                lmaocore.Models.ServerSettings.ServerSettings serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
                 if (new Random().Next(1, 100) <= serverSettings.BotSettings.ReplaceAssChance) await ReplyAsync(Context.User.Mention + " You appear to have misplaced your ass while laughing. Here is a replacement: :peach:");
                 if (new Random().Next(1, 100) <= serverSettings.BotSettings.ReactChance) await Context.Message.AddReactionAsync(new Emoji("\U0001F351"));
             }
@@ -51,30 +51,66 @@ namespace lmao_bot.Modules
         [RequireContext(ContextType.Guild)]
         public async Task ToggleReaction()
         {
-            lmaocore.Models.ServerSettings.Server serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
-            int newChance = await Database.ToggleAss(serverSettings);
-            await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `" + newChance + "%`.");
+            lmaocore.Models.ServerSettings.ServerSettings serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+
+            if (serverSettings.BotSettings.ReactChance != 0) serverSettings.BotSettings.ReactChance = 0;
+            else serverSettings.BotSettings.ReactChance = 100;
+
+            if (serverSettings.BotSettings.ReplaceAssChance != 0) serverSettings.BotSettings.ReplaceAssChance = 0;
+            else serverSettings.BotSettings.ReplaceAssChance = 100;
+
+            await Database.SaveServerSettings(serverSettings, new SaveServerSettingsOptions()
+            {
+                BotSettingsOptions = new SaveBotSettingsOptions()
+                {
+                    UpdateReactChance = true,
+                    UpdateReplaceAssChance = true
+                }
+            });
+            await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `" + serverSettings.BotSettings.ReplaceAssChance + "%`.");
         }
 
         [Command("on")]
-        [Summary("Toggles lmao-bot reactions on in this server")]
+        [Summary("Turns lmao-bot reactions on in this server")]
         [RequireBotDeveloper(Group = "Group")]
         [RequireUserPermission(GuildPermission.ManageMessages, Group="Group")]
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task On()
         {
-            await Database.SetAss((long)Context.Guild.Id, 100);
+            lmaocore.Models.ServerSettings.ServerSettings serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+            serverSettings.BotSettings.ReplaceAssChance = 100;
+            serverSettings.BotSettings.ReactChance = 100;
+
+            await Database.SaveServerSettings(serverSettings, new SaveServerSettingsOptions()
+            {
+                BotSettingsOptions = new SaveBotSettingsOptions()
+                {
+                    UpdateReactChance = true,
+                    UpdateReplaceAssChance = true
+                }
+            });
             await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `100%`.");
         }
 
         [Command("off")]
-        [Summary("Toggles lmao-bot reactions off in this server")]
+        [Summary("Turns lmao-bot reactions off in this server.")]
         [RequireBotDeveloper(Group = "Group")]
         [RequireUserPermission(GuildPermission.ManageMessages, Group="Group")]
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task Off()
         {
-            await Database.SetAss((long)Context.Guild.Id, 0);
+            lmaocore.Models.ServerSettings.ServerSettings serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+            serverSettings.BotSettings.ReplaceAssChance = 0;
+            serverSettings.BotSettings.ReactChance = 0;
+
+            await Database.SaveServerSettings(serverSettings, new SaveServerSettingsOptions()
+            {
+                BotSettingsOptions = new SaveBotSettingsOptions()
+                {
+                    UpdateReactChance = true,
+                    UpdateReplaceAssChance = true
+                }
+            });
             await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `0%`.");
         }
 
@@ -85,7 +121,18 @@ namespace lmao_bot.Modules
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         public async Task Lotto()
         {
-            await Database.SetAss((long)Context.Guild.Id, 1);
+            lmaocore.Models.ServerSettings.ServerSettings serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+            serverSettings.BotSettings.ReplaceAssChance = 1;
+            serverSettings.BotSettings.ReactChance = 1;
+
+            await Database.SaveServerSettings(serverSettings, new SaveServerSettingsOptions()
+            {
+                BotSettingsOptions = new SaveBotSettingsOptions()
+                {
+                    UpdateReactChance = true,
+                    UpdateReplaceAssChance = true
+                }
+            });
             await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `1%`.");
         }
 
@@ -99,11 +146,19 @@ namespace lmao_bot.Modules
             if (chance < 0 || chance > 100) 
             {
                 return CustomResult.FromError("The chance must be between 0 and 100");
-                
             }
             else
             {
-                await Database.SetAss((long)Context.Guild.Id, chance);
+                lmaocore.Models.ServerSettings.ServerSettings serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+                serverSettings.BotSettings.ReplaceAssChance = 1;
+
+                await Database.SaveServerSettings(serverSettings, new SaveServerSettingsOptions()
+                {
+                    BotSettingsOptions = new SaveBotSettingsOptions()
+                    {
+                        UpdateReplaceAssChance = true
+                    }
+                });
                 await ReplyAsync(Context.User.Mention + " You have set the ass replacement chance to `" + chance + "%`.");
                 return CustomResult.FromSuccess();
             }
@@ -122,7 +177,16 @@ namespace lmao_bot.Modules
             }
             else
             {
-                await Database.SetReact((long)Context.Guild.Id, chance);
+                lmaocore.Models.ServerSettings.ServerSettings serverSettings = await Database.GetServerSettings((long)Context.Guild.Id);
+                serverSettings.BotSettings.ReactChance = 1;
+
+                await Database.SaveServerSettings(serverSettings, new SaveServerSettingsOptions()
+                {
+                    BotSettingsOptions = new SaveBotSettingsOptions()
+                    {
+                        UpdateReactChance = true
+                    }
+                });
                 await ReplyAsync(Context.User.Mention + " You have set the react chance to  `" + chance + "%`.");
                 return CustomResult.FromSuccess();
             }

@@ -1,6 +1,5 @@
 ﻿using Discord.WebSocket;
 using DiscordBotsList.Api;
-using lmao_bot.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,10 +13,10 @@ namespace lmao_bot.Services
         private AuthDiscordBotListApi AuthAPI;
 
         private LogService Log;
-        private Config Config;
+        private BotConfig Config;
         private DiscordSocketClient Client;
 
-        public DBLService(LogService log, Config config, DiscordSocketClient client)
+        public DBLService(LogService log, BotConfig config, DiscordSocketClient client)
         {
             Log = log;
             Config = config;

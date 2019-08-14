@@ -14,11 +14,11 @@ namespace lmao_bot.Services
     {
         private readonly DiscordSocketClient Discord;
         private readonly CommandService Commands;
-        private readonly APIService Database;
+        private readonly DatabaseService Database;
         private readonly LogService Log;
         private IServiceProvider Provider;
 
-        public CommandHandlingService(IServiceProvider provider, DiscordSocketClient client, CommandService commands, APIService database, LogService log)
+        public CommandHandlingService(IServiceProvider provider, DiscordSocketClient client, CommandService commands, DatabaseService database, LogService log)
         {
             Discord = client;
             Commands = commands;
@@ -51,7 +51,7 @@ namespace lmao_bot.Services
                 }
                 else if (result.IsSuccess)
                 {
-                    if (command.IsSpecified) await Database.UpdateUsageCount(command.Value);
+                    if (command.IsSpecified) await Database.UpdateUsageCount(command.Value.Name);
                     else Log.LogString("Command result was success but CommandInfo object not included?");
                 }
                 
@@ -81,7 +81,7 @@ namespace lmao_bot.Services
             }
             else if (result.IsSuccess)
             {
-                if (command.IsSpecified) await Database.UpdateUsageCount(command.Value);
+                if (command.IsSpecified) await Database.UpdateUsageCount(command.Value.Name);
                 else Log.LogString("Command result was success but CommandInfo object not included?");
             }
 
