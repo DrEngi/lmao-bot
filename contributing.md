@@ -35,20 +35,13 @@ Finally, change into the new directory created by the clone and open the lmao-bo
 
 ### Testing
 
-To test the bot, you'll need to create a config.json and place it within the root directory of your build folder (usually lmao-bot/lmao-bot/bin/Debug/netcoreapp2.2 or similar.). This configuration file will contain your bot token and Mongo connection information. If you're you're using lavalink, that information will go here as well. To get a bot token, create an account on the discord developer portal and create a bot user.
-
-I'm updating the project structure to abstract away the database access from the actual bot. While this may feel like a step backwards at first, it's so that the bot can have multiple fall-backs if the database crashes, and allows me to create other projects that connect to it. There are two configurations you need, one for the bot and another for the API.
+To test the bot, you'll need to create a config.json and place it within the root directory of your build folder (usually lmao-bot/lmao-bot/bin/Debug/netcoreapp3.0 or similar.). This configuration file will contain your bot token and Mongo connection information. If you're you're using lavalink, that information will go here as well. To get a bot token, create an account on the discord developer portal and create a bot user.
 
 Bot config:
 ```json
 {
   "Token": "token",
   "Dbl": null,
-  "Api": {
-    "URL": "http://your.lmao.site",
-    "Port": 8080,
-    "AuthKey": "yourverysecureauthkeyforlmaohere"
-  },
   "Mongo": {
     "Hostname": "127.0.0.1",
     "Port": 27017,
@@ -63,27 +56,6 @@ Bot config:
     "Password": "exampleverylongandverysecurelavalinkpasshere",
     "Name": "default-node"
   }
-}
-```
-
-API config:
-```json
-{
-  "lmaoauthkey": "yourverysecureauthkeyforlmaohere",
-  "Lavalink": {
-    "Hostname": "127.0.0.1",
-    "Port": 2333,
-    "Region": "us",
-    "Password": "exampleverylongandverysecurelavalinkpasshere",
-    "Name": "default-node"
-  },
-  "Mongo": {
-    "Hostname": "127.0.0.1",
-    "Port": 27017,
-    "User": "user",
-    "Password": "password",
-    "Database": "lmao"
-  },
 }
 ```
 
