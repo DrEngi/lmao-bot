@@ -35,6 +35,7 @@ namespace lmao_bot.Services
         public async Task<Dictionary<long, string>> GetPrefixes()
         {
             var collection = Database.GetCollection<lmaocore.Models.ServerSettings.ServerSettings>("servers");
+
             List<lmaocore.Models.ServerSettings.ServerSettings> servers = (await collection.FindAsync(new BsonDocument())).ToList();
             prefixes = new Dictionary<long, string>();
 
@@ -226,7 +227,11 @@ namespace lmao_bot.Services
 
             if (options.BotSettingsOptions != null)
             {
-                if (options.BotSettingsOptions.UpdateCommandPrefix) updates.Add(update.Set("BotSettings.CommandPrefix", settings.BotSettings.CommandPrefix));
+                if (options.BotSettingsOptions.UpdateCommandPrefix)
+                {
+                    updates.Add(update.Set("BotSettings.CommandPrefix", settings.BotSettings.CommandPrefix));
+                    this.prefixes[settings.ServerID] = settings.BotSettings.CommandPrefix;
+                }
                 if (options.BotSettingsOptions.UpdateReplaceAssChance) updates.Add(update.Set("BotSettings.ReplaceAssChance", settings.BotSettings.ReplaceAssChance));
                 if (options.BotSettingsOptions.UpdateReactChance) updates.Add(update.Set("BotSettings.ReactChance", settings.BotSettings.ReactChance));
                 if (options.BotSettingsOptions.UpdateAllowNSFW) updates.Add(update.Set("BotSettings.AllowNSFW", settings.BotSettings.AllowNSFW));
