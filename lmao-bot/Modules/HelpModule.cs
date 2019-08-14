@@ -20,6 +20,7 @@ namespace lmao_bot.Modules
         }
 
         [Command("help")]
+        [Alias("helpme", "assistance", "commands", "cmds")]
         [Summary("Lists this bot's commands.")]
         public async Task Help(string path = "")
         {

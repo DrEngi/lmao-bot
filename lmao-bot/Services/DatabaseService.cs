@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace lmao_bot.Services
         private IMongoDatabase Database;
 
         private Dictionary<long, string> prefixes;
-        //TODO: We need to cache local server settings until we know an update has occurred to it's not calling mongo every time
+        public Stopwatch UptimeWatch = new Stopwatch();
 
         public DatabaseService(BotConfig config)
         {
@@ -25,6 +26,7 @@ namespace lmao_bot.Services
             //Mongo Connection String: mongodb://user:password@hostname:port
             Mongo = new MongoClient(String.Format("mongodb://{0}:{1}@{2}:{3}", Config.Mongo.User, Config.Mongo.Password, Config.Mongo.Hostname, Config.Mongo.Port));
             Database = Mongo.GetDatabase(config.Mongo.Database);
+            UptimeWatch.Start();
             GetPrefixes();
         }
 
