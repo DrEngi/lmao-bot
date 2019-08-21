@@ -23,6 +23,7 @@ namespace lmao_bot.Modules
 
         [Command("avatar")]
         [Alias("pfp", "image", "profilepic", "profilepicture")]
+        [Summary("Grabs the profile picture of yourself or someone else")]
         public async Task Avatar(string user = "")
         {
             IDisposable typing = Context.Channel.EnterTypingState();
@@ -37,6 +38,7 @@ namespace lmao_bot.Modules
 
         [Command("someone")]
         [Alias("@someone", "@random", "mention")]
+        [Summary("Mentions a random person in the server")]
         public async Task Someone([Remainder]string text)
         {
             IDisposable typing = Context.Channel.EnterTypingState();
@@ -54,6 +56,7 @@ namespace lmao_bot.Modules
 
         [Command("urban")]
         [Alias("define", "dictionary", "urbandictionary", "ud")]
+        [Summary("Define words from urban dictionary")]
         [RequireNsfw(ErrorMessage = "Whoa-ho-ho-ho, hold your horses. The Urban Dictionary command only works in NSFW channels.")]
         public async Task Urban([Remainder]string word)
         {
@@ -85,6 +88,7 @@ namespace lmao_bot.Modules
 
         [Command("lmgtfy")]
         [Alias("google", "search", "bing")]
+        [Summary("Too lazy to google? This'll help you out")]
         public async Task LMGTFY([Remainder] string query)
         {
             IDisposable typing = Context.Channel.EnterTypingState();

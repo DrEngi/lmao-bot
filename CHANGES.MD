@@ -8,3 +8,4 @@
 # Behind the scenes changes
 * all help commands have been moved to the new helpmodule, as it is extensive.
 * `lmao uptime` moved to the new DevModule.
+* `vaporwave`, `clap` moved to the new TextModule.
