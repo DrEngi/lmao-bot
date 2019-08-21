@@ -42,10 +42,10 @@ namespace lmao_bot
              * of these classes every time we run a command, so we call them Singletons (that way, they're
              * only created once when they're needed and then maintained throughout the lifetime of the
              * application)
-             **/        
+             **/
             return new ServiceCollection()
                 .AddSingleton(Client)                       //base discord services
-                .AddSingleton<CommandService>()
+                .AddSingleton(new CommandService(new CommandServiceConfig {DefaultRunMode = RunMode.Async }))
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<LogService>()                 //logging
                 .AddSingleton(Config)                       //configuration
