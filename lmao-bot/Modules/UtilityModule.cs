@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using UrbanDictionnet;
 
 namespace lmao_bot.Modules
@@ -79,6 +80,16 @@ namespace lmao_bot.Modules
             }.Build();
             await ReplyAsync(embed: e);
 
+            typing.Dispose();
+        }
+
+        [Command("lmgtfy")]
+        [Alias("google", "search", "bing")]
+        public async Task LMGTFY([Remainder] string query)
+        {
+            IDisposable typing = Context.Channel.EnterTypingState();
+            string newQuery = "Let me Google that for you... http://lmgtfy.com/?q=" + HttpUtility.UrlEncode(query);
+            await ReplyAsync(Context.User.Mention + " " + newQuery);
             typing.Dispose();
         }
     }
