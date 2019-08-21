@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
+using lmao_bot.Models.ServerSettings;
 using lmao_bot.Services;
-using lmaocore.Models.ServerSettings;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -43,17 +43,11 @@ namespace lmao_bot.Modules
         [RequireContext(ContextType.Guild)]
         public async Task SetPrefix(string prefix)
         {
-            ServerSettings settings = await Database.GetServerSettings((long)Context.Guild.Id);
+            LmaoBotServer settings = await Database.GetServerSettings().GetServerSettings((long)Context.Guild.Id);
             string oldPrefix = settings.BotSettings.CommandPrefix;
             settings.BotSettings.CommandPrefix = prefix;
 
-            await Database.SaveServerSettings(settings, new SaveServerSettingsOptions()
-            {
-                BotSettingsOptions = new SaveBotSettingsOptions()
-                {
-                    UpdateCommandPrefix = true,
-                }
-            });
+            await Database.GetServerSettings().SetServerPrefix((long)Context.Guild.Id, prefix);
 
             var embed = new EmbedBuilder()
             {

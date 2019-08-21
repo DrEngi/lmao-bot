@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace lmaocore.Models
+namespace lmao_bot.Models
 {
     public class CommandUsage
     {

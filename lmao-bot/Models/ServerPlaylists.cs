@@ -3,14 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace lmaocore.Models.ServerPlaylists
+namespace lmao_bot.Models.ServerPlaylists
 {
     public class Server
     {
         public ObjectId _id { get; set; }
         public Int64 ServerID { get; set; }
         public Dictionary<string, Playlist> Playlists { get; set; }
-
     }
 
     public class Playlist

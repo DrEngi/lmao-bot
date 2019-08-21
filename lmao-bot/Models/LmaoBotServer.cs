@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace lmaocore.Models.ServerSettings
+namespace lmao_bot.Models.ServerSettings
 {
     //ServerSettings Object for Mongo
     //Also contains lmao admins
-    public class ServerSettings
+    public class LmaoBotServer
     {
         public ObjectId _id { get; set; }
         public Int64 ServerID { get; set; }

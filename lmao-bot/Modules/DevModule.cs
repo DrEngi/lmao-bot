@@ -20,7 +20,7 @@ namespace lmao_bot.Modules
 
         [Command("uptime")]
         [Alias("timeup", "online")]
-        [Summary("Displays the uptiem for the bot")]
+        [Summary("Displays the uptime for the bot")]
         public async Task Uptime()
         {
             var embed = new EmbedBuilder

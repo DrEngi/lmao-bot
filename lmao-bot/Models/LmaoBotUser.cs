@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace lmaocore.Models.UserSettings
+namespace lmao_bot.Models.UserSettings
 {
-    public class UserSettings
+    public class LmaoBotUser
     {
         public ObjectId _id { get; set; }
         public Int64 UserID { get; set; }
@@ -22,8 +22,6 @@ namespace lmaocore.Models.UserSettings
     {
         public DateTime Created { get; set; }
         public DateTime DueDate { get; set; }
-        public Int64 Author { get; set; }
-        public string Time { get; set; }
         public string Message { get; set; }
     }
 }

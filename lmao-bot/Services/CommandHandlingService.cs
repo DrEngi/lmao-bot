@@ -36,18 +36,35 @@ namespace lmao_bot.Services
             {
                 if (!string.IsNullOrEmpty(result?.ErrorReason))
                 {
-                    //We called this error ourselves.
-                    var embed = new EmbedBuilder
+                    if (result.IsSuccess)
                     {
-                        Title = "Command Error",
-                        Color = Color.DarkBlue,
-                        Description = result.ErrorReason,
-                        Footer = new EmbedFooterBuilder
+                        var embedSuccess = new EmbedBuilder
                         {
-                            Text = "Unexpected? Visit lmao support for help"
-                        }
-                    }.Build();
-                    await context.Channel.SendMessageAsync(embed: embed);
+                            Title = "Command Finished",
+                            Color = Color.Green,
+                            Description = result.ErrorReason,
+                            Footer = new EmbedFooterBuilder
+                            {
+                                Text = "Unexpected? Visit lmao support for help"
+                            }
+                        }.Build();
+                        await context.Channel.SendMessageAsync(embed: embedSuccess);
+                    }
+                    else
+                    {
+                        //We called this error ourselves.
+                        var embed = new EmbedBuilder
+                        {
+                            Title = "Command Error",
+                            Color = Color.DarkBlue,
+                            Description = result.ErrorReason,
+                            Footer = new EmbedFooterBuilder
+                            {
+                                Text = "Unexpected? Visit lmao support for help"
+                            }
+                        }.Build();
+                        await context.Channel.SendMessageAsync(embed: embed);
+                    }
                 }
                 else if (result.IsSuccess)
                 {

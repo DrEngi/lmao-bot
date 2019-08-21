@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using lmao_bot.Events;
@@ -52,6 +53,7 @@ namespace lmao_bot
                 .AddSingleton<DatabaseService>()            //database
                 .AddSingleton<DBLService>()                 //discord bot list
                 .AddSingleton<UrbanDictionaryService>()     //urban dictionary
+                .AddSingleton<InteractiveService>()         //enables interactive commands
                 .BuildServiceProvider();
         }
     }

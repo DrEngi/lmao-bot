@@ -1,4 +1,7 @@
-﻿using lmaocore;
+﻿using lmao_bot.Models;
+using lmao_bot.Models.ServerSettings;
+using lmao_bot.Models.UserSettings;
+using lmao_bot.Services.Database;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -17,7 +20,13 @@ namespace lmao_bot.Services
         private IMongoDatabase Database;
 
         private Dictionary<long, string> prefixes;
+        private Dictionary<long, LmaoBotUser> users;
+        private Dictionary<long, LmaoBotServer> servers;
+
         public Stopwatch UptimeWatch = new Stopwatch();
+
+        private ServerSettingsCollection serverSettings;
+        private UserSettingsCollection userSettings;
 
         public DatabaseService(BotConfig config)
         {
@@ -27,6 +36,13 @@ namespace lmao_bot.Services
             Mongo = new MongoClient(String.Format("mongodb://{0}:{1}@{2}:{3}", Config.Mongo.User, Config.Mongo.Password, Config.Mongo.Hostname, Config.Mongo.Port));
             Database = Mongo.GetDatabase(config.Mongo.Database);
             UptimeWatch.Start();
+
+            serverSettings = new ServerSettingsCollection(Mongo, Database, this);
+            userSettings = new UserSettingsCollection(Mongo, Database, this);
+
+            users = new Dictionary<long, LmaoBotUser>();
+            servers = new Dictionary<long, LmaoBotServer>();
+
             GetPrefixes();
         }
 
@@ -36,12 +52,12 @@ namespace lmao_bot.Services
         /// </summary>
         public async Task<Dictionary<long, string>> GetPrefixes()
         {
-            var collection = Database.GetCollection<lmaocore.Models.ServerSettings.ServerSettings>("servers");
+            var collection = Database.GetCollection<LmaoBotServer>("servers");
 
-            List<lmaocore.Models.ServerSettings.ServerSettings> servers = (await collection.FindAsync(new BsonDocument())).ToList();
+            List<LmaoBotServer> servers = (await collection.FindAsync(new BsonDocument())).ToList();
             prefixes = new Dictionary<long, string>();
 
-            foreach (lmaocore.Models.ServerSettings.ServerSettings server in servers)
+            foreach (LmaoBotServer server in servers)
             {
                 prefixes.Add(server.ServerID, server.BotSettings.CommandPrefix);
             }
@@ -61,8 +77,8 @@ namespace lmao_bot.Services
             {
                 //We don't have the prefix cached. Let's see if we can grab it from mongo.
                 //This can happen if there is a new server
-                var collection = Database.GetCollection<lmaocore.Models.ServerSettings.ServerSettings>("servers");
-                var filter = Builders<lmaocore.Models.ServerSettings.ServerSettings>.Filter.Eq("ServerID", serverID);
+                var collection = Database.GetCollection<LmaoBotServer>("servers");
+                var filter = Builders<LmaoBotServer>.Filter.Eq("ServerID", serverID);
 
                 if (await collection.CountDocumentsAsync(filter) == 1)
                 {
@@ -86,17 +102,17 @@ namespace lmao_bot.Services
         /// <param name="command">The command to increment</param>
         public async Task UpdateUsageCount(string command)
         {
-            var collection = Database.GetCollection<lmaocore.Models.CommandUsage>("usage");
-            var filter = Builders<lmaocore.Models.CommandUsage>.Filter.Eq("Command", command);
+            var collection = Database.GetCollection<CommandUsage>("usage");
+            var filter = Builders<CommandUsage>.Filter.Eq("Command", command);
 
             if (await collection.CountDocumentsAsync(filter) == 1)
             {
-                var update = Builders<lmaocore.Models.CommandUsage>.Update.Inc("Uses", 1);
+                var update = Builders<CommandUsage>.Update.Inc("Uses", 1);
                 await collection.UpdateOneAsync(filter, update);
             }
             else
             {
-                await collection.InsertOneAsync(new lmaocore.Models.CommandUsage()
+                await collection.InsertOneAsync(new CommandUsage()
                 {
                     Command = command,
                     Uses = 1,
@@ -105,168 +121,14 @@ namespace lmao_bot.Services
             }
         }
 
-        /// <summary>
-        /// Update the lmao count of the specified user
-        /// </summary>
-        /// <param name="userID">The ID of the user to update</param>
-        public async Task UpdateLmaoCount(long userID)
+        public ServerSettingsCollection GetServerSettings()
         {
-            var collection = Database.GetCollection<lmaocore.Models.UserSettings.UserSettings>("users");
-            var filter = Builders<lmaocore.Models.UserSettings.UserSettings>.Filter.Eq("UserID", userID);
-
-            if (await collection.CountDocumentsAsync(filter) == 1)
-            {
-                var update = Builders<lmaocore.Models.UserSettings.UserSettings>.Update.Inc("Settings.LmaoCount", 1);
-                await collection.UpdateOneAsync(filter, update);
-            }
-            else
-            {
-                await collection.InsertOneAsync(new lmaocore.Models.UserSettings.UserSettings()
-                {
-                    UserID = userID,
-                    Settings = new lmaocore.Models.UserSettings.Settings()
-                    {
-                        LmaoCount = 1
-                    },
-                    Reminders = null
-                });
-            }
+            return this.serverSettings;
         }
 
-        /// <summary>
-        /// Retrieves the server settings for the specified ID
-        /// </summary>
-        /// <param name="serverID">The ID of the server</param>
-        /// <returns>The specified server settings</returns>
-        public async Task<lmaocore.Models.ServerSettings.ServerSettings> GetServerSettings(long serverID)
+        public UserSettingsCollection GetUserSettings()
         {
-            var collection = Database.GetCollection<lmaocore.Models.ServerSettings.ServerSettings>("servers");
-            var filter = Builders<lmaocore.Models.ServerSettings.ServerSettings>.Filter.Eq("ServerID", serverID);
-
-            if (await collection.CountDocumentsAsync(filter) == 1)
-            {
-                lmaocore.Models.ServerSettings.ServerSettings serverSettings = await collection.Find(filter).FirstAsync();
-                //Might as well update the prefix while we're at it
-                if (!prefixes[serverID].Equals(serverSettings.BotSettings.CommandPrefix)) prefixes[serverID] = serverSettings.BotSettings.CommandPrefix;
-                return serverSettings;
-            }
-            else
-            {
-                //Server doesn't have any settings saved. Could happen because of corrupted import.
-                //For now we're just gonna return an empty one, and we'll be sure to upload it to the database
-                lmaocore.Models.ServerSettings.ServerSettings serverSettings = new lmaocore.Models.ServerSettings.ServerSettings()
-                {
-                    ServerID = serverID,
-                    BotSettings = new lmaocore.Models.ServerSettings.BotSettings()
-                    {
-                        AllowNSFW = false,
-                        CommandPrefix = "lmao",
-                        LastModified = DateTime.Now,
-                        ReactChance = 100,
-                        ReplaceAssChance = 100
-                    },
-                    CustomCommands = null,
-                    Filters = null,
-                    LmaoAdmins = new List<string>()
-                };
-                await collection.InsertOneAsync(serverSettings);
-                //Log.LogString("Tried to fetch server settings from database but it did not exist: " + serverID);
-                return serverSettings;
-            }
+            return this.userSettings;
         }
-
-        /// <summary>
-        /// Get the bot settings of the specified user
-        /// </summary>
-        /// <param name="userID">the ID of the user to get</param>
-        /// <returns>The UserSettings model of the user</returns>
-        public async Task<lmaocore.Models.UserSettings.UserSettings> GetUserSettings(long userID)
-        {
-            var collection = Database.GetCollection<lmaocore.Models.UserSettings.UserSettings>("users");
-            var filter = Builders<lmaocore.Models.UserSettings.UserSettings>.Filter.Eq("UserID", userID);
-
-            if (await collection.CountDocumentsAsync(filter) == 1)
-            {
-                lmaocore.Models.UserSettings.UserSettings settings = await collection.Find(filter).FirstAsync();
-                return settings;
-            }
-            else
-            {
-                //No settings saved, we'll make new one
-                return new lmaocore.Models.UserSettings.UserSettings()
-                {
-                    Reminders = null,
-                    UserID = userID,
-                    Settings = new lmaocore.Models.UserSettings.Settings()
-                    {
-                        LmaoCount = 0
-                    }
-                };
-            }
-        }
-
-        public async Task SaveUserSettings(lmaocore.Models.UserSettings.UserSettings settings, SaveUserSettingsOptions options)
-        {
-            var collection = Database.GetCollection<lmaocore.Models.UserSettings.UserSettings>("users");
-            var filter = Builders<lmaocore.Models.UserSettings.UserSettings>.Filter.Eq("UserID", settings.UserID);
-
-            var update = Builders<lmaocore.Models.UserSettings.UserSettings>.Update;
-            var updates = new List<UpdateDefinition<lmaocore.Models.UserSettings.UserSettings>>();
-
-            if (options.UpdateUserReminders) updates.Add(update.Set("Reminders", settings.Reminders));
-            if (options.UpdateUserLmaoCount) updates.Add(update.Set("Settings.LmaoCount", settings.Settings.LmaoCount));
-
-            await collection.FindOneAndUpdateAsync<lmaocore.Models.UserSettings.UserSettings>(filter, update.Combine(updates));
-        }
-
-        public async Task SaveServerSettings(lmaocore.Models.ServerSettings.ServerSettings settings, SaveServerSettingsOptions options)
-        {
-            var collection = Database.GetCollection<lmaocore.Models.ServerSettings.ServerSettings>("servers");
-            var filter = Builders<lmaocore.Models.ServerSettings.ServerSettings>.Filter.Eq("ServerID", settings.ServerID);
-
-            var update = Builders<lmaocore.Models.ServerSettings.ServerSettings>.Update;
-            var updates = new List<UpdateDefinition<lmaocore.Models.ServerSettings.ServerSettings>>();
-
-            if (options.BotSettingsOptions != null)
-            {
-                if (options.BotSettingsOptions.UpdateCommandPrefix)
-                {
-                    updates.Add(update.Set("BotSettings.CommandPrefix", settings.BotSettings.CommandPrefix));
-                    this.prefixes[settings.ServerID] = settings.BotSettings.CommandPrefix;
-                }
-                if (options.BotSettingsOptions.UpdateReplaceAssChance) updates.Add(update.Set("BotSettings.ReplaceAssChance", settings.BotSettings.ReplaceAssChance));
-                if (options.BotSettingsOptions.UpdateReactChance) updates.Add(update.Set("BotSettings.ReactChance", settings.BotSettings.ReactChance));
-                if (options.BotSettingsOptions.UpdateAllowNSFW) updates.Add(update.Set("BotSettings.AllowNSFW", settings.BotSettings.AllowNSFW));
-                updates.Add(update.Set("BotSettings.LastModified", DateTime.Now));
-            }
-            if (options.SaveLmaoAdmins) updates.Add(update.Set("LmaoAdmins", settings.LmaoAdmins));
-            if (options.SaveFilters) updates.Add(update.Set("Filters", settings.Filters));
-            if (options.SaveCustomCommands) updates.Add(update.Set("CustomCommands", settings.CustomCommands));
-
-            await collection.FindOneAndUpdateAsync<lmaocore.Models.ServerSettings.ServerSettings>(filter, update.Combine(updates));
-        }
-    }
-
-    public class SaveUserSettingsOptions
-    {
-        public bool UpdateUserReminders = false;
-        public bool UpdateUserLmaoCount = false;
-    }
-
-    public class SaveServerSettingsOptions
-    {
-        public SaveBotSettingsOptions BotSettingsOptions = null;
-        public bool SaveLmaoAdmins = false;
-        public bool SaveFilters = false;
-        public bool SaveCustomCommands = false;
-    }
-
-    public class SaveBotSettingsOptions
-    {
-        public bool UpdateCommandPrefix = false;
-        public bool UpdateReplaceAssChance = false;
-        public bool UpdateReactChance = false;
-        public bool UpdateAllowNSFW = false;
-        //if any of these are true, last modified should be updated.
     }
 }
