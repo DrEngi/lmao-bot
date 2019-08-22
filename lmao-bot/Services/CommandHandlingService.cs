@@ -136,7 +136,7 @@ namespace lmao_bot.Services
             else if (rawMessage.Channel is IDMChannel)
             {
                 //Message being sent in a DM
-                prefix = "lmao ";
+                prefix = "lmao";
             }
             else Log.LogString("Unknown Channel Type");
 
