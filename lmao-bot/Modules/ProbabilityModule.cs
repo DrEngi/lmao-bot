@@ -74,5 +74,53 @@ namespace lmao_bot.Modules
                 return CustomResult.FromSuccess();
             }
         }
+
+        [Command("dice")]
+        [Alias("roll")]
+        [Summary("Roll the dice!")]
+        public async Task<RuntimeResult> RollDice(int dice = 1)
+        {
+            List<string> emojis = new List<string>()
+            {
+                "one",
+                "two",
+                "three",
+                "four",
+                "five",
+                "six"
+            };
+
+            if (dice > 100)
+            {
+                return CustomResult.FromError("You may only roll up to 100 dice at a time");
+            }
+            else if (dice <= 0)
+            {
+                dice = 1;
+            }
+
+            string diceMessage = Context.User.Mention + " :game_die: You just rolled a ";
+            string diceEmoji = "";
+            int total = 0;
+
+            Random rnd = new Random();
+            for (int i=0; i < dice; i++)
+            {
+                int die = rnd.Next(1, 7);
+                diceMessage += "**" + die + "** +" ;
+                diceEmoji += ":" + emojis[die - 1] + ":";
+                total += die;
+            }
+            diceMessage = diceMessage.Remove(diceMessage.Length - 2, 2);
+            diceMessage += "!";
+            await ReplyAsync(diceMessage + " " + diceEmoji);
+
+            if (dice > 1)
+            {
+                string dice_stats = "`Total:   " + total + "`\n`Average: " + total / dice + "`";
+                await ReplyAsync(dice_stats);
+            }
+            return CustomResult.FromSuccess();
+        }
     }
 }
