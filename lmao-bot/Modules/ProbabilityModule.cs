@@ -122,5 +122,33 @@ namespace lmao_bot.Modules
             }
             return CustomResult.FromSuccess();
         }
+
+        [Command("pick")]
+        [Alias("choose", "select")]
+        public async Task Pick([Remainder] string optionsStr)
+        {
+            string[] options = optionsStr.Split(",");
+            List<string> pickMessage = new List<string>()
+            {
+                "I'm in the mood for ",
+                "",
+                "Eeny, meeny, miny, moe. I pick ",
+                "An obvious choice: ",
+                "Do you even need to ask? The obvious answer is "
+            };
+            List<string> afterMessage = new List<string>()
+            {
+                " today.",
+                ", I choose you!",
+                ".",
+                ", naturally.",
+                "."
+            };
+
+            Random rdm = new Random();
+            int x = rdm.Next(0, pickMessage.Count);
+            int y = rdm.Next(0, options.Length);
+            await ReplyAsync(Context.User.Mention + " " + pickMessage[x] + options[y].Trim() + afterMessage[x]);
+        }
     }
 }
