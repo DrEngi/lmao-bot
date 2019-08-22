@@ -46,11 +46,12 @@ namespace lmao_bot
              **/
             return new ServiceCollection()
                 .AddSingleton(Client)                       //base discord services
-                .AddSingleton(new CommandService(new CommandServiceConfig {DefaultRunMode = RunMode.Async }))
+                .AddSingleton(new CommandService(new CommandServiceConfig { DefaultRunMode = RunMode.Async }))
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<LogService>()                 //logging
                 .AddSingleton(Config)                       //configuration
                 .AddSingleton<DatabaseService>()            //database
+                .AddSingleton<StatusService>()
                 .AddSingleton<DBLService>()                 //discord bot list
                 .AddSingleton<UrbanDictionaryService>()     //urban dictionary
                 .AddSingleton<InteractiveService>()         //enables interactive commands
