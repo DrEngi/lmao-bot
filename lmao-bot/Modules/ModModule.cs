@@ -49,36 +49,44 @@ namespace lmao_bot.Modules
         [RequireBotDeveloper(Group = "Group")]
         [RequireUserPermission(GuildPermission.ManageMessages, Group = "Group")]
         [RequireBotPermission(GuildPermission.ManageMessages)]
-        public async Task<RuntimeResult> Mute(IGuildUser user, TimeSpan? duration)
+        public async Task<RuntimeResult> Mute(IGuildUser user, TimeSpan? duration = null)
         {
             try
             {
                 if (user.Id == Context.Client.CurrentUser.Id) return CustomResult.FromError($"Silly {Context.User.Mention}, I can't mute myself!");
-                if (!duration.HasValue) return CustomResult.FromError("You must include the duration");
-                var channel = Context.Guild.GetChannel(Context.Channel.Id);
-                await channel.AddPermissionOverwriteAsync(user, new OverwritePermissions(sendMessages: PermValue.Deny));
-                string timeString = "";
-                if (duration.Value.Hours != 0) timeString += $"{duration.Value.Hours} hours, ";
-                if (duration.Value.Minutes != 0) timeString += $"{duration.Value.Minutes} minutes, ";
-                if (duration.Value.Seconds != 0) timeString += $"{duration.Value.Seconds} seconds";
+                if (!duration.HasValue)
+                {
+                    var channel = Context.Guild.GetChannel(Context.Channel.Id);
+                    await channel.AddPermissionOverwriteAsync(user, new OverwritePermissions(sendMessages: PermValue.Deny));
+                    return CustomResult.FromSuccess($"{user.Mention} was permanently muted in {Context.Channel.Name} by {Context.User.Mention}.");
+                }
+                else
+                {
+                    var channel = Context.Guild.GetChannel(Context.Channel.Id);
+                    await channel.AddPermissionOverwriteAsync(user, new OverwritePermissions(sendMessages: PermValue.Deny));
+                    string timeString = "";
+                    if (duration.Value.Hours != 0) timeString += $"{duration.Value.Hours} hours, ";
+                    if (duration.Value.Minutes != 0) timeString += $"{duration.Value.Minutes} minutes, ";
+                    if (duration.Value.Seconds != 0) timeString += $"{duration.Value.Seconds} seconds";
 
-                _ = Task.Run(async () =>
-                  {
-                      Thread.Sleep((int)duration.Value.TotalMilliseconds);
-                      await channel.RemovePermissionOverwriteAsync(user);
-                      Embed e = new EmbedBuilder()
-                      {
-                          Title = "Notice",
-                          Description = $"{ user.Mention } is no longer muted.",
-                          Color = Color.Orange,
-                          Footer = new EmbedFooterBuilder()
-                          {
-                              Text = $"Originally muted by {Context.User.Username}"
-                          }
-                      }.Build();
-                      await ReplyAsync(embed: e);
-                  });
-                return CustomResult.FromSuccess($"{user.Mention} was muted in {Context.Channel.Name} by {Context.User.Mention} for {timeString}.");
+                    _ = Task.Run(async () =>
+                    {
+                        Thread.Sleep((int)duration.Value.TotalMilliseconds);
+                        await channel.RemovePermissionOverwriteAsync(user);
+                        Embed e = new EmbedBuilder()
+                        {
+                            Title = "Notice",
+                            Description = $"{ user.Mention } is no longer muted.",
+                            Color = Color.Orange,
+                            Footer = new EmbedFooterBuilder()
+                            {
+                                Text = $"Originally muted by {Context.User.Username}"
+                            }
+                        }.Build();
+                        await ReplyAsync(embed: e);
+                    });
+                    return CustomResult.FromSuccess($"{user.Mention} was muted in {Context.Channel.Name} by {Context.User.Mention} for {timeString}.");
+                }
             }
             catch (Exception ex)
             {
