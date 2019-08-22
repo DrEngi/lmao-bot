@@ -174,5 +174,46 @@ namespace lmao_bot.Modules
         }
         */
 
+        [Command("kick")]
+        [Summary("Kick a user from your server")]
+        [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.KickMembers, Group = "Group")]
+        [RequireBotPermission(GuildPermission.KickMembers)]
+        public async Task<RuntimeResult> Kick(IGuildUser user, [Remainder]string reason = "")
+        {
+            if (user.Id == Context.Client.CurrentUser.Id) return CustomResult.FromError($"Silly { Context.User.Mention}, I can't kick myself!");
+            if (user.Id == Context.User.Id) return CustomResult.FromError($"{ Context.User.Mention}, you can't kick yourself");
+
+            string reasonString = (reason.Length == 0) ? "No reason given." : reason;
+            Embed announceE = new EmbedBuilder()
+            {
+                Title = "User Kicked",
+                Color = Color.Green,
+                Description = $"{user.Mention} was kick from the server.",
+                Fields = new List<EmbedFieldBuilder>()
+                {
+                    new EmbedFieldBuilder()
+                    {
+                        Name = "Reason",
+                        Value = reasonString
+                    }
+                }
+            }.Build();
+
+            Embed dmE = new EmbedBuilder()
+            {
+                Title = $"You have been kicked from {Context.Guild.Name} by {Context.User.Username}",
+                Color = Color.Red,
+                Description = reasonString,
+                Timestamp = DateTime.Now
+            }.Build();
+
+            await (await user.GetOrCreateDMChannelAsync()).SendMessageAsync(embed: dmE);
+            await user.BanAsync(reason: reasonString);
+            await ReplyAsync(embed: announceE);
+            return CustomResult.FromSuccess();
+        }
+
     }
 }
