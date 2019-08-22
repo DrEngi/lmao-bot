@@ -4,8 +4,11 @@
 * help significantly reworked so it no longer lags and spams you when you want assistance, instead it'll display all the commands you need in the channel where you asked for them, showing only the ones you have permission for.
 * `lmao ping` no longer shows latency as it was wholly inaccurate.
 * `lmao info` no longer displays member count, useless. also cleaned it up
+* `lmao remind` now asks for a time to be specified in `dd:hh:mm`, or `mm:ss`, or similar.
+* `lmao draw` removed.
 
 # Behind the scenes changes
 * all help commands have been moved to the new helpmodule, as it is extensive.
 * `lmao uptime` moved to the new DevModule.
-* `vaporwave`, `clap` moved to the new TextModule.
+* `clap` moved to the new TextModule.
+* reminders moved to the new RemindModule.
