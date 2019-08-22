@@ -44,7 +44,7 @@ namespace lmao_bot.Modules
 
         [Command("mute")]
         [Alias("silence", "shush")]
-        [Summary("Mute a user in your guild")]
+        [Summary("Mute a user in your server")]
         [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
         [RequireBotDeveloper(Group = "Group")]
         [RequireUserPermission(GuildPermission.ManageMessages, Group = "Group")]
@@ -95,5 +95,84 @@ namespace lmao_bot.Modules
                 throw;
             }
         }
+
+        [Command("ban")]
+        [Summary("Ban a user from your server")]
+        [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.BanMembers, Group = "Group")]
+        [RequireBotPermission(GuildPermission.BanMembers)]
+        public async Task<RuntimeResult> Ban(IGuildUser user, [Remainder]string reason = "")
+        {
+            if (user.Id == Context.Client.CurrentUser.Id) return CustomResult.FromError($"Silly { Context.User.Mention}, I can't ban myself!");
+            if (user.Id == Context.User.Id) return CustomResult.FromError($"{ Context.User.Mention}, you can't ban yourself");
+
+            string reasonString = (reason.Length == 0) ? "No reason given." : reason;
+            Embed announceE = new EmbedBuilder()
+            {
+                Title = "User Banned",
+                Color = Color.Green,
+                Description = $"{user.Mention} was banned from the server.",
+                Fields = new List<EmbedFieldBuilder>()
+                {
+                    new EmbedFieldBuilder()
+                    {
+                        Name = "Reason",
+                        Value = reasonString
+                    }
+                }
+            }.Build();
+
+            Embed dmE = new EmbedBuilder()
+            {
+                Title = $"You have been banned from {Context.Guild.Name} by {Context.User.Username}",
+                Color = Color.Red,
+                Description = reasonString,
+                Timestamp = DateTime.Now
+            }.Build();
+
+            await (await user.GetOrCreateDMChannelAsync()).SendMessageAsync(embed: dmE);
+            await user.BanAsync(reason: reasonString);
+            await ReplyAsync(embed: announceE);
+            return CustomResult.FromSuccess();
+        }
+
+        /*
+        [Command("tempban")]
+        [Alias("tban")]
+        [Summary("Temporarily a user from your server")]
+        [RequireContext(ContextType.Guild, ErrorMessage = "This command can only be run in a server.")]
+        [RequireBotDeveloper(Group = "Group")]
+        [RequireUserPermission(GuildPermission.BanMembers, Group = "Group")]
+        [RequireBotPermission(GuildPermission.BanMembers)]
+        public async Task<RuntimeResult> TempBan(IGuildUser user, TimeSpan duration, [Remainder]string reason = "")
+        {
+            if (user.Id == Context.Client.CurrentUser.Id) return CustomResult.FromError($"Silly { Context.User.Mention}, I can't ban myself!");
+            if (user.Id == Context.User.Id) return CustomResult.FromError($"{ Context.User.Mention}, you can't ban yourself");
+
+            Embed e = new EmbedBuilder()
+            {
+                Title = "User Banned",
+                Color = Color.Green,
+                Description = $"{user.Mention} was banned from the server.",
+                Fields = new List<EmbedFieldBuilder>()
+                {
+                    new EmbedFieldBuilder()
+                    {
+                        Name = "Duration",
+                        Value = duration.ToString()
+                    },
+                    new EmbedFieldBuilder()
+                    {
+                        Name = "Reason",
+                        Value = (reason.Length == 0) ? "No reason given." : reason
+                    }
+                }
+            }.Build();
+            await ReplyAsync(embed: e);
+            return CustomResult.FromSuccess();
+        }
+        */
+
     }
 }
