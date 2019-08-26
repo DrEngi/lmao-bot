@@ -15,3 +15,4 @@
 * `lmao uptime` moved to the new DevModule.
 * `clap` moved to the new TextModule.
 * reminders moved to the new RemindModule.
+* the following dev commands have been removed because they either need to be reworked or are now useless: getmarkdown, getemoji, addemoji, displayguildcount
