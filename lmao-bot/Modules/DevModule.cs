@@ -40,5 +40,18 @@ namespace lmao_bot.Modules
         {
             await ReplyAsync("Pong!");
         }
+
+        public async Task Announce()
+        {
+            //TODO: Announce command
+        }
+
+        [Command("changemaint")]
+        [Alias("setmaint")]
+        [Summary("Inform users of when the bot will be down for maintenance")]
+        public async Task ChangeMaintenance()
+        {
+            
+        }
     }
 }
