@@ -1,21 +1,27 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using lmao_bot.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace lmao_bot.Modules
 {
     public class DevModule : ModuleBase
     {
-        public DatabaseService Database;
+        private DatabaseService Database;
+        private StatusService Status;
+        private DiscordSocketClient Client;
 
-        public DevModule(DatabaseService database)
+        public DevModule(DatabaseService database, StatusService status, DiscordSocketClient client)
         {
             Database = database;
+            Status = status;
+            Client = client;
         }
 
         [Command("uptime")]
@@ -41,17 +47,46 @@ namespace lmao_bot.Modules
             await ReplyAsync("Pong!");
         }
 
-        public async Task Announce()
+        [Command("announce")]
+        [Summary("Announce a message to the world at large")]
+        [RequireBotDeveloper()]
+        public async Task<RuntimeResult> Announce(String message)
         {
-            //TODO: Announce command
+            // THIS IS BAD PRACTICE DON'T DO THIS
+            // TODO: Move this to a service or somewhere not here, so if the bot crashes we can continue automatically.
+            _ = Task.Run(() =>
+            {
+                Thread.Sleep(5000);
+                foreach (SocketGuild g in this.Client.Guilds)
+                {
+                    var embed = new EmbedBuilder
+                    {
+                        Title = "Bot Announcement",
+                        Color = Color.Orange,
+                        Description = message,
+                        Footer = new EmbedFooterBuilder
+                        {
+                            Text = DateTime.Now.ToShortDateString()
+                        }
+                    }.Build();
+
+                    g.DefaultChannel.SendMessageAsync(embed: embed);
+                    Thread.Sleep(5000);
+                }
+            });
+            return CustomResult.FromSuccess("Announcement will begin in 10 seconds.");
         }
 
         [Command("changemaint")]
         [Alias("setmaint")]
         [Summary("Inform users of when the bot will be down for maintenance")]
-        public async Task ChangeMaintenance()
+        [RequireBotDeveloper()]
+        public async Task<RuntimeResult> ChangeMaintenance(DateTime time)
         {
-            
+            Status.SetMaintenance(time);
+            //await ReplyAsync(Context.User.Mention + " You have set the react chance to  `" + chance + "%`.");
+            return CustomResult.FromSuccess($"Maintenance set to {time.ToShortTimeString()}");
+
         }
     }
 }

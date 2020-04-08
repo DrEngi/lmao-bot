@@ -28,5 +28,11 @@ namespace lmao_bot.Services
         {
             this.SetStatusText($"lmao help | {Client.Guilds.Count} servers");
         }
+
+        public void SetMaintenance(DateTime time)
+        {
+            this.Maintenance = time;
+            this.SetStatusText($"lmao help | Maint. @ {time.ToShortTimeString()}");
+        }
     }
 }
