@@ -97,5 +97,14 @@ namespace lmao_bot.Modules
             //TODO: Implement disconnect guild when music is done.
             return CustomResult.FromSuccess();
         }
+
+        [Command("showallusage")]
+        [Summary("Shows all bot usage")]
+        [RequireBotDeveloper()]
+        public async Task<RuntimeResult> ShowAllUsage()
+        {
+            //TODO: Implement show all usage once tracking is in there
+            return CustomResult.FromSuccess();
+        }
     }
 }
