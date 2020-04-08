@@ -88,5 +88,14 @@ namespace lmao_bot.Modules
             return CustomResult.FromSuccess($"Maintenance set to {time.ToShortTimeString()}");
 
         }
+
+        [Command("disconnectguild")]
+        [Summary("Disconnects a given guild from the music system")]
+        [RequireBotDeveloper()]
+        public async Task<RuntimeResult> DisconnectGuild(long ServerID)
+        {
+            //TODO: Implement disconnect guild when music is done.
+            return CustomResult.FromSuccess();
+        }
     }
 }
