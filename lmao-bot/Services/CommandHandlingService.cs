@@ -68,8 +68,9 @@ namespace lmao_bot.Services
                 }
                 else if (result.IsSuccess)
                 {
-                    if (command.IsSpecified) await Database.UpdateUsageCount(command.Value.Name);
-                    else Log.LogString("Command result was success but CommandInfo object not included?");
+                    //TODO: Uncomment this
+                    //if (command.IsSpecified) await Database.UpdateUsageCount(command.Value.Name);
+                    //else Log.LogString("Command result was success but CommandInfo object not included?");
                 }
                 
                 return;
@@ -98,8 +99,9 @@ namespace lmao_bot.Services
             }
             else if (result.IsSuccess)
             {
-                if (command.IsSpecified) await Database.UpdateUsageCount(command.Value.Name);
-                else Log.LogString("Command result was success but CommandInfo object not included?");
+                //TODO: Uncomment this
+                //if (command.IsSpecified) await Database.UpdateUsageCount(command.Value.Name);
+                //else Log.LogString("Command result was success but CommandInfo object not included?");
             }
 
             // ...or even log the result (the method used should fit into

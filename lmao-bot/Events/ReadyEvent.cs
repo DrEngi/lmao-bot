@@ -10,8 +10,7 @@ namespace lmao_bot.Events
     public class ReadyEvent
     {
         LogService Log;
-        MusicService Music;
-        
+        MusicService Music; 
         public ReadyEvent(DiscordShardedClient client, LogService log, MusicService music)
         {
             client.ShardReady += ShardReady;
@@ -24,8 +23,9 @@ namespace lmao_bot.Events
             Log.LogString("Shard " + arg.ShardId + " online. " + arg.Guilds.Count + " servers.");
             if (arg.ShardId == await arg.GetRecommendedShardCountAsync() - 1)
             {
-                Log.LogString("Bot ready. Activating music...");
-                await Music.InitializeAsync();
+                //Log.LogString("Bot ready. Activating music...");
+                //TODO: Uncomment this
+                //await Music.InitializeAsync();
             }
         }
     }

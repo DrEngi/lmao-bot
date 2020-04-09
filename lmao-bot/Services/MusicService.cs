@@ -32,7 +32,6 @@ namespace lmao_bot.Services
             });
 
             await LavaNode.ConnectAsync();
-            await LavaNode.
 
             try
             {

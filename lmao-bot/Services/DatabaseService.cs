@@ -96,6 +96,11 @@ namespace lmao_bot.Services
             }
         }
 
+        public void SetPrefix(long serverID, string prefix)
+        {
+            prefixes[serverID] = prefix;
+        }
+
         /// <summary>
         /// Increments the usage count of a command by one
         /// </summary>

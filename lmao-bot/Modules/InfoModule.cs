@@ -48,6 +48,7 @@ namespace lmao_bot.Modules
             settings.BotSettings.CommandPrefix = prefix;
 
             await Database.GetServerSettings().SetServerPrefix((long)Context.Guild.Id, prefix);
+            Database.SetPrefix((long)Context.Guild.Id, prefix);
 
             var embed = new EmbedBuilder()
             {

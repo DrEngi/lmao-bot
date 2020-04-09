@@ -1,4 +1,5 @@
-﻿using lmao_bot.Models.ServerSettings;
+﻿using lmao_bot.Models.ServerPlaylists;
+using lmao_bot.Models.ServerSettings;
 using lmao_bot.Models.UserSettings;
 using MongoDB.Driver;
 using System;
@@ -21,6 +22,25 @@ namespace lmao_bot.Services.Database
             Database = database;
             DatabaseService = databaseService;
             Collection = Database.GetCollection<LmaoBotServer>("servers");
+        }
+
+        public async Task CreateServerSettings(long serverID)
+        {
+            await Collection.InsertOneAsync(new LmaoBotServer()
+            {
+                ServerID = serverID,
+                CustomCommands = null,
+                Filters = null,
+                LmaoAdmins = { },
+                BotSettings = new BotSettings()
+                {
+                    AllowNSFW = false,
+                    CommandPrefix = "lmao",
+                    ReactChance = 100,
+                    ReplaceAssChance = 100,
+                    LastModified = DateTime.Now
+                }
+            });
         }
 
         /// <summary>
