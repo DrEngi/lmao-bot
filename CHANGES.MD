@@ -9,6 +9,7 @@
 * `lmao draw`, `lmao guess` removed for now.
 * lmao admin/adminlist and related commands have been removed from the bot because they were underused and not required. Most bot access can be given by applying the `manage messages` permission to users.
 * custom commands removed, filters basically do the same thing.
+* The bot now automatically deafens itself whenever it enters a voice channel to safe memory.
 
 # Behind the scenes changes
 * all help commands have been moved to the new helpmodule, as it is extensive.
