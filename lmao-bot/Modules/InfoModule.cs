@@ -64,7 +64,7 @@ namespace lmao_bot.Modules
         public async Task Info()
         {
             string desc = "I am a fun utility bot created by Firestar493#6963 and DrEngineer#8214 with discord.py in June 2018. I replace people's asses after they \"lmao\" or \"lmfao\". Try it out!\n " +
-                          "I do all sorts of other things too, such as play music, provide moderation commands, and give answers from the almighty magic 8 - ball.Invite me to one of your servers to see for yourself!";
+                          "I do all sorts of other things too, such as play music, provide moderation commands, and give answers from the almighty magic 8 - ball. Invite me to one of your servers to see for yourself!";
 
             var embed = new EmbedBuilder
             {

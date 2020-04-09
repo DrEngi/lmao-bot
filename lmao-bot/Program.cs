@@ -54,6 +54,7 @@ namespace lmao_bot
                 .AddSingleton<StatusService>()              //playing... status
                 .AddSingleton<DBLService>()                 //discord bot list
                 .AddSingleton<UrbanDictionaryService>()     //urban dictionary
+                .AddSingleton<ImageService>()               //image service
                 .AddSingleton<InteractiveService>()         //enables interactive commands
                 .BuildServiceProvider();
         }
