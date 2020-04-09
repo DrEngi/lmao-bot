@@ -24,8 +24,17 @@ namespace lmao_bot.Services.Database
             Collection = Database.GetCollection<LmaoBotServer>("servers");
         }
 
+        /// <summary>
+        /// Create a new server settings object in the database if it doesn't already exist.
+        /// </summary>
+        /// <param name="serverID"></param>
+        /// <returns></returns>
         public async Task CreateServerSettings(long serverID)
         {
+            var filter = Builders<LmaoBotServer>.Filter.Eq("ServerID", serverID);
+
+            if (await Collection.CountDocumentsAsync(filter) != 0) return;
+
             await Collection.InsertOneAsync(new LmaoBotServer()
             {
                 ServerID = serverID,
@@ -57,34 +66,51 @@ namespace lmao_bot.Services.Database
                 LmaoBotServer serverSettings = await Collection.Find(filter).FirstAsync();
                 return serverSettings;
             }
-            return null;
+            //TODO: FOR TESTING PURPOSES ONLY.
+            //this shouldn't be required if the database is up to date.
+            else
+            {
+                await CreateServerSettings(serverID);
+
+                LmaoBotServer serverSettings = await Collection.Find(filter).FirstAsync();
+                return serverSettings;
+            }
+            //return null;
         }
 
         public async Task SetServerPrefix(long serverID, string prefix)
         {
             var filter = Builders<LmaoBotServer>.Filter.Eq("ServerID", serverID);
-            var update = Builders<LmaoBotServer>.Update.Set(server => server.BotSettings.CommandPrefix, prefix).Set(server => server.BotSettings.LastModified, DateTime.Now);
+            var update = Builders<LmaoBotServer>.Update
+                .Set(server => server.BotSettings.CommandPrefix, prefix)
+                .Set(server => server.BotSettings.LastModified, DateTime.Now);
             await Collection.FindOneAndUpdateAsync<LmaoBotServer>(filter, update);
         }
 
         public async Task SetReplaceAssChance(long serverID, int chance)
         {
             var filter = Builders<LmaoBotServer>.Filter.Eq("ServerID", serverID);
-            var update = Builders<LmaoBotServer>.Update.Set(server => server.BotSettings.ReplaceAssChance, chance).Set(server => server.BotSettings.LastModified, DateTime.Now);
+            var update = Builders<LmaoBotServer>.Update
+                .Set(server => server.BotSettings.ReplaceAssChance, chance)
+                .Set(server => server.BotSettings.LastModified, DateTime.Now);
             await Collection.FindOneAndUpdateAsync<LmaoBotServer>(filter, update);
         }
 
         public async Task SetReactChance(long serverID, int chance)
         {
             var filter = Builders<LmaoBotServer>.Filter.Eq("ServerID", serverID);
-            var update = Builders<LmaoBotServer>.Update.Set(server => server.BotSettings.ReactChance, chance).Set(server => server.BotSettings.LastModified, DateTime.Now);
+            var update = Builders<LmaoBotServer>.Update
+                .Set(server => server.BotSettings.ReactChance, chance)
+                .Set(server => server.BotSettings.LastModified, DateTime.Now);
             await Collection.FindOneAndUpdateAsync<LmaoBotServer>(filter, update);
         }
 
         public async Task SetAllowNSFW(long serverID, bool allow)
         {
             var filter = Builders<LmaoBotServer>.Filter.Eq("ServerID", serverID);
-            var update = Builders<LmaoBotServer>.Update.Set(server => server.BotSettings.AllowNSFW, allow).Set(server => server.BotSettings.LastModified, DateTime.Now);
+            var update = Builders<LmaoBotServer>.Update
+                .Set(server => server.BotSettings.AllowNSFW, allow)
+                .Set(server => server.BotSettings.LastModified, DateTime.Now);
             await Collection.FindOneAndUpdateAsync<LmaoBotServer>(filter, update);
         }
     }
