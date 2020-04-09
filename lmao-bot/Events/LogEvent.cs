@@ -13,7 +13,7 @@ namespace lmao_bot.Events
     {
         LogService Log;
 
-        public LogEvent(LogService logService, DiscordSocketClient client, CommandService commandService)
+        public LogEvent(LogService logService, DiscordShardedClient client, CommandService commandService)
         {
             Log = logService;
             client.Log += LogMessage;

@@ -12,13 +12,13 @@ namespace lmao_bot.Services
 {
     class CommandHandlingService
     {
-        private readonly DiscordSocketClient Discord;
+        private readonly DiscordShardedClient Discord;
         private readonly CommandService Commands;
         private readonly DatabaseService Database;
         private readonly LogService Log;
         private IServiceProvider Provider;
 
-        public CommandHandlingService(IServiceProvider provider, DiscordSocketClient client, CommandService commands, DatabaseService database, LogService log)
+        public CommandHandlingService(IServiceProvider provider, DiscordShardedClient client, CommandService commands, DatabaseService database, LogService log)
         {
             Discord = client;
             Commands = commands;
@@ -126,12 +126,14 @@ namespace lmao_bot.Services
 
             int argPos = 0;
             string prefix = null;
+            IGuild guild = null;
 
             if (rawMessage.Channel is IGuildChannel)
             {
                 //Message being sent in a guild
                 IGuildChannel channel = (IGuildChannel)rawMessage.Channel;
                 prefix = await Database.GetPrefix((long)channel.GuildId);
+                guild = channel.Guild;
             }
             else if (rawMessage.Channel is IDMChannel)
             {
@@ -145,13 +147,20 @@ namespace lmao_bot.Services
             {
                 if (message.HasStringPrefix("replaceass", ref argPos)) return;
                 //Message is a command
-                var context = new SocketCommandContext(Discord, message);
+                
+                SocketCommandContext context;
+                if (guild != null) context = new SocketCommandContext(Discord.GetShardFor(guild), message);
+                else context = new SocketCommandContext(Discord.GetShard(0), message);
+
                 await Commands.ExecuteAsync(context, argPos, Provider);
             }
             else if (message.Content.ToLower().Contains("lmao") || message.Content.ToLower().Contains("lmfao"))
             {
+                SocketCommandContext context;
+                if (guild != null) context = new SocketCommandContext(Discord.GetShardFor(guild), message);
+                else context = new SocketCommandContext(Discord.GetShard(0), message);
+
                 //Message is not a command but contains lmao so we're gonna replace some asses
-                var context = new SocketCommandContext(Discord, message);
                 await Commands.ExecuteAsync(context, "replaceass", Provider);
                 return;
             }

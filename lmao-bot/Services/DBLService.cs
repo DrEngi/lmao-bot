@@ -14,9 +14,9 @@ namespace lmao_bot.Services
 
         private LogService Log;
         private BotConfig Config;
-        private DiscordSocketClient Client;
+        private DiscordShardedClient Client;
 
-        public DBLService(LogService log, BotConfig config, DiscordSocketClient client)
+        public DBLService(LogService log, BotConfig config, DiscordShardedClient client)
         {
             Log = log;
             Config = config;

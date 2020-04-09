@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace lmao_bot.Services
 {
@@ -9,9 +10,9 @@ namespace lmao_bot.Services
     {
         private string StatusText;
         private DateTime Maintenance;
-        private DiscordSocketClient Client;
+        private DiscordShardedClient Client;
 
-        public StatusService(DiscordSocketClient client)
+        public StatusService(DiscordShardedClient client)
         {
             Client = client;
             StatusText = "Starting up...";

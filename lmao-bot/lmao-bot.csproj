@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Addons.Interactive" Version="1.0.1" />
     <PackageReference Include="Discord.Net" Version="2.1.1" />
     <PackageReference Include="DiscordBotsList.Api" Version="1.4.0" />
     <PackageReference Include="Flurl.Http" Version="2.4.2" />
@@ -20,6 +19,13 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0007" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0007" />
     <PackageReference Include="UrbanDictionary" Version="2.0.0" />
+    <PackageReference Include="Victoria" Version="5.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Discord.Addons.Interactive">
+      <HintPath>..\dependencies\Discord.Addons.Interactive.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

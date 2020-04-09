@@ -15,9 +15,9 @@ namespace lmao_bot.Modules
     {
         private DatabaseService Database;
         private StatusService Status;
-        private DiscordSocketClient Client;
+        private DiscordShardedClient Client;
 
-        public DevModule(DatabaseService database, StatusService status, DiscordSocketClient client)
+        public DevModule(DatabaseService database, StatusService status, DiscordShardedClient client)
         {
             Database = database;
             Status = status;

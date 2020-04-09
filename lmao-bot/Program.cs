@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Victoria;
 
 namespace lmao_bot
 {
@@ -16,24 +17,29 @@ namespace lmao_bot
     {
         static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
-        private DiscordSocketClient Client;
+        private DiscordShardedClient Client;
         private BotConfig Config;
 
         public async Task MainAsync()
         {
             Console.WriteLine("Info Starting up lmao-bot v2");
-            Client = new DiscordSocketClient();
+            Client = new DiscordShardedClient();
             Config = JsonConvert.DeserializeObject<BotConfig>(File.ReadAllText("config.json"));
 
             var services = ConfigureServices();
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync(services);
-
-            new LogEvent(services.GetRequiredService<LogService>(), Client, services.GetRequiredService<CommandService>());
+            ConfigureEvents(services);
 
             await Client.LoginAsync(TokenType.Bot, Config.Token);
             await Client.StartAsync();
 
             await Task.Delay(-1);
+        }
+
+        private void ConfigureEvents(IServiceProvider services)
+        {
+            new LogEvent(services.GetRequiredService<LogService>(), Client, services.GetRequiredService<CommandService>());
+            new ReadyEvent(Client, services.GetRequiredService<LogService>(), services.GetRequiredService<MusicService>());
         }
 
         private IServiceProvider ConfigureServices()
@@ -54,8 +60,10 @@ namespace lmao_bot
                 .AddSingleton<StatusService>()              //playing... status
                 .AddSingleton<DBLService>()                 //discord bot list
                 .AddSingleton<UrbanDictionaryService>()     //urban dictionary
-                .AddSingleton<ImageService>()               //image service
-                .AddSingleton<InteractiveService>()         //enables interactive commands
+                .AddSingleton<ImageService>()               //image manipulation
+                .AddSingleton<InteractiveService>()
+                .AddSingleton<MusicService>()
+
                 .BuildServiceProvider();
         }
     }
