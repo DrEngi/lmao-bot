@@ -15,7 +15,7 @@ namespace lmao_bot.Services
         public StatusService(DiscordShardedClient client)
         {
             Client = client;
-            StatusText = "Starting up...";
+            StatusText = "Running rewerite test!";
             Client.SetActivityAsync(new Discord.Game(StatusText));
         }
 
