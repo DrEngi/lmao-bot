@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using lmao_bot.Models.ServerSettings;
 using lmao_bot.Services;
 using System;
@@ -11,10 +12,12 @@ namespace lmao_bot.Modules
     public class InfoModule : ModuleBase
     {
         private DatabaseService Database;
+        private DiscordShardedClient Client;
 
-        public InfoModule(DatabaseService service)
+        public InfoModule(DatabaseService service, DiscordShardedClient client)
         {
             Database = service;
+            Client = client;
         }
 
         [Command("prefix")]
@@ -77,7 +80,7 @@ namespace lmao_bot.Modules
                     new EmbedFieldBuilder()
                     {
                         Name = "Total Servers",
-                        Value = (await Context.Client.GetGuildsAsync()).Count,
+                        Value = Client.Guilds.Count,
                         IsInline = true
                     },
                     new EmbedFieldBuilder()
@@ -89,8 +92,7 @@ namespace lmao_bot.Modules
                     new EmbedFieldBuilder()
                     {
                          Name = "Invite me to your server",
-                         Value = "[You won't regret it :eyes:](https://discordapp.com/oauth2/authorize?client_id=460667259753463830&scope=bot&permissions=336063575)",
-                                                                                                        //TODO: THIS IS DEV'S INVITE!!!!!!
+                         Value = "[You won't regret it :eyes:](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)",
                          IsInline = false
                     },
                     new EmbedFieldBuilder()
@@ -142,7 +144,7 @@ namespace lmao_bot.Modules
             var embed = new EmbedBuilder()
             {
                 Title = "Invite lmao-bot!",
-                Description = "Need ass insurance in other servers you're in?\n\n[Click here to invite to more servers!](https://discordapp.com/oauth2/authorize?client_id=460667259753463830&scope=bot&permissions=336063575)",
+                Description = "Need ass insurance in other servers you're in?\n\n[Click here to invite to more servers!](https://discordapp.com/oauth2/authorize?client_id=459432854821142529&scope=bot&permissions=336063575)",
                 ThumbnailUrl = Context.Client.CurrentUser.GetAvatarUrl(),
                 Color = Color.Orange
             }.Build();

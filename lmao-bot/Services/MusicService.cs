@@ -32,7 +32,9 @@ namespace lmao_bot.Services
             });
 
             await LavaNode.ConnectAsync();
+        }
 
+            /*
             try
             {
                 LavaPlayer player = await LavaNode.JoinAsync(Client.GetChannel(547246466733703168) as IVoiceChannel);
@@ -44,6 +46,7 @@ namespace lmao_bot.Services
 
                 throw;
             }
+            */
         }
     }
 }
