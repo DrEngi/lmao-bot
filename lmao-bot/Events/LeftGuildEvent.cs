@@ -7,26 +7,26 @@ using System.Threading.Tasks;
 
 namespace lmao_bot.Events
 {
-    public class JoinedGuildEvent
+    public class LeftGuildEvent
     {
         private DiscordShardedClient Client;
         private DatabaseService Database;
         private LogService Log;
         private StatusService Status;
-        
-        public JoinedGuildEvent(DiscordShardedClient client, DatabaseService database, LogService log, StatusService status)
+
+        public LeftGuildEvent(DiscordShardedClient client, DatabaseService database, LogService log, StatusService status)
         {
             Client = client;
             Database = database;
             Log = log;
             Status = status;
-            Client.JoinedGuild += Client_JoinedGuild;
+            Client.LeftGuild += Client_LeftGuild;
         }
 
-        private async Task Client_JoinedGuild(SocketGuild arg)
+        private async Task Client_LeftGuild(SocketGuild arg)
         {
-            Log.LogString($"New server! {arg.Name} with {arg.MemberCount} members! Total servers now at {Client.Guilds.Count}");
-            await Database.GetServerSettings().CreateServerSettings((long)arg.Id);
+            Log.LogString($"Server left :( Total servers now at {Client.Guilds.Count}");
+            await Database.GetServerSettings().DeleteServerSettings((long)arg.Id);
             Status.SetToServerCount();
         }
     }

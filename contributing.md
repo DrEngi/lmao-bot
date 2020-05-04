@@ -31,7 +31,7 @@ With the above dependencies satisfied, [create your new account on Github](https
 
 Next up, you need to fork and clone the repo to be able to contribute to it. You can [learn about forking on Github](https://help.github.com/articles/fork-a-repo). Once you have your own fork, [clone it to your local machine](https://help.github.com/articles/cloning-a-repository/).
 
-Finally, change into the new directory created by the clone and open the lmao-bot solution and start working. The main bot rests within the lmao-bot project. If you're looking to change the database schemas (by editing anything in `lmaocore`), you may do so, but please provide explicit reasoning in your pull request as well as methods for converting current objects into your new versions.
+Finally, change into the new directory created by the clone and open the lmao-bot solution and start working. The main bot rests within the lmao-bot project. If you're looking to change the database schemas (by editing anything in `lmao_bot.Models`), you may do so, but please provide explicit reasoning in your pull request as well as methods for converting current objects into your new versions.
 
 ### Testing
 

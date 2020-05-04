@@ -39,8 +39,8 @@ namespace lmao_bot
         private void ConfigureEvents(IServiceProvider services)
         {
             new LogEvent(services.GetRequiredService<LogService>(), Client, services.GetRequiredService<CommandService>());
-            new ReadyEvent(Client, services.GetRequiredService<LogService>(), services.GetRequiredService<MusicService>());
-            new JoinedGuildEvent(Client, services.GetRequiredService<DatabaseService>(), services.GetRequiredService<LogService>());
+            new ReadyEvent(Client, services.GetRequiredService<LogService>(), services.GetRequiredService<MusicService>(), services.GetRequiredService<StatusService>());
+            new JoinedGuildEvent(Client, services.GetRequiredService<DatabaseService>(), services.GetRequiredService<LogService>(), services.GetRequiredService<StatusService>());
         }
 
         private IServiceProvider ConfigureServices()

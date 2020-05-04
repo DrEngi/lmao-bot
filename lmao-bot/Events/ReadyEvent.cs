@@ -10,12 +10,15 @@ namespace lmao_bot.Events
     public class ReadyEvent
     {
         LogService Log;
-        MusicService Music; 
-        public ReadyEvent(DiscordShardedClient client, LogService log, MusicService music)
+        MusicService Music;
+        StatusService Status;
+
+        public ReadyEvent(DiscordShardedClient client, LogService log, MusicService music, StatusService status)
         {
             client.ShardReady += ShardReady;
             Log = log;
             Music = music;
+            Status = status;
         }
 
         private async Task ShardReady(DiscordSocketClient arg)
@@ -23,7 +26,8 @@ namespace lmao_bot.Events
             Log.LogString("Shard " + arg.ShardId + " online. " + arg.Guilds.Count + " servers.");
             if (arg.ShardId == await arg.GetRecommendedShardCountAsync() - 1)
             {
-                //Log.LogString("Bot ready. Activating music...");
+                Log.LogString("Bot ready.");
+                Status.SetToServerCount();
                 //TODO: Uncomment this
                 //await Music.InitializeAsync();
             }

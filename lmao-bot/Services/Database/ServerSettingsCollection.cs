@@ -52,6 +52,15 @@ namespace lmao_bot.Services.Database
             });
         }
 
+        public async Task DeleteServerSettings(long serverID)
+        {
+            var filter = Builders<LmaoBotServer>.Filter.Eq("ServerID", serverID);
+
+            if (await Collection.CountDocumentsAsync(filter) != 0) return;
+
+            await Collection.DeleteOneAsync(filter);
+        }
+
         /// <summary>
         /// Retrieves the server settings for the specified ID
         /// </summary>

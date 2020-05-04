@@ -47,6 +47,5 @@ namespace lmao_bot.Services
                 throw;
             }
             */
-        }
     }
 }
