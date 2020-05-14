@@ -63,7 +63,7 @@ Fill in all data as you like. The DBL field is used for the token that belongs t
 
 ### Pull Requests
 
-Once you're satisfied, [submit your pull request](https://help.github.com/articles/creating-a-pull-request/). Please be sure you create a pull request to the REWRITE branch, not to master or develop (this is for the python version right now). Direct PRs to master/develop will be denied as they skip crucial build checks and ruin my OCD.
+Once you're satisfied, [submit your pull request](https://help.github.com/articles/creating-a-pull-request/). Please be sure you create a pull request to the DEVELOP branch, not to master. Direct PRs to master will be denied as they skip crucial build checks and ruin my OCD.
 
 ## Thank you!
 
