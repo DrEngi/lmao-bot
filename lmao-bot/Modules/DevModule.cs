@@ -89,6 +89,14 @@ namespace lmao_bot.Modules
 
         }
 
+        [Command("refreshcount")]
+        [Summary("Refresh bot status with the current user count")]
+        [RequireBotDeveloper()]
+        public async Task RefreshCount()
+        {
+            Status.SetToServerCount();
+        }
+
         [Command("disconnectguild")]
         [Summary("Disconnects a given guild from the music system")]
         [RequireBotDeveloper()]
