@@ -22,7 +22,7 @@ namespace lmao_bot
 
         public async Task MainAsync()
         {
-            Console.WriteLine("Info Starting up lmao-bot v2");
+            Console.WriteLine("Starting up lmao-bot v2...");
             Client = new DiscordShardedClient();
             Config = JsonConvert.DeserializeObject<BotConfig>(File.ReadAllText("config.json"));
 

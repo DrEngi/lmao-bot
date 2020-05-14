@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace lmao_bot.Modules
 {
+    [RequireBotDeveloper(ErrorMessage = "NSFW is not implemented yet, but we're working on it!")]
     public class NSFWModule: ModuleBase
     {
         private DatabaseService Database;
