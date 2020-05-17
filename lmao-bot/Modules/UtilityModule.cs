@@ -26,13 +26,10 @@ namespace lmao_bot.Modules
         [Summary("Grabs the profile picture of yourself or someone else")]
         public async Task Avatar(IUser user = null)
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             if (user == null) user = Context.User;
 
             if (String.IsNullOrEmpty(user.GetAvatarUrl())) await ReplyAsync(user.GetDefaultAvatarUrl());
             else await ReplyAsync(user.GetAvatarUrl());
-
-            typing.Dispose();
         }
 
         [Command("someone")]
@@ -40,7 +37,6 @@ namespace lmao_bot.Modules
         [Summary("Mentions a random person in the server")]
         public async Task Someone([Remainder]string text)
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             SocketGuildUser guildUser = (SocketGuildUser)Context.User;
             ChannelPermissions permissions = guildUser.GetPermissions((IGuildChannel)Context.Channel);
             IReadOnlyCollection<IUser> users = await Context.Channel.GetUsersAsync().ElementAt(0);
@@ -50,7 +46,6 @@ namespace lmao_bot.Modules
 
             if (permissions.MentionEveryone) await ReplyAsync(users.ElementAt(r).Mention + " " + text);
             else await ReplyAsync(Utilities.MessageUtil.CleanMention(users.ElementAt(r).Mention + " " + text));
-            typing.Dispose();
         }
 
         [Command("urban")]
@@ -59,7 +54,6 @@ namespace lmao_bot.Modules
         [RequireNsfw(ErrorMessage = "Whoa-ho-ho-ho, hold your horses. The Urban Dictionary command only works in NSFW channels.")]
         public async Task Urban([Remainder]string word)
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             WordDefine definition = await UDService.Define(word);
 
             Embed e = new EmbedBuilder()
@@ -81,8 +75,6 @@ namespace lmao_bot.Modules
                 }
             }.Build();
             await ReplyAsync(embed: e);
-
-            typing.Dispose();
         }
 
         [Command("lmgtfy")]
@@ -90,10 +82,8 @@ namespace lmao_bot.Modules
         [Summary("Too lazy to google? This'll help you out")]
         public async Task LMGTFY([Remainder] string query)
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             string newQuery = "Let me Google that for you... http://lmgtfy.com/?q=" + HttpUtility.UrlEncode(query);
             await ReplyAsync(Context.User.Mention + " " + newQuery);
-            typing.Dispose();
         }
     }
 }

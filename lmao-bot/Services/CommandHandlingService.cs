@@ -154,8 +154,10 @@ namespace lmao_bot.Services
                 if (guild != null) context = new SocketCommandContext(Discord.GetShardFor(guild), message);
                 else context = new SocketCommandContext(Discord.GetShard(0), message);
 
-                IDisposable ITyping = context.Channel.EnterTypingState();
-                await Commands.ExecuteAsync(context, argPos, Provider);
+                using (IDisposable ITyping = context.Channel.EnterTypingState())
+                {
+                    await Commands.ExecuteAsync(context, argPos, Provider);
+                }
             }
             else if (message.Content.ToLower().Contains("lmao") || message.Content.ToLower().Contains("lmfao"))
             {
@@ -163,10 +165,11 @@ namespace lmao_bot.Services
                 if (guild != null) context = new SocketCommandContext(Discord.GetShardFor(guild), message);
                 else context = new SocketCommandContext(Discord.GetShard(0), message);
 
-                //Message is not a command but contains lmao so we're gonna replace some asses
-                IDisposable ITyping = context.Channel.EnterTypingState();
-                await Commands.ExecuteAsync(context, "replaceass", Provider);
-                ITyping.Dispose();
+                //Message is not a command but contains lmao so we're gonna replace some asses          
+                using (IDisposable ITyping = context.Channel.EnterTypingState())
+                {
+                    await Commands.ExecuteAsync(context, "replaceass", Provider);
+                }
                 return;
             }
         }

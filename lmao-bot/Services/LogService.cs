@@ -81,9 +81,16 @@ namespace lmao_bot.Services
                         Text = "This will also be logged to the console and latest.log"
                     }
                 }.Build();
-                
-                var _1 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync(embed: e);
-                var _2 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync($"```{message.Exception}```");
+
+                try
+                {
+                    var _1 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync(embed: e);
+                    var _2 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync($"```{message.Exception}```");
+                }
+                catch (Exception)
+                {
+
+                }
             }
 
             Console.WriteLine(message.Severity + " " + message.Message);

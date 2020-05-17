@@ -32,9 +32,7 @@ namespace lmao_bot.Modules
         [Summary("Sends a random SFW booty image in the chat")]
         public async Task Booty()
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             await Context.Channel.SendFileAsync(Image.GetRandomBooty(), "booty.jpg");
-            typing.Dispose();
         }
 
         [Command("moon")]
@@ -45,9 +43,7 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
 
-            IDisposable typing = Context.Channel.EnterTypingState();
             await Context.Channel.SendFileAsync(Image.GetRandomBooty(), "booty.jpg", user.Mention + ", you have been mooned by " + Context.Message.Author.Mention + "!");
-            typing.Dispose();
         }
 
         [Command("deepfry")]
@@ -64,11 +60,9 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
 
-            IDisposable typing = Context.Channel.EnterTypingState();
             Stream stream = await Image.GetBeautifulImage(user);
             await Context.Channel.SendFileAsync(stream, "beautiful.jpg", user.Mention + " :heart:");
             await stream.DisposeAsync();
-            typing.Dispose();
         }
 
         [Command("ugly")]
@@ -78,11 +72,9 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
 
-            IDisposable typing = Context.Channel.EnterTypingState();
             Stream stream = await Image.GetUglyImage(user);
             await Context.Channel.SendFileAsync(stream, "ugly.jpg", user.Mention + " :japanese_goblin:");
             await stream.DisposeAsync();
-            typing.Dispose();
         }
 
         [Command("garbage")]
@@ -93,11 +85,9 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
 
-            IDisposable typing = Context.Channel.EnterTypingState();
             Stream stream = await Image.GetGarbageImage(user);
             await Context.Channel.SendFileAsync(stream, "garbage.jpg", user.Mention + " is GARBAGE! :wastebasket:");
             await stream.DisposeAsync();
-            typing.Dispose();
         }
 
         [Command("triggered")]
@@ -107,11 +97,9 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
 
-            IDisposable typing = Context.Channel.EnterTypingState();
             Stream stream = await Image.GetTriggeredImage(user);
             await Context.Channel.SendFileAsync(stream, "triggered.jpg", user.Mention + " needs a safe space!");
             await stream.DisposeAsync();
-            typing.Dispose();
         }
 
         [Command("victory")]
@@ -121,11 +109,9 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
 
-            IDisposable typing = Context.Channel.EnterTypingState();
             Stream stream = await Image.GetVictoryImage(user);
             await Context.Channel.SendFileAsync(stream, "victory.jpg", user.Mention + " :trophy: Victory royale!");
             await stream.DisposeAsync();
-            typing.Dispose();
         }
 
         [Command("wanted")]
@@ -135,11 +121,9 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
 
-            IDisposable typing = Context.Channel.EnterTypingState();
             Stream stream = await Image.GetWantedImage(user);
             await Context.Channel.SendFileAsync(stream, "wanted.jpg", user.Mention + " is WANTED!");
             await stream.DisposeAsync();
-            typing.Dispose();
         }
 
         [Command("whosthat")]
@@ -149,11 +133,9 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
 
-            IDisposable typing = Context.Channel.EnterTypingState();
             Stream stream = await Image.GetWhosThatImage(user);
             await Context.Channel.SendFileAsync(stream, "whosthat.jpg", $"Who's that Pokémon?\n\nIt's... {user.Mention}!");
             await stream.DisposeAsync();
-            typing.Dispose();
         }
 
         [Command("seenfromabove")]
@@ -163,11 +145,9 @@ namespace lmao_bot.Modules
         {
             if (user == null) user = (IGuildUser)Context.User;
             
-            IDisposable typing = Context.Channel.EnterTypingState();
             Stream stream = await Image.GetSeenFromAboveImage(user);
             await Context.Channel.SendFileAsync(stream, "seenfromabove.jpg", $"It's... {user.Mention}, seen from above!");
             await stream.DisposeAsync();
-            typing.Dispose();
         }
     }
 }

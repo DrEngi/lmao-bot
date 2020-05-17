@@ -50,9 +50,7 @@ namespace lmao_bot.Modules
         [RequireBotNSFW]
         public async Task GoneWild()
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             await ReplyAsync(embed: this.SearchReddit("gonewild"));
-            typing.Dispose();
         }
 
         [Command("ladybonersgw")]
@@ -62,9 +60,7 @@ namespace lmao_bot.Modules
         [RequireBotNSFW]
         public async Task LBG()
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             await ReplyAsync(embed: this.SearchReddit("ladybonersgw"));
-            typing.Dispose();
         }
 
         [Command("gonewildmale")]
@@ -74,9 +70,7 @@ namespace lmao_bot.Modules
         [RequireBotNSFW]
         public async Task GoneWildMale()
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             await ReplyAsync(embed: this.SearchReddit("gonewildmale"));
-            typing.Dispose();
         }
 
         [Command("thighhighs")]
@@ -86,9 +80,7 @@ namespace lmao_bot.Modules
         [RequireBotNSFW]
         public async Task ThighHighs()
         {
-            IDisposable typing = Context.Channel.EnterTypingState();
             await ReplyAsync(embed: this.SearchReddit("thighhighs"));
-            typing.Dispose();
         }
     }
 }
