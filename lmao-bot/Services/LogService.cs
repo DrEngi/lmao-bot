@@ -11,8 +11,12 @@ namespace lmao_bot.Services
 {
     public class LogService
     {
-        public LogService()
+        private DiscordShardedClient Client;
+        
+        public LogService(DiscordShardedClient client)
         {
+            Client = client;
+            
             if (!Directory.Exists("logs/"))
             {
                 Directory.CreateDirectory("logs/");
@@ -26,10 +30,11 @@ namespace lmao_bot.Services
         
         public Task LogDiscord(LogMessage message)
         {
-            Console.WriteLine($"[{message.Severity.ToString().ToUpper()}] {message.Message}");
-            File.AppendAllText("logs/latest.log", $"[{message.Severity.ToString().ToUpper()}] {message.Message}" + Environment.NewLine);
+            Console.WriteLine($"[{message.Severity.ToString().ToUpper()}] [DISCORD] {message.Message}");
+
+            File.AppendAllText("logs/latest.log", $"[{message.Severity.ToString().ToUpper()}] [DISCORD] {message.Message}" + Environment.NewLine);
             File.AppendAllText("logs/latest.log", $"{message.Exception}" + Environment.NewLine);
-            Console.WriteLine(message.Exception + Environment.NewLine);
+           
             return Task.CompletedTask;
         }
 
@@ -40,8 +45,52 @@ namespace lmao_bot.Services
             {
                 // Don't risk blocking the logging task by awaiting a message send; ratelimits!?
                 var _ = command.Context.Channel.SendMessageAsync($"Error: {command.Message}");
-                Console.WriteLine("[ERROR] " + command.Message);
+                Console.WriteLine("[ERROR] [COMMAND] " + command.Message);
                 File.AppendAllText("logs/latest.log", "[INFO] " + message + Environment.NewLine);
+
+                //Send information to exceptions channel: 711423990459006986
+                Embed e = new EmbedBuilder()
+                {
+                    Title = "Bot Exception",
+                    Description = $"{command.Message}",
+                    Color = Color.Red,
+                    Fields = new List<EmbedFieldBuilder>()
+                    {
+                        new EmbedFieldBuilder()
+                        {
+                            Name = "Server ID",
+                            Value = command.Context.Guild.Id,
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder()
+                        {
+                            Name = "User ID",
+                            Value = command.Context.User.Id,
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder()
+                        {
+                            Name = "Channel ID",
+                            Value = command.Context.Channel.Id,
+                            IsInline = false
+                        }
+                    },
+                    Timestamp = DateTime.Now,
+                    Footer = new EmbedFooterBuilder()
+                    {
+                        Text = "This will also be logged to the console and latest.log"
+                    }
+                }.Build();
+
+                try
+                {
+                    var _1 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync(embed: e);
+                    var _2 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync($"```{message.Exception}```");
+                }
+                catch (Exception)
+                {
+
+                }
             }
 
             Console.WriteLine(message.Severity + " " + message.Message);

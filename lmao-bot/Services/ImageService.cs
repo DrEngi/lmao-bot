@@ -19,9 +19,13 @@ namespace lmao_bot.Services
         private string ImageLocation = "img/";
         private string WhiteCanvas = "img/white_canvas.png";
 
+        FontCollection Fonts;
+        FontFamily Arial;
+
         public ImageService()
         {
-
+            Fonts = new FontCollection();
+            Arial = Fonts.Install("fonts/arial.ttf");
         }
 
         public Stream GetRandomBooty()
@@ -37,13 +41,19 @@ namespace lmao_bot.Services
             }
         }
 
+        private async Task<Image<Rgba32>> GetUserAvatar(IGuildUser user)
+        {
+            if (String.IsNullOrEmpty(user.GetAvatarUrl())) return SixLabors.ImageSharp.Image.Load<Rgba32>(await user.GetDefaultAvatarUrl().GetBytesAsync());
+            else return SixLabors.ImageSharp.Image.Load<Rgba32>(await user.GetAvatarUrl().GetBytesAsync());
+        }
+
         public async Task<Stream> GetBeautifulImage(IGuildUser user)
         {
             string path = ImageLocation + "beautiful.png";
             string avatarURL = user.GetAvatarUrl();
             Stream stream = new MemoryStream();
 
-            using (SixLabors.ImageSharp.Image avatarImage = SixLabors.ImageSharp.Image.Load<Rgba32>(await avatarURL.GetBytesAsync()))
+            using (SixLabors.ImageSharp.Image avatarImage = await GetUserAvatar(user))
             using (SixLabors.ImageSharp.Image whiteCanvas = SixLabors.ImageSharp.Image.Load<Rgba32>(WhiteCanvas))
             using (SixLabors.ImageSharp.Image beautifulTemplate = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
@@ -69,7 +79,7 @@ namespace lmao_bot.Services
             string avatarURL = user.GetAvatarUrl();
             Stream stream = new MemoryStream();
 
-            using (SixLabors.ImageSharp.Image avatarImage = SixLabors.ImageSharp.Image.Load<Rgba32>(await avatarURL.GetBytesAsync()))
+            using (SixLabors.ImageSharp.Image avatarImage = await GetUserAvatar(user))
             using (SixLabors.ImageSharp.Image whiteCanvas = SixLabors.ImageSharp.Image.Load<Rgba32>(WhiteCanvas))
             using (SixLabors.ImageSharp.Image uglyTemplate = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
@@ -93,7 +103,7 @@ namespace lmao_bot.Services
             string avatarURL = user.GetAvatarUrl();
             Stream stream = new MemoryStream();
 
-            using (SixLabors.ImageSharp.Image avatarImage = SixLabors.ImageSharp.Image.Load<Rgba32>(await avatarURL.GetBytesAsync()))
+            using (SixLabors.ImageSharp.Image avatarImage = await GetUserAvatar(user))
             using (SixLabors.ImageSharp.Image whiteCanvas = SixLabors.ImageSharp.Image.Load<Rgba32>(WhiteCanvas))
             using (SixLabors.ImageSharp.Image garbageTemplate = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
@@ -117,7 +127,7 @@ namespace lmao_bot.Services
             string avatarURL = user.GetAvatarUrl();
             Stream stream = new MemoryStream();
 
-            using (SixLabors.ImageSharp.Image avatarImage = SixLabors.ImageSharp.Image.Load<Rgba32>(await avatarURL.GetBytesAsync()))
+            using (SixLabors.ImageSharp.Image avatarImage = await GetUserAvatar(user))
             using (SixLabors.ImageSharp.Image triggeredTemplate = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(triggeredTemplate.Width, triggeredTemplate.Height)))
@@ -137,7 +147,7 @@ namespace lmao_bot.Services
             string avatarURL = user.GetAvatarUrl();
             Stream stream = new MemoryStream();
 
-            using (SixLabors.ImageSharp.Image avatarImage = SixLabors.ImageSharp.Image.Load<Rgba32>(await avatarURL.GetBytesAsync()))
+            using (SixLabors.ImageSharp.Image avatarImage = await GetUserAvatar(user))
             using (SixLabors.ImageSharp.Image whiteCanvas = SixLabors.ImageSharp.Image.Load<Rgba32>(WhiteCanvas))
             using (SixLabors.ImageSharp.Image victoryTemplate = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
@@ -161,7 +171,7 @@ namespace lmao_bot.Services
             string avatarURL = user.GetAvatarUrl();
             Stream stream = new MemoryStream();
 
-            using (SixLabors.ImageSharp.Image avatarImage = SixLabors.ImageSharp.Image.Load<Rgba32>(await avatarURL.GetBytesAsync()))
+            using (SixLabors.ImageSharp.Image avatarImage = await GetUserAvatar(user))
             using (SixLabors.ImageSharp.Image triggeredTemplate = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(244, 239)))
@@ -181,7 +191,7 @@ namespace lmao_bot.Services
             string avatarURL = user.GetAvatarUrl();
             Stream stream = new MemoryStream();
 
-            using (SixLabors.ImageSharp.Image avatarImage = SixLabors.ImageSharp.Image.Load<Rgba32>(await avatarURL.GetBytesAsync()))
+            using (SixLabors.ImageSharp.Image avatarImage = await GetUserAvatar(user))
             using (SixLabors.ImageSharp.Image whiteCanvas = SixLabors.ImageSharp.Image.Load<Rgba32>(WhiteCanvas))
             using (SixLabors.ImageSharp.Image victoryTemplate = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
@@ -205,7 +215,7 @@ namespace lmao_bot.Services
             string avatarURL = user.GetAvatarUrl();
             Stream stream = new MemoryStream();
 
-            using (SixLabors.ImageSharp.Image avatarImage = SixLabors.ImageSharp.Image.Load<Rgba32>(await avatarURL.GetBytesAsync()))
+            using (SixLabors.ImageSharp.Image avatarImage = await GetUserAvatar(user))
             using (SixLabors.ImageSharp.Image whiteCanvas = SixLabors.ImageSharp.Image.Load<Rgba32>(WhiteCanvas))
             using (SixLabors.ImageSharp.Image seenFromAboveTemplate = SixLabors.ImageSharp.Image.Load<Rgba32>(path))
             {
@@ -219,7 +229,9 @@ namespace lmao_bot.Services
                 whiteCanvas.Mutate(x => x.DrawImage(seenFromAboveTemplate, location: new SixLabors.Primitives.Point(0, 0), 1));
 
                 string text = user.Nickname == null ? user.Username : user.Nickname;
-                Font font = SystemFonts.CreateFont("Arial", 32f);
+                
+                Font font = Arial.CreateFont(32f);
+                
 
                 var measure = TextMeasurer.Measure(text, new RendererOptions(font));
 
