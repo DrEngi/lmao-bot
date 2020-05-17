@@ -24,15 +24,14 @@ namespace lmao_bot.Modules
         [Command("avatar")]
         [Alias("pfp", "image", "profilepic", "profilepicture")]
         [Summary("Grabs the profile picture of yourself or someone else")]
-        public async Task Avatar(string user = "")
+        public async Task Avatar(IUser user = null)
         {
             IDisposable typing = Context.Channel.EnterTypingState();
-            if (Context.Message.MentionedUserIds.Count <= 0) await ReplyAsync(Context.User.GetAvatarUrl());
-            else
-            {
-                IGuildUser userClass = await Context.Guild.GetUserAsync(Context.Message.MentionedUserIds.ElementAt(0));
-                await ReplyAsync(userClass.GetAvatarUrl());
-            }
+            if (user == null) user = Context.User;
+
+            if (String.IsNullOrEmpty(user.GetAvatarUrl())) await ReplyAsync(user.GetDefaultAvatarUrl());
+            else await ReplyAsync(user.GetAvatarUrl());
+
             typing.Dispose();
         }
 
