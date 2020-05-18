@@ -56,6 +56,12 @@ namespace lmao_bot.Modules
         {
             WordDefine definition = await UDService.Define(word);
 
+            if (definition.Definitions.Count == 0)
+            {
+                await ReplyAsync($"{Context.User.Mention}, I couldn't find any definitions for `{word}`");
+                return;
+            }
+
             Embed e = new EmbedBuilder()
             {
                 Title = $"Urban Dictionary Entry for {definition.Definitions[0].Word}",
@@ -65,7 +71,7 @@ namespace lmao_bot.Modules
                     new EmbedFieldBuilder()
                     {
                         Name = "Example",
-                        Value = definition.Definitions[0].Example
+                        Value = String.IsNullOrEmpty(definition.Definitions[0].Example) ? "N/A" : definition.Definitions[0].Example
                     }
                 },
                 Color = Color.Orange,

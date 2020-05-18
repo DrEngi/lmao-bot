@@ -82,15 +82,11 @@ namespace lmao_bot.Services
                     }
                 }.Build();
 
-                try
+                if (Client.CurrentUser.Id == 459432854821142529)
                 {
                     var _1 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync(embed: e);
                     var _2 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync($"```{message.Exception}```");
-                }
-                catch (Exception)
-                {
-
-                }
+                }   
             }
 
             Console.WriteLine(message.Severity + " " + message.Message);

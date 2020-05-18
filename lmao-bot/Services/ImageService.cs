@@ -34,7 +34,8 @@ namespace lmao_bot.Services
             string bootyFileName = "booty" + rand.Next(11) + ".jpg";
             string path = ImageLocation + "booties/" + bootyFileName;
 
-            if (!File.Exists(path)) return null;
+            //a fix to ensure even if no image is found, we'll still load somethin
+            if (!File.Exists(path)) return File.OpenRead(ImageLocation + "booties/booty1.jpg");
             else
             {
                 return File.OpenRead(path);
