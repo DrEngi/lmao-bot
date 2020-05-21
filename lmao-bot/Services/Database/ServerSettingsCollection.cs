@@ -46,7 +46,7 @@ namespace lmao_bot.Services.Database
                     AllowNSFW = false,
                     CommandPrefix = "lmao",
                     ReactChance = 100,
-                    ReplaceAssChance = 100,
+                    ReplaceAssChance = 10,
                     LastModified = DateTime.Now
                 }
             });

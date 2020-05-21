@@ -18,6 +18,8 @@ namespace lmao_bot.Services
         private readonly LogService Log;
         private IServiceProvider Provider;
 
+        private Dictionary<ulong, DateTime> tempRateLimits = new Dictionary<ulong, DateTime>();
+
         public CommandHandlingService(IServiceProvider provider, DiscordShardedClient client, CommandService commands, DatabaseService database, LogService log)
         {
             Discord = client;
@@ -154,6 +156,25 @@ namespace lmao_bot.Services
                 if (guild != null) context = new SocketCommandContext(Discord.GetShardFor(guild), message);
                 else context = new SocketCommandContext(Discord.GetShard(0), message);
 
+                if (tempRateLimits.ContainsKey(context.User.Id))
+                {
+                    if (DateTime.Now.Subtract(tempRateLimits[context.User.Id]) < new TimeSpan(0, 0, 3))
+                    {
+                        Console.WriteLine("rate limits activated on " + context.User.Username);
+                        return;
+                    }
+                    else
+                    {
+                        tempRateLimits[context.User.Id] = DateTime.Now;
+                    }
+                }
+                else
+                {
+                    tempRateLimits.Add(context.User.Id, DateTime.Now);
+                }
+
+                //Console.WriteLine("command executing: " + context.Message.Content + " by " + context.Message.Author + " in " + context.Message.Channel);
+
                 using (IDisposable ITyping = context.Channel.EnterTypingState())
                 {
                     await Commands.ExecuteAsync(context, argPos, Provider);
@@ -164,6 +185,33 @@ namespace lmao_bot.Services
                 SocketCommandContext context;
                 if (guild != null) context = new SocketCommandContext(Discord.GetShardFor(guild), message);
                 else context = new SocketCommandContext(Discord.GetShard(0), message);
+
+                if (tempRateLimits.ContainsKey(context.User.Id))
+                {
+                    if (DateTime.Now.Subtract(tempRateLimits[context.User.Id]) < new TimeSpan(0, 0, 3))
+                    {
+                        Log.LogString("rate limits activated on " + context.User.Username);
+
+                        if (context.User.Id == 293855081596452866 || context.User.Id == 712812620952109117)
+                        {
+                            Log.LogString("leaving plagued server! " + context.Guild.Id);
+                            await context.Channel.SendMessageAsync(context.User.Mention + ", thanks, this was fun. I'll be leaving your server now. Don't worry, there's lots of other bots to plague");
+                            await context.Guild.LeaveAsync();
+                        }
+
+                        return;
+                    }
+                    else
+                    {
+                        tempRateLimits[context.User.Id] = DateTime.Now;
+                    }
+                }
+                else
+                {
+                    tempRateLimits.Add(context.User.Id, DateTime.Now);
+                }
+
+                //Console.WriteLine("command executing: " + context.Message.Content + " by " + context.Message.Author + " in " + context.Message.Channel);
 
                 //Message is not a command but contains lmao so we're gonna replace some asses          
                 using (IDisposable ITyping = context.Channel.EnterTypingState())

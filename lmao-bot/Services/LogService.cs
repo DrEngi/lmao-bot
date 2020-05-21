@@ -84,12 +84,17 @@ namespace lmao_bot.Services
 
                 if (Client.CurrentUser.Id == 459432854821142529)
                 {
+                    //this is supremely hacky but just doing it for a temporary fix
+                    if (message.Exception.InnerException.Message.Contains("403") || message.Exception.InnerException.Message.Contains("50013"))
+                    {
+                        //don't bother forwarding exceptions if they're because of permission issues
+                        return Task.CompletedTask;
+                    }
+                    
                     var _1 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync(embed: e);
                     var _2 = ((IMessageChannel)Client.GetChannel(711423990459006986)).SendMessageAsync($"```{message.Exception}```");
                 }   
             }
-
-            Console.WriteLine(message.Severity + " " + message.Message);
             return Task.CompletedTask;
         }
 
