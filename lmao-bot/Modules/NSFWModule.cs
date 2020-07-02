@@ -23,9 +23,10 @@ namespace lmao_bot.Modules
             Client = client;
         }
 
-        private Embed SearchReddit(string sub)
+        private Embed SearchReddit(string sub, string sort="hot", int limit=100)
         {
             //TODO: Parse reddit with flurl.
+            string url = $"https://www.reddit.com/r/{sub}/{sort}.json?limit={limit}";
             return null;
         }
 
