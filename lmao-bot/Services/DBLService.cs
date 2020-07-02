@@ -24,7 +24,7 @@ namespace lmao_bot.Services
 
             UnauthAPI = new DiscordBotListApi();
             if (config.Dbl != null) AuthAPI = new AuthDiscordBotListApi(client.CurrentUser.Id, Config.Dbl);
-            Log.LogString("Connected to DBL");
+            Log.LogInfo("Connected to DBL");
         }
 
         /// <summary>

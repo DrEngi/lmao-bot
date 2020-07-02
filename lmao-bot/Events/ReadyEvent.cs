@@ -23,12 +23,12 @@ namespace lmao_bot.Events
 
         private async Task ShardReady(DiscordSocketClient arg)
         {
-            Log.LogString("Shard " + arg.ShardId + " online. " + arg.Guilds.Count + " servers.");
+            Log.LogInfo("Shard " + arg.ShardId + " online. " + arg.Guilds.Count + " servers.");
             Status.SetToServerCount();
             //TODO: We need a better way of noting when a bot is completely ready
             if (arg.ShardId == await arg.GetRecommendedShardCountAsync() - 1)
             {
-                Log.LogString("Bot ready.");
+                Log.LogInfo("Bot ready.");
                 
                 //TODO: Uncomment this
                 //await Music.InitializeAsync();

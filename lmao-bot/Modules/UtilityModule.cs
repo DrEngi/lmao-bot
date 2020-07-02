@@ -39,7 +39,7 @@ namespace lmao_bot.Modules
         {
             SocketGuildUser guildUser = (SocketGuildUser)Context.User;
             ChannelPermissions permissions = guildUser.GetPermissions((IGuildChannel)Context.Channel);
-            IReadOnlyCollection<IUser> users = await Context.Channel.GetUsersAsync().ElementAt(0);
+            IReadOnlyCollection<IUser> users = await Context.Channel.GetUsersAsync().ElementAtAsync(0);
 
             Random random = new Random();
             int r = random.Next(users.Count);

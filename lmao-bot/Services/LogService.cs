@@ -98,10 +98,16 @@ namespace lmao_bot.Services
             return Task.CompletedTask;
         }
 
-        public void LogString(string message)
+        public void LogInfo(string message)
         {
             Console.WriteLine("[INFO] " + message);
             File.AppendAllText("logs/latest.log", "[INFO] " + message + Environment.NewLine);
+        }
+
+        public void LogWarn(string message)
+        {
+            Console.WriteLine("[WARN] " + message);
+            File.AppendAllText("logs/latest.log", "[WARN] " + message + Environment.NewLine);
         }
     }
 }

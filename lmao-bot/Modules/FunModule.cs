@@ -24,6 +24,7 @@ namespace lmao_bot.Modules
         [Summary("Repeat after me")]
         public async Task Say([Remainder]string text)
         {
+            await Context.Message.DeleteAsync();
             await ReplyAsync(MessageUtil.CleanMention(text));
         }
 

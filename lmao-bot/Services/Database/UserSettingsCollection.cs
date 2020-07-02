@@ -11,17 +11,13 @@ namespace lmao_bot.Services.Database
 {
     public class UserSettingsCollection
     {
-        private MongoClient Mongo;
         private IMongoDatabase Database;
         private IMongoCollection<LmaoBotUser> Collection;
-        private DatabaseService DatabaseService;
 
-        public UserSettingsCollection(MongoClient mongo, IMongoDatabase database, DatabaseService databaseService)
+        public UserSettingsCollection(IMongoDatabase database)
         {
-            Mongo = mongo;
             Database = database;
             Collection = Database.GetCollection<LmaoBotUser>("users");
-            DatabaseService = databaseService;
         }
 
         /// <summary>

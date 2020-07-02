@@ -19,14 +19,15 @@ namespace lmao_bot.Services
         private MongoClient Mongo;
         private IMongoDatabase Database;
 
-        private Dictionary<long, string> prefixes;
-        private Dictionary<long, LmaoBotUser> users;
-        private Dictionary<long, LmaoBotServer> servers;
+        private Dictionary<long, string> Prefixes;
+        private Dictionary<long, LmaoBotUser> Users;
+        private Dictionary<long, LmaoBotServer> Servers;
 
         public Stopwatch UptimeWatch = new Stopwatch();
 
-        private ServerSettingsCollection serverSettings;
-        private UserSettingsCollection userSettings;
+        private ServerSettingsCollection ServerSettings;
+        private UserSettingsCollection UserSettings;
+        private BotSettingsCollection BotSettings;
 
         public DatabaseService(BotConfig config)
         {
@@ -37,11 +38,12 @@ namespace lmao_bot.Services
             Database = Mongo.GetDatabase(config.Mongo.Database);
             UptimeWatch.Start();
 
-            serverSettings = new ServerSettingsCollection(Mongo, Database, this);
-            userSettings = new UserSettingsCollection(Mongo, Database, this);
+            ServerSettings = new ServerSettingsCollection(Database);
+            UserSettings = new UserSettingsCollection(Database);
+            BotSettings = new BotSettingsCollection(Database);
 
-            users = new Dictionary<long, LmaoBotUser>();
-            servers = new Dictionary<long, LmaoBotServer>();
+            Users = new Dictionary<long, LmaoBotUser>();
+            Servers = new Dictionary<long, LmaoBotServer>();
 
             GetPrefixes();
         }
@@ -55,13 +57,13 @@ namespace lmao_bot.Services
             var collection = Database.GetCollection<LmaoBotServer>("servers");
 
             List<LmaoBotServer> servers = (await collection.FindAsync(new BsonDocument())).ToList();
-            prefixes = new Dictionary<long, string>();
+            Prefixes = new Dictionary<long, string>();
 
             foreach (LmaoBotServer server in servers)
             {
-                prefixes.Add(server.ServerID, server.BotSettings.CommandPrefix);
+                Prefixes.Add(server.ServerID, server.BotSettings.CommandPrefix);
             }
-            return prefixes;
+            return Prefixes;
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace lmao_bot.Services
         /// <returns>The prefix for the specified server</returns>
         public async Task<string> GetPrefix(long serverID)
         {
-            if (prefixes.ContainsKey(serverID)) return prefixes[serverID];
+            if (Prefixes.ContainsKey(serverID)) return Prefixes[serverID];
             else
             {
                 //We don't have the prefix cached. Let's see if we can grab it from mongo.
@@ -83,7 +85,7 @@ namespace lmao_bot.Services
                 if (await collection.CountDocumentsAsync(filter) == 1)
                 {
                     string prefix = (await collection.FindAsync(filter)).First().BotSettings.CommandPrefix;
-                    prefixes.Add(serverID, prefix);
+                    Prefixes.Add(serverID, prefix);
                     return prefix;
                 }
                 else
@@ -98,7 +100,7 @@ namespace lmao_bot.Services
 
         public void SetPrefix(long serverID, string prefix)
         {
-            prefixes[serverID] = prefix;
+            Prefixes[serverID] = prefix;
         }
 
         /// <summary>
@@ -128,12 +130,17 @@ namespace lmao_bot.Services
 
         public ServerSettingsCollection GetServerSettings()
         {
-            return this.serverSettings;
+            return this.ServerSettings;
         }
 
         public UserSettingsCollection GetUserSettings()
         {
-            return this.userSettings;
+            return this.UserSettings;
+        }
+
+        public BotSettingsCollection GetBotSettings()
+        {
+            return this.BotSettings;
         }
     }
 }

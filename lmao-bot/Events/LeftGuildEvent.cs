@@ -25,7 +25,7 @@ namespace lmao_bot.Events
 
         private async Task Client_LeftGuild(SocketGuild arg)
         {
-            Log.LogString($"Server left :( Total servers now at {Client.Guilds.Count}");
+            Log.LogInfo($"Server left :( Total servers now at {Client.Guilds.Count}");
             await Database.GetServerSettings().DeleteServerSettings((long)arg.Id);
             Status.SetToServerCount();
         }

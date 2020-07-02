@@ -97,6 +97,15 @@ namespace lmao_bot.Modules
             Status.SetToServerCount();
         }
 
+        [Command("blacklist")]
+        [Summary("Add a user ID to the blacklist")]
+        [RequireBotDeveloper()]
+        public async Task<RuntimeResult> AddToBlackList(long userID)
+        {
+            await Database.GetBotSettings().AddToBlacklist(userID);
+            return CustomResult.FromSuccess($"User {userID} has been added to the blacklist.");
+        }
+
         [Command("disconnectguild")]
         [Summary("Disconnects a given guild from the music system")]
         [RequireBotDeveloper()]

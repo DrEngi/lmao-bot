@@ -28,18 +28,18 @@ namespace lmao_bot.Events
         {
             if (arg.Users.Contains(Client.GetUser(293855081596452866)) || arg.Users.Contains(Client.GetUser(712812620952109117)))
             {
-                Log.LogString("leaving server " + arg.Id + " because blacklisted user is in it");
+                Log.LogInfo("leaving server " + arg.Id + " because blacklisted user is in it");
                 await arg.LeaveAsync();
                 return;
             }
             if (arg.Id == 613801195005411336)
             {
-                Log.LogString("leaving server " + arg.Id + " because it is blacklisted");
+                Log.LogInfo("leaving server " + arg.Id + " because it is blacklisted");
                 await arg.LeaveAsync();
                 return;
             }
             
-            Log.LogString($"New server! {arg.Name} with {arg.MemberCount} members! Total servers now at {Client.Guilds.Count}");
+            Log.LogInfo($"New server! {arg.Name} with {arg.MemberCount} members! Total servers now at {Client.Guilds.Count}");
             await Database.GetServerSettings().CreateServerSettings((long)arg.Id);
             Status.SetToServerCount();
         }

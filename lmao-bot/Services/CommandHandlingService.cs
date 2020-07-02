@@ -115,9 +115,10 @@ namespace lmao_bot.Services
 
         private async Task Discord_MessageReceived(SocketMessage rawMessage)
         {
-            // Ignore system messages and messages from bots
+            // Ignore system messages, messages from bots, and blacklisted users.
             if (!(rawMessage is SocketUserMessage message)) return;
             if (message.Source != MessageSource.User) return;
+            if ((await Database.GetBotSettings().GetBlacklist()).Contains((long)rawMessage.Author.Id)) return;
 
             int argPos = 0;
             string prefix = null;
@@ -135,7 +136,7 @@ namespace lmao_bot.Services
                 //Message being sent in a DM
                 prefix = "lmao";
             }
-            else Log.LogString("Unknown Channel Type");
+            else Log.LogInfo("Unknown Channel Type");
 
 
             if (message.HasMentionPrefix(Discord.CurrentUser, ref argPos) || message.HasStringPrefix(prefix + " ", ref argPos))
@@ -149,20 +150,14 @@ namespace lmao_bot.Services
 
                 if (tempRateLimits.ContainsKey(context.User.Id))
                 {
-                    if (DateTime.Now.Subtract(tempRateLimits[context.User.Id]) < new TimeSpan(0, 0, 3))
+                    if (DateTime.Now.Subtract(tempRateLimits[context.User.Id]) < new TimeSpan(0, 0, 2))
                     {
-                        Console.WriteLine("rate limits activated on " + context.User.Username);
+                        Log.LogWarn($"Rate Limits Activated on {context.User.Username} ({context.User.Id})");
                         return;
                     }
-                    else
-                    {
-                        tempRateLimits[context.User.Id] = DateTime.Now;
-                    }
+                    else tempRateLimits[context.User.Id] = DateTime.Now;
                 }
-                else
-                {
-                    tempRateLimits.Add(context.User.Id, DateTime.Now);
-                }
+                else tempRateLimits.Add(context.User.Id, DateTime.Now);
 
                 using (IDisposable ITyping = context.Channel.EnterTypingState())
                 {
@@ -177,30 +172,17 @@ namespace lmao_bot.Services
 
                 if (tempRateLimits.ContainsKey(context.User.Id))
                 {
-                    if (DateTime.Now.Subtract(tempRateLimits[context.User.Id]) < new TimeSpan(0, 0, 3))
+                    if (DateTime.Now.Subtract(tempRateLimits[context.User.Id]) < new TimeSpan(0, 0, 2))
                     {
-                        Log.LogString("rate limits activated on " + context.User.Username);
-                        //293855081596452866 712812620952109117
-
+                        Log.LogWarn($"Rate Limits Activated on {context.User.Username} ({context.User.Id})");
                         return;
                     }
-                    else
-                    {
-                        tempRateLimits[context.User.Id] = DateTime.Now;
-                    }
+                    else tempRateLimits[context.User.Id] = DateTime.Now;
                 }
-                else
-                {
-                    tempRateLimits.Add(context.User.Id, DateTime.Now);
-                }
-
-                //Console.WriteLine("command executing: " + context.Message.Content + " by " + context.Message.Author + " in " + context.Message.Channel);
+                else tempRateLimits.Add(context.User.Id, DateTime.Now);
 
                 //Message is not a command but contains lmao so we're gonna replace some asses          
-                using (IDisposable ITyping = context.Channel.EnterTypingState())
-                {
-                    await Commands.ExecuteAsync(context, "replaceass", Provider);
-                }
+                await Commands.ExecuteAsync(context, "replaceass", Provider);
                 return;
             }
         }
