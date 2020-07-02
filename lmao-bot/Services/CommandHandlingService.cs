@@ -105,15 +105,6 @@ namespace lmao_bot.Services
                 //if (command.IsSpecified) await Database.UpdateUsageCount(command.Value.Name);
                 //else Log.LogString("Command result was success but CommandInfo object not included?");
             }
-
-            // ...or even log the result (the method used should fit into
-            // your existing log handler)
-            var commandName = command.IsSpecified ? command.Value.Name : "A command";
-            /*
-            await _log.LogAsync(new LogMessage(LogSeverity.Info,
-                "CommandExecution",
-                $"{commandName} was executed at {DateTime.UtcNow}."));
-            */
         }
 
         public async Task InitializeAsync(IServiceProvider provider)
@@ -173,8 +164,6 @@ namespace lmao_bot.Services
                     tempRateLimits.Add(context.User.Id, DateTime.Now);
                 }
 
-                //Console.WriteLine("command executing: " + context.Message.Content + " by " + context.Message.Author + " in " + context.Message.Channel);
-
                 using (IDisposable ITyping = context.Channel.EnterTypingState())
                 {
                     await Commands.ExecuteAsync(context, argPos, Provider);
@@ -191,13 +180,7 @@ namespace lmao_bot.Services
                     if (DateTime.Now.Subtract(tempRateLimits[context.User.Id]) < new TimeSpan(0, 0, 3))
                     {
                         Log.LogString("rate limits activated on " + context.User.Username);
-
-                        if (context.User.Id == 293855081596452866 || context.User.Id == 712812620952109117)
-                        {
-                            Log.LogString("leaving plagued server! " + context.Guild.Id);
-                            await context.Channel.SendMessageAsync(context.User.Mention + ", thanks, this was fun. I'll be leaving your server now. Don't worry, there's lots of other bots to plague");
-                            await context.Guild.LeaveAsync();
-                        }
+                        //293855081596452866 712812620952109117
 
                         return;
                     }
