@@ -11,6 +11,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.Fonts;
+using SixLabors.ImageSharp.Drawing.Processing;
 
 namespace lmao_bot.Services
 {
@@ -63,11 +64,11 @@ namespace lmao_bot.Services
                 using (SixLabors.ImageSharp.Image specimen1 = avatarImage.Clone(x => x.Resize(288, 288)))
                 using (SixLabors.ImageSharp.Image specimen2 = avatarImage.Clone(x => x.Resize(285, 285)))
                 {
-                    whiteCanvas.Mutate(x => x.DrawImage(specimen1, location: new SixLabors.Primitives.Point(712, 76), 1));
-                    whiteCanvas.Mutate(x => x.DrawImage(specimen2, location: new SixLabors.Primitives.Point(712, 700), 1));
+                    whiteCanvas.Mutate(x => x.DrawImage(specimen1, location: new Point(712, 76), 1));
+                    whiteCanvas.Mutate(x => x.DrawImage(specimen2, location: new Point(712, 700), 1));
                 }
 
-                whiteCanvas.Mutate(x => x.DrawImage(beautifulTemplate, location: new SixLabors.Primitives.Point(0, 0), 1));
+                whiteCanvas.Mutate(x => x.DrawImage(beautifulTemplate, location: new Point(0, 0), 1));
                 whiteCanvas.SaveAsJpeg(stream);
                 stream.Position = 0;
                 return stream;
@@ -88,10 +89,10 @@ namespace lmao_bot.Services
 
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(100, 100)))
                 {
-                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new SixLabors.Primitives.Point(158, 96), 1));
+                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new Point(158, 96), 1));
                 }
 
-                whiteCanvas.Mutate(x => x.DrawImage(uglyTemplate, location: new SixLabors.Primitives.Point(0, 0), 1));
+                whiteCanvas.Mutate(x => x.DrawImage(uglyTemplate, location: new Point(0, 0), 1));
                 whiteCanvas.SaveAsJpeg(stream);
                 stream.Position = 0;
                 return stream;
@@ -112,10 +113,10 @@ namespace lmao_bot.Services
 
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(202, 202)))
                 {
-                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new SixLabors.Primitives.Point(197, 118), 1));
+                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new Point(197, 118), 1));
                 }
 
-                whiteCanvas.Mutate(x => x.DrawImage(garbageTemplate, location: new SixLabors.Primitives.Point(0, 0), 1));
+                whiteCanvas.Mutate(x => x.DrawImage(garbageTemplate, location: new Point(0, 0), 1));
                 whiteCanvas.SaveAsJpeg(stream);
                 stream.Position = 0;
                 return stream;
@@ -133,7 +134,7 @@ namespace lmao_bot.Services
             {
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(triggeredTemplate.Width, triggeredTemplate.Height)))
                 {
-                    triggeredTemplate.Mutate(x => x.DrawImage(specimen, location: new SixLabors.Primitives.Point(0, 0), 0.5f));
+                    triggeredTemplate.Mutate(x => x.DrawImage(specimen, location: new Point(0, 0), 0.5f));
                 }
 
                 triggeredTemplate.SaveAsJpeg(stream);
@@ -156,10 +157,10 @@ namespace lmao_bot.Services
 
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(333, 333)))
                 {
-                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new SixLabors.Primitives.Point(353, 219), 1));
+                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new Point(353, 219), 1));
                 }
 
-                whiteCanvas.Mutate(x => x.DrawImage(victoryTemplate, location: new SixLabors.Primitives.Point(0, 0), 1));
+                whiteCanvas.Mutate(x => x.DrawImage(victoryTemplate, location: new Point(0, 0), 1));
                 whiteCanvas.SaveAsJpeg(stream);
                 stream.Position = 0;
                 return stream;
@@ -177,7 +178,7 @@ namespace lmao_bot.Services
             {
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(244, 239)))
                 {
-                    triggeredTemplate.Mutate(x => x.DrawImage(specimen, location: new SixLabors.Primitives.Point(76, 191), 1));
+                    triggeredTemplate.Mutate(x => x.DrawImage(specimen, location: new Point(76, 191), 1));
                 }
 
                 triggeredTemplate.SaveAsJpeg(stream);
@@ -200,10 +201,10 @@ namespace lmao_bot.Services
 
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(296, 182)))
                 {
-                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new SixLabors.Primitives.Point(23, 432), 1));
+                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new Point(23, 432), 1));
                 }
 
-                whiteCanvas.Mutate(x => x.DrawImage(victoryTemplate, location: new SixLabors.Primitives.Point(0, 0), 1));
+                whiteCanvas.Mutate(x => x.DrawImage(victoryTemplate, location: new Point(0, 0), 1));
                 whiteCanvas.SaveAsJpeg(stream);
                 stream.Position = 0;
                 return stream;
@@ -224,13 +225,12 @@ namespace lmao_bot.Services
 
                 using (SixLabors.ImageSharp.Image specimen = avatarImage.Clone(x => x.Resize(202, 207)))
                 {
-                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new SixLabors.Primitives.Point(155, 833), 1));
+                    whiteCanvas.Mutate(x => x.DrawImage(specimen, location: new Point(155, 833), 1));
                 }
 
-                whiteCanvas.Mutate(x => x.DrawImage(seenFromAboveTemplate, location: new SixLabors.Primitives.Point(0, 0), 1));
-
+                whiteCanvas.Mutate(x => x.DrawImage(seenFromAboveTemplate, location: new Point(0, 0), 1));
                 string text = user.Nickname == null ? user.Username : user.Nickname;
-                
+         
                 Font font = Arial.CreateFont(32f);
                 
 
@@ -240,7 +240,7 @@ namespace lmao_bot.Services
                     text,
                     font,
                     SixLabors.ImageSharp.Color.Black,
-                    new SixLabors.Primitives.PointF(whiteCanvas.Width / 4 - measure.Width / 2, whiteCanvas.Height - measure.Height - 68)));
+                    new PointF(whiteCanvas.Width / 4 - measure.Width / 2, whiteCanvas.Height - measure.Height - 68)));
 
                 whiteCanvas.SaveAsJpeg(stream);
                 stream.Position = 0;
